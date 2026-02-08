@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>吉祥滷意｜立即下單</title>
+  <link rel="stylesheet" href="./assets/style.css" />
+</head>
+<body data-page="order">
+  <header class="topbar">
+    <div class="nav">
+      <a class="brand" href="./index.html">
+        <div class="brand-badge" aria-hidden="true"></div>
+        <div class="brand-title">
+          <b>吉祥滷意</b>
+          <span>冷凍真空滷汁（肉燥）</span>
+        </div>
+      </a>
+
+      <nav class="menu">
+        <a class="pill" href="./index.html">🏠 首頁</a>
+        <a class="pill" href="./heating.html">🔥 加熱方式</a>
+        <a class="pill" href="./recipes.html">🍳 料理教學</a>
+        <a class="pill primary" href="./order.html">🧾 立即下單</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-grid">
+        <div class="hero-left">
+          <div class="kicker">🧾 下單試算・買十送一・滿1800免運</div>
+          <h1 class="h1">立即下單｜<strong>吉祥滷意（肉燥滷汁）</strong></h1>
+          <p class="lead">
+            因無囤貨：下單匯款後約 <b>1～2 週</b> 準備並寄出。物流：<b>7-11 冷凍交貨便</b>。
+            你填完後按「一鍵複製」把文字傳給小編即可。
+          </p>
+
+          <div class="badges">
+            <span class="badge">🚚 運費 NT$150（含包材）</span>
+            <span class="badge">🧾 滿 NT$1800 免運</span>
+            <span class="badge">🎁 買十送一</span>
+          </div>
+        </div>
+
+        <div class="hero-right">
+          <figure class="photo">
+            <img src="./images/photo2.jpg" alt="俯拍擺盤滷肉飯" />
+            <figcaption>今天想偷懶？那就讓滷汁幫你把飯桌變豐盛。</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="card col-7">
+        <h2>📝 填寫訂購資訊</h2>
+
+        <div class="form">
+          <div class="field">
+            <label for="name">姓名</label>
+            <input id="name" placeholder="例：王小明" />
+          </div>
+          <div class="field">
+            <label for="phone">手機</label>
+            <input id="phone" placeholder="例：09xx-xxx-xxx" />
+          </div>
+
+          <div class="field">
+            <label for="store">7-11 冷凍交貨便取貨門市</label>
+            <input id="store" placeholder="例：7-11 XX門市（冷凍交貨便）" />
+          </div>
+          <div class="field">
+            <label for="note">備註（收件人/希望到貨時段/露營日期等）</label>
+            <textarea id="note" placeholder="例：想要下週末露營用，謝謝！"></textarea>
+          </div>
+
+          <div class="field">
+            <label for="qty">訂購數量（包）</label>
+            <input id="qty" type="number" min="1" value="1" />
+          </div>
+          <div class="field">
+            <label for="price">單價（NT$，你可自行調整）</label>
+            <input id="price" type="number" min="0" value="180" />
+          </div>
+        </div>
+
+        <div class="cta-row">
+          <button class="btn" id="fillSample" type="button">✍️ 一鍵填入範例</button>
+          <a class="btn" href="./heating.html">🔥 看加熱方式</a>
+          <a class="btn" href="./recipes.html">🍳 看料理教學</a>
+        </div>
+
+        <h2 style="margin-top:14px;">📌 付款資訊</h2>
+        <table class="table">
+          <tr><th>收款帳號</th><td><b>中國信託 (822) 668540149274</b></td></tr>
+          <tr><th>出貨時間</th><td>匯款後約 <b>1～2 週</b> 準備並寄出（無囤貨）</td></tr>
+          <tr><th>客服</th><td>私訊粉專小編 / LINE：<b>0985210319</b></td></tr>
+        </table>
+      </div>
+
+      <div class="card col-5">
+        <h2>💰 金額試算</h2>
+        <div class="checkout">
+          <div class="sum"><span>買十送一（送）</span><b id="gift">0 包</b></div>
+          <div class="sum"><span>實拿數量</span><b id="totalQty">0 包</b></div>
+          <div class="sum"><span>小計</span><b id="subtotal">NT$ 0</b></div>
+          <div class="sum"><span>運費</span><b id="shipping">NT$ 0</b></div>
+          <div class="sum"><span>應付總額</span><b id="total">NT$ 0</b></div>
+
+          <h2 style="margin:6px 0 0;">📨 一鍵複製下單文字</h2>
+          <textarea id="orderText" readonly></textarea>
+          <button class="btn primary" id="copyOrder" type="button">一鍵複製下單文字</button>
+
+          <p class="muted" style="margin:0;">
+            小提醒：你可以把上面複製的文字貼到粉專/LINE，讓小編幫你對單。
+          </p>
+        </div>
+      </div>
+
+      <div class="card col-12">
+        <h2>✅ 購買須知</h2>
+        <p>
+          ・保存方式：冷凍保存。開封後請盡速食用。<br/>
+          ・有效期限：90 天（冷凍）。建議兩週內食用風味最佳。<br/>
+          ・物流：7-11 冷凍交貨便，運費 NT$150（含包裝耗材）；訂購滿 NT$1800 免運。<br/>
+          ・優惠：買十送一（以包數計算）。
+        </p>
+      </div>
+    </section>
+
+    <div class="footer">© 吉祥滷意｜冷凍真空滷汁（肉燥）</div>
+  </main>
+
+  <div class="dock">
+    <div class="dock-inner">
+      <div>匯款後約 <b>1～2週</b> 出貨｜LINE：<b>0985210319</b></div>
+      <a class="btn small" href="./index.html">🏠 回首頁</a>
+    </div>
+  </div>
+
+  <script src="./assets/app.js"></script>
+</body>
+</html>
