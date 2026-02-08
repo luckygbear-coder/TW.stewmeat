@@ -358,7 +358,6 @@
 
       <div class="top-actions">
         <a class="btn small" href="https://www.instagram.com/9.12lin" target="_blank" rel="noopener">📷 IG</a>
-        <!-- ✅ 粉專按鈕改成 LINE：chris770912（直接加好友對話） -->
         <a class="btn small navy" href="https://line.me/ti/p/~chris770912" target="_blank" rel="noopener">💬 LINE：chris770912</a>
         <a class="btn primary small" href="#order">🧾 下單</a>
       </div>
@@ -563,7 +562,7 @@
             </select>
           </div>
           <div>
-            <label for="contactId">帳號/ID（預設 9.12lin）</label>
+            <label for="contactId">帳號/ID（可不填，預設 LINE：chris770912）</label>
             <input id="contactId" placeholder="例如：你的LINE/IG帳號（可不填）" />
           </div>
         </div>
@@ -576,7 +575,8 @@
         <div class="cta-row">
           <button class="btn primary" type="button" id="copyOrder">📋 一鍵複製下單訊息</button>
           <button class="btn" type="button" id="copyPay">🏦 複製匯款資訊</button>
-          <a class="btn navy" href="https://line.me/ti/p/~chris7709" target="_blank" rel="noopener">💬 直接加 LINE 對話</a>
+          <!-- ✅ 改成 button：會自動把訂單訊息帶進 LINE -->
+          <button class="btn navy" type="button" id="lineSend">💬 直接加 LINE 對話（自動貼上訂單）</button>
         </div>
 
         <div class="panel" style="margin-top:10px">
@@ -773,7 +773,8 @@
         : `收件地址：${(addrEl.value || "（請填地址）")}`;
 
       const contactText = contactEl.value;
-      const contactId = contactIdEl.value || "9.12lin";
+      // ✅ 預設改成你的主聯絡 LINE
+      const contactId = contactIdEl.value || "chris770912";
 
       const msg =
 `【吉祥滷意 下單資料】
@@ -826,6 +827,13 @@ ${storeLine}
 匯款後請回傳：金額＋末五碼＋姓名
 LINE：chris770912`;
       await copyText(pay);
+    });
+
+    // ✅ LINE：自動帶入訂單訊息
+    document.getElementById("lineSend").addEventListener("click", ()=>{
+      const msg = buildMessage();
+      const url = "https://line.me/R/msg/text/?" + encodeURIComponent(msg);
+      window.open(url, "_blank");
     });
 
     const inputs = [qtyEl, nameEl, phoneEl, methodEl, storeEl, addrEl, contactEl, contactIdEl, noteMsgEl];
