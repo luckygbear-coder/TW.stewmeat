@@ -29,7 +29,7 @@
       background: linear-gradient(180deg,#ffe6bf 0%, var(--bg) 30%, #fff7ea 100%);
       -webkit-text-size-adjust: 100%;
     }
-    .wrap{max-width:var(--maxw);margin:0 auto;padding:12px 12px 120px;}
+    .wrap{max-width:var(--maxw);margin:0 auto;padding:12px 12px 140px;}
     .topbar{
       position:sticky;top:0;z-index:50;
       background:rgba(255,241,214,.92);
@@ -67,7 +67,8 @@
     .btn.small{padding:10px 12px;border-radius:14px;font-size:12px}
     .btn.primary{background:var(--red);color:#fff;border-color:rgba(0,0,0,.08)}
     .btn.navy{background:var(--navy);color:#fff;border-color:rgba(0,0,0,.08)}
-
+    .btn.ghost{background:rgba(255,255,255,.75)}
+    .btn:active{transform: translateY(1px)}
     .card{
       background:var(--card);
       border:2px solid rgba(245,211,166,.9);
@@ -92,7 +93,6 @@
       background:#fff;font-weight:900;font-size:12px;
     }
     .cta-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
-
     .quick-grid{
       margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px;
     }
@@ -107,7 +107,7 @@
     .quick-item.teal{background:var(--teal);}
     .quick-item.sand{background:var(--sand);}
 
-    /* ✅ Carousel：不裁切、可滑動、轉場 */
+    /* Carousel */
     .carousel{
       position:relative;border-radius:18px;overflow:hidden;
       border:2px solid rgba(245,211,166,.9);
@@ -124,8 +124,8 @@
     .carousel-slide img{
       width:100%;
       height:auto;
-      max-height: 320px;     /* ✅ 防止撐爆跑版 */
-      object-fit: contain;   /* ✅ 完整顯示不裁切 */
+      max-height: 320px;
+      object-fit: contain;
       display:block;
       border-radius:16px;
       border:2px solid rgba(245,211,166,.85);
@@ -153,6 +153,7 @@
     }
     .dot.is-on{background:var(--red);}
 
+    /* Tabs */
     .tabs{
       display:flex;gap:8px;flex-wrap:wrap;
       padding-bottom:10px;border-bottom:1px dashed rgba(245,211,166,.9);
@@ -179,6 +180,94 @@
       background:#fff;
     }
     .li b{display:block;margin-bottom:6px;}
+
+    /* Order form */
+    .form{
+      display:grid;
+      gap:10px;
+    }
+    .row{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    @media (max-width:420px){
+      .row{grid-template-columns:1fr;}
+    }
+    label{
+      display:block;
+      font-weight:900;
+      font-size:12px;
+      color:var(--muted);
+      margin: 0 0 6px;
+    }
+    input, textarea, select{
+      width:100%;
+      padding:12px 12px;
+      border-radius:14px;
+      border:2px solid rgba(245,211,166,.95);
+      background:#fff;
+      font-size:14px;
+      outline:none;
+    }
+    textarea{min-height:88px;resize:vertical}
+    .hint{
+      font-size:12px;
+      color:var(--muted);
+      font-weight:900;
+      line-height:1.5;
+    }
+
+    .calc{
+      display:grid;
+      gap:10px;
+      margin-top: 6px;
+    }
+    .calc-grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:10px;
+      align-items:end;
+    }
+    .money{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    .box{
+      border:2px solid rgba(245,211,166,.9);
+      background:rgba(255,255,255,.9);
+      border-radius:16px;
+      padding:12px;
+    }
+    .box b{display:block;margin-bottom:6px}
+    .kpi{
+      font-weight:1000;
+      font-size:18px;
+    }
+    .kpi small{font-size:12px;color:var(--muted);font-weight:900}
+
+    .toast{
+      position: fixed;
+      left: 50%;
+      bottom: 110px;
+      transform: translateX(-50%);
+      background: rgba(24,36,51,.92);
+      color: #fff;
+      padding: 10px 12px;
+      border-radius: 999px;
+      font-weight: 900;
+      font-size: 12px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .22s ease;
+      z-index: 80;
+      max-width: calc(var(--maxw) - 24px);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .toast.on{opacity:1}
 
     .dock{
       position:fixed;left:0;right:0;bottom:0;
@@ -216,7 +305,6 @@
 
   <main class="wrap">
 
-    <!-- A：先讓人有食慾 -->
     <section class="card">
       <div class="pill">🇹🇼 台灣豬嚴選・慢火熬煮・冷凍真空包</div>
       <h1>一包搞定的台味幸福：<span style="color:var(--red)">吉祥滷意</span>（肉燥滷汁）</h1>
@@ -225,7 +313,6 @@
         露營、野餐、家庭晚餐——只要加熱，立刻上桌。
       </p>
 
-      <!-- ✅ 你指定的四張 -->
       <div class="carousel" data-carousel>
         <div class="carousel-track" data-track></div>
         <button class="carousel-arrow left" type="button" aria-label="上一張" data-prev>‹</button>
@@ -246,7 +333,6 @@
       </div>
     </section>
 
-    <!-- 西堤風格四格入口 -->
     <section class="quick-grid">
       <button class="quick-item red" type="button" onclick="document.getElementById('order').scrollIntoView({behavior:'smooth'})">
         <div class="qi-title">ORDER</div><div class="qi-sub">立即下單</div>
@@ -262,7 +348,6 @@
       </button>
     </section>
 
-    <!-- Tabs -->
     <section class="card" id="tabs">
       <div class="tabs">
         <button class="tab" data-tab="product" aria-selected="true">商品資訊</button>
@@ -314,21 +399,121 @@
       <div class="tab-panel hide" data-panel="ship">
         <div class="list">
           <div class="li"><b>🌟 7-11 冷凍交貨便</b><div class="muted">運費 NT$150（含包裝耗材）｜滿 NT$1800 免運</div></div>
+          <div class="li"><b>🎁 買十送一</b><div class="muted">每買 10 包 → 送 1 包（系統會自動算）</div></div>
           <div class="li"><b>🏦 收款帳號</b><div class="muted">中國信託 (822)｜668540149274</div></div>
           <div class="li"><b>⏳ 出貨時間</b><div class="muted">下單匯款後約 1～2 週準備並寄出</div></div>
         </div>
       </div>
     </section>
 
+    <!-- ✅ 下單表單 + 試算 + 一鍵複製 -->
     <section class="card" id="order">
-      <h2>🧾 立即下單</h2>
-      <p class="muted" style="margin-top:0">
-        貼心小提醒：因為沒有囤貨，下單匯款後約 1～2 週準備並寄出。<br>
-        若有疑問：私訊粉專小編或 LINE：0985210319
+      <h2>🧾 立即下單（填完一鍵複製訊息給我確認）</h2>
+      <p class="hint" style="margin-top:0">
+        ✅ 請填：收件人/電話/地址、7-11 門市（如走交貨便）、備註<br>
+        ✅ 系統會自動算：買十送一、運費 150、滿 1800 免運
       </p>
-      <div class="cta-row">
-        <a class="btn primary" href="tel:0985210319">📞 直接聯絡</a>
-        <button class="btn" type="button" onclick="selectTab('ship')">🚚 運送/付款說明</button>
+
+      <div class="calc box">
+        <b>🧮 數量＆運費試算</b>
+        <div class="calc-grid">
+          <div>
+            <label for="qty">訂購數量（包）</label>
+            <input id="qty" type="number" min="1" step="1" value="1" inputmode="numeric" />
+          </div>
+          <div>
+            <label for="price">單價（每包 NT$）</label>
+            <input id="price" type="number" min="0" step="1" value="0" inputmode="numeric" />
+          </div>
+        </div>
+
+        <div class="money">
+          <div class="box">
+            <b>贈送</b>
+            <div class="kpi" id="freePacks">0 包 <small>（每滿10送1）</small></div>
+          </div>
+          <div class="box">
+            <b>運費</b>
+            <div class="kpi" id="shipFee">NT$150 <small>（滿1800免運）</small></div>
+          </div>
+        </div>
+
+        <div class="box">
+          <b>合計</b>
+          <div class="kpi" id="grand">NT$150 <small id="grandNote">（商品 0 + 運費 150）</small></div>
+        </div>
+
+        <div class="hint">
+          小提醒：你也可以先不填單價（預設 0）。若你要讓客人直接結帳，告訴我你的「每包售價」，我再幫你把單價固定起來。
+        </div>
+      </div>
+
+      <div class="form" style="margin-top:12px">
+        <div class="row">
+          <div>
+            <label for="name">收件人姓名</label>
+            <input id="name" placeholder="例如：王小明" autocomplete="name" />
+          </div>
+          <div>
+            <label for="phone">聯絡電話</label>
+            <input id="phone" placeholder="例如：0912xxxxxx" inputmode="tel" autocomplete="tel" />
+          </div>
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="method">取貨方式</label>
+            <select id="method">
+              <option value="711">7-11 冷凍交貨便（運費150 / 滿1800免運）</option>
+              <option value="home">宅配/其他（請在備註說明）</option>
+            </select>
+          </div>
+          <div>
+            <label for="store">7-11 分店名稱（如：XX門市）</label>
+            <input id="store" placeholder="例如：台北忠孝東門市" />
+          </div>
+        </div>
+
+        <div>
+          <label for="addr">收件地址（若用宅配/其他再填）</label>
+          <input id="addr" placeholder="例：台北市…（7-11取貨可不填）" autocomplete="street-address" />
+        </div>
+
+        <div class="row">
+          <div>
+            <label for="contact">方便聯絡方式</label>
+            <select id="contact">
+              <option value="LINE">LINE</option>
+              <option value="FB">FB 私訊</option>
+              <option value="IG">IG 私訊</option>
+              <option value="PHONE">電話</option>
+            </select>
+          </div>
+          <div>
+            <label for="contactId">帳號/ID</label>
+            <input id="contactId" placeholder="例如：你的LINE/IG帳號" />
+          </div>
+        </div>
+
+        <div>
+          <label for="note">備註</label>
+          <textarea id="note" placeholder="例如：希望週末到店取貨 / 需要多送筷子湯匙 / 匯款末五碼…"></textarea>
+        </div>
+
+        <div class="cta-row">
+          <button class="btn primary" type="button" id="copyOrder">📋 一鍵複製下單訊息</button>
+          <button class="btn" type="button" id="copyPay">🏦 複製匯款資訊</button>
+          <a class="btn navy" href="https://line.me/ti/p/~chris770912" target="_blank" rel="noopener">💬 加 LINE：chris770912</a>
+        </div>
+
+        <div class="panel" style="margin-top:10px">
+          <b>📌 你複製出去會長這樣</b>
+          <pre id="preview" style="margin:8px 0 0;white-space:pre-wrap;font-family:inherit;line-height:1.55" class="muted"></pre>
+        </div>
+
+        <p class="hint">
+          貼心小提醒：因為沒有囤貨，下單匯款後約 1～2 週準備並寄出。若有任何疑問，歡迎私訊或加 LINE：<b>chris770912</b>
+        </p>
       </div>
     </section>
 
@@ -342,8 +527,10 @@
     </div>
   </div>
 
+  <div class="toast" id="toast">已複製 ✅</div>
+
   <script>
-    // ✅ 你提供的正式路徑
+    // ✅ 圖片路徑
     const IMAGES = [
       "images/packs.jpg",
       "images/set.jpg",
@@ -354,7 +541,6 @@
     // Tabs
     const tabs = Array.from(document.querySelectorAll(".tab[data-tab]"));
     const panels = Array.from(document.querySelectorAll("[data-panel]"));
-
     function setTab(id){
       tabs.forEach(t => t.setAttribute("aria-selected", t.dataset.tab === id ? "true" : "false"));
       panels.forEach(p => p.classList.toggle("hide", p.dataset.panel !== id));
@@ -414,7 +600,6 @@
       btnPrev.addEventListener("click", ()=>{ stopAuto(); prev(); startAuto(); });
       btnNext.addEventListener("click", ()=>{ stopAuto(); next(); startAuto(); });
 
-      // touch swipe
       track.addEventListener("touchstart", (e)=>{
         dragging = true; stopAuto();
         startX = e.touches[0].clientX; currentX = startX;
@@ -442,10 +627,140 @@
 
       window.addEventListener("resize", measure);
 
-      renderDots();
-      measure();
-      startAuto();
+      renderDots(); measure(); startAuto();
     })();
+
+    // Toast
+    const toast = document.getElementById("toast");
+    let toastTimer = null;
+    function showToast(msg="已複製 ✅"){
+      toast.textContent = msg;
+      toast.classList.add("on");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(()=> toast.classList.remove("on"), 1600);
+    }
+
+    // Order calc + copy
+    const qtyEl = document.getElementById("qty");
+    const priceEl = document.getElementById("price");
+    const freeEl = document.getElementById("freePacks");
+    const shipEl = document.getElementById("shipFee");
+    const grandEl = document.getElementById("grand");
+    const noteEl = document.getElementById("grandNote");
+
+    const nameEl = document.getElementById("name");
+    const phoneEl = document.getElementById("phone");
+    const methodEl = document.getElementById("method");
+    const storeEl = document.getElementById("store");
+    const addrEl = document.getElementById("addr");
+    const contactEl = document.getElementById("contact");
+    const contactIdEl = document.getElementById("contactId");
+    const noteMsgEl = document.getElementById("note");
+    const previewEl = document.getElementById("preview");
+
+    function n(v){ const x = Number(v); return Number.isFinite(x) ? x : 0; }
+    function fmt(v){ return "NT$" + Math.round(v).toLocaleString("zh-Hant-TW"); }
+
+    function calc(){
+      const qty = Math.max(1, Math.floor(n(qtyEl.value)));
+      const price = Math.max(0, Math.floor(n(priceEl.value)));
+
+      const free = Math.floor(qty / 10); // 買10送1
+      const product = qty * price;
+
+      let ship = 150;
+      if(product >= 1800) ship = 0;
+
+      // 若選宅配/其他：先維持150顯示，讓你未來可改
+      if(methodEl.value !== "711"){
+        // 你之後若要宅配另計，可在這邊改規則
+      }
+
+      const grand = product + ship;
+
+      freeEl.textContent = `${free} 包`;
+      shipEl.textContent = ship === 0 ? "免運" : fmt(ship);
+      grandEl.textContent = fmt(grand);
+      noteEl.textContent = `（商品 ${fmt(product)} + 運費 ${ship===0 ? "NT$0" : fmt(ship)}）`;
+
+      return { qty, price, free, product, ship, grand };
+    }
+
+    function buildMessage(){
+      const c = calc();
+
+      const methodText = methodEl.value === "711"
+        ? "7-11 冷凍交貨便"
+        : "宅配/其他";
+
+      const storeLine = (methodEl.value === "711")
+        ? `7-11門市：${(storeEl.value || "（請填門市名稱）")}`
+        : `收件地址：${(addrEl.value || "（請填地址）")}`;
+
+      const contactText = contactEl.value;
+      const contactId = contactIdEl.value || "（未填）";
+
+      const msg =
+`【吉祥滷意 下單資料】
+姓名：${nameEl.value || "（未填）"}
+電話：${phoneEl.value || "（未填）"}
+取貨方式：${methodText}
+${storeLine}
+
+訂購：${c.qty} 包（買十送一：${c.free} 包）
+單價：${c.price ? fmt(c.price) : "（未填/0）"}
+商品小計：${fmt(c.product)}
+運費：${c.ship===0 ? "免運（滿1800）" : fmt(c.ship)}
+合計：${fmt(c.grand)}
+
+聯絡方式：${contactText}｜${contactId}
+備註：${noteMsgEl.value || "—"}
+
+請協助確認訂單，謝謝！`;
+
+      previewEl.textContent = msg;
+      return msg;
+    }
+
+    async function copyText(text){
+      try{
+        await navigator.clipboard.writeText(text);
+        showToast("已複製 ✅");
+      }catch(e){
+        // fallback
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+        showToast("已複製 ✅");
+      }
+    }
+
+    document.getElementById("copyOrder").addEventListener("click", async ()=>{
+      const msg = buildMessage();
+      await copyText(msg);
+    });
+
+    document.getElementById("copyPay").addEventListener("click", async ()=>{
+      const pay =
+`【匯款資訊】
+中國信託 (822)
+帳號：668540149274
+
+匯款後請回傳：金額＋末五碼＋姓名
+LINE：chris770912`;
+      await copyText(pay);
+    });
+
+    // update preview live
+    const inputs = [qtyEl, priceEl, nameEl, phoneEl, methodEl, storeEl, addrEl, contactEl, contactIdEl, noteMsgEl];
+    inputs.forEach(el => el.addEventListener("input", buildMessage));
+    methodEl.addEventListener("change", buildMessage);
+
+    // initial
+    calc(); buildMessage();
   </script>
 </body>
 </html>
