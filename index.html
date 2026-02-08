@@ -31,10 +31,10 @@
 
 <main class="container">
 
-  <!-- TASTy-like hero: photo first -->
+  <!-- Hero: food close-up first (more appetite) -->
   <section class="tasty-hero">
     <div class="tasty-hero-media">
-      <img src="./images/photo1.jpg" alt="吉祥滷意滷肉飯" />
+      <img src="./images/bowl.jpg" alt="吉祥滷意 滷肉飯" loading="eager" />
       <div class="tasty-hero-overlay">
         <div class="tasty-brandbar">
           <div class="tasty-brand-left">
@@ -84,7 +84,39 @@
   </section>
 
   <section class="grid">
-    <!-- Value cards scan -->
+    <!-- NEW: Photo gallery wall -->
+    <div class="card col-12">
+      <h2>📸 美味實拍（露營・野餐・家庭都適合）</h2>
+
+      <div class="gallery">
+        <a class="gallery-main" href="./images/spread.jpg" target="_blank" rel="noopener">
+          <img src="./images/spread.jpg" alt="整桌台味家常菜" loading="lazy" />
+        </a>
+
+        <div class="gallery-side">
+          <a class="gallery-thumb" href="./images/set.jpg" target="_blank" rel="noopener">
+            <img src="./images/set.jpg" alt="便當搭配真空包" loading="lazy" />
+          </a>
+          <a class="gallery-thumb" href="./images/packs.jpg" target="_blank" rel="noopener">
+            <img src="./images/packs.jpg" alt="冷凍真空滷汁多包" loading="lazy" />
+          </a>
+        </div>
+      </div>
+
+      <div class="gallery-caption">
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <span class="pill">⛺ 露營：一包撐起一餐</span>
+          <span class="pill">🧺 野餐：不怕手忙腳亂</span>
+          <span class="pill">🏠 家庭：下班 10 分鐘上桌</span>
+        </div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <a class="btn primary" href="./order.html">🧾 立即下單</a>
+          <button class="btn" type="button" onclick="window.selectHomeTab('heat')">🔥 怎麼加熱？</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Value cards -->
     <div class="card col-12">
       <h2>一眼看懂：為什麼大家會囤</h2>
       <div class="value-grid">
@@ -95,7 +127,7 @@
       </div>
     </div>
 
-    <!-- Tabs block (你指定：照片後面再 Tabs，先讓人有食慾) -->
+    <!-- Tabs block (照片後面再 Tabs) -->
     <div class="card col-12" id="tabsBlock">
       <h2>你想先看哪一個？</h2>
 
@@ -159,7 +191,7 @@
           <div class="panel"><b>🍚 3 分鐘滷肉飯</b><p class="muted">熱白飯＋20g 滷汁＝立刻開吃。</p></div>
           <div class="panel"><b>🍜 露營拌麵</b><p class="muted">煮麵＋滷汁＋蔥花，香到不想洗鍋。</p></div>
           <div class="panel"><b>🥚 家庭常備滷蛋</b><p class="muted">滷汁加水煮蛋，冰箱放著隨時加菜。</p></div>
-          <div class="panel"><b>⛺ 露營一鍋料理</b><p class="muted">蔬菜＋豆腐＋滷汁，立刻變下飯菜。</p></div>
+          <div class="panel"><b>⛺ 一鍋料理</b><p class="muted">蔬菜＋豆腐＋滷汁，立刻變下飯菜。</p></div>
 
           <div class="cta-row">
             <a class="btn primary" href="./order.html">🧾 立即下單</a>
@@ -203,7 +235,7 @@
         <div class="pouch" aria-label="真空包裝示意">
           <div class="pouch-seal"></div>
           <div class="pouch-label">
-            <img src="./images/label.jpg" alt="包裝標示（示意）" />
+            <img src="./images/label.jpg" alt="包裝標示（示意）" loading="lazy" />
           </div>
           <div class="pouch-title">
             吉祥滷意（肉燥）
