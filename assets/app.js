@@ -1,39 +1,61 @@
-// 吉祥滷意（滷汁-肉燥）前端下單計算：
-// - 買十送一（以「包」為單位）
-// - 7-11 冷凍交貨便 運費150（含包裝耗材）
-// - 訂購滿 1800 免運
-// - 這是「下單資訊產生器」，不會真的自動收款/出貨
+// ========= Helpers =========
+function fmt(n){ return n.toLocaleString("zh-Hant-TW"); }
+function calcGift(qty){ return Math.floor(qty / 10); }
+function calcShipping(subtotal){ return subtotal >= 1800 ? 0 : 150; }
 
-function fmt(n){
-  return n.toLocaleString("zh-Hant-TW");
+// ========= Tabs (Home) =========
+function initTabs(){
+  const tabsWrap = document.querySelector("[data-tabs]");
+  if(!tabsWrap) return;
+
+  const tabs = Array.from(tabsWrap.querySelectorAll('[role="tab"]'));
+  const panels = Array.from(document.querySelectorAll('[role="tabpanel"]'));
+
+  function selectTab(id){
+    tabs.forEach(t=>{
+      const selected = t.dataset.tab === id;
+      t.setAttribute("aria-selected", selected ? "true" : "false");
+    });
+    panels.forEach(p=>{
+      p.classList.toggle("hide", p.dataset.panel !== id);
+    });
+  }
+
+  tabs.forEach(t=>{
+    t.addEventListener("click", ()=>{
+      selectTab(t.dataset.tab);
+    });
+  });
+
+  // default
+  selectTab(tabs[0]?.dataset.tab || "product");
+
+  // optional: buttons can jump to a tab
+  window.selectHomeTab = (id)=>{
+    selectTab(id);
+    const block = document.querySelector("#tabsBlock");
+    if(block) block.scrollIntoView({behavior:"smooth", block:"start"});
+  };
 }
 
-function calcGift(qty){
-  // 買十送一：每 10 包送 1 包
-  return Math.floor(qty / 10);
-}
-
-function calcShipping(subtotal){
-  return subtotal >= 1800 ? 0 : 150;
-}
-
+// ========= Order =========
 function buildOrderText(data){
   const lines = [];
   lines.push("【吉祥滷意（滷汁-肉燥）】下單資訊");
   lines.push(`姓名：${data.name || "（未填）"}`);
   lines.push(`手機：${data.phone || "（未填）"}`);
   lines.push(`取貨門市（7-11 冷凍交貨便）：${data.store || "（未填）"}`);
-  lines.push(`收件資訊/備註：${data.note || "（無）"}`);
+  lines.push(`備註：${data.note || "（無）"}`);
   lines.push("—");
   lines.push(`訂購數量：${data.qty} 包`);
   lines.push(`買十送一：送 ${data.gift} 包（實拿共 ${data.totalQty} 包）`);
   lines.push(`小計：NT$ ${fmt(data.subtotal)}`);
-  lines.push(`運費：NT$ ${fmt(data.shipping)} ${data.shipping === 0 ? "（滿1800免運）" : "（7-11冷凍交貨便）"}`);
+  lines.push(`運費：NT$ ${fmt(data.shipping)} ${data.shipping === 0 ? "（滿1800免運）" : "（含包材）"}`);
   lines.push(`應付總額：NT$ ${fmt(data.total)}`);
   lines.push("—");
   lines.push("匯款帳號：中國信託(822) 668540149274");
-  lines.push("備註：因無囤貨，下單匯款後約 1～2 週準備並寄出。");
-  lines.push("如有疑問：私訊粉專小編 / LINE：0985210319");
+  lines.push("貼心小提醒：因為沒有囤貨，所以下單匯款後約 1～2 週準備並寄出。");
+  lines.push("若有任何疑問：私訊粉專小編或 LINE：0985210319");
   return lines.join("\n");
 }
 
@@ -54,6 +76,7 @@ function initOrderPage(){
 
   const copyBtn = document.querySelector("#copyOrder");
   const sampleBtn = document.querySelector("#fillSample");
+  const successPanel = document.querySelector("#successPanel");
 
   function recalc(){
     const qty = Math.max(1, parseInt(qtyEl.value || "1", 10));
@@ -89,6 +112,10 @@ function initOrderPage(){
     try{
       await navigator.clipboard.writeText(orderTextEl.value);
       copyBtn.textContent = "✅ 已複製";
+      if(successPanel){
+        successPanel.classList.remove("hide");
+        successPanel.scrollIntoView({behavior:"smooth", block:"start"});
+      }
       setTimeout(()=> copyBtn.textContent = "一鍵複製下單文字", 1200);
     }catch(e){
       alert("複製失敗，請手動全選複製。");
@@ -98,7 +125,7 @@ function initOrderPage(){
   sampleBtn?.addEventListener("click", ()=>{
     nameEl.value = "王小明";
     phoneEl.value = "09xx-xxx-xxx";
-    storeEl.value = "7-11 XX門市（冷凍交貨便）";
+    storeEl.value = "7-11 XX門市（冷凍交貨便）｜台北市OO區OO路OO號";
     noteEl.value = "想要下週末露營用，謝謝！";
     recalc();
   });
@@ -106,8 +133,9 @@ function initOrderPage(){
   recalc();
 }
 
-// run
+// ========= Boot =========
 document.addEventListener("DOMContentLoaded", ()=>{
+  initTabs();
   if(document.body.dataset.page === "order"){
     initOrderPage();
   }
