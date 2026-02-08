@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="./assets/style.css" />
 </head>
 <body>
+
 <header class="topbar">
   <div class="nav">
     <a class="brand" href="./index.html">
@@ -29,30 +30,61 @@
 </header>
 
 <main class="container">
-  <!-- Hero -->
-  <section class="hero">
-    <div class="hero-inner">
-      <div class="kicker">🇹🇼 台灣豬嚴選｜8小時慢火｜冷凍真空包</div>
-      <h1 class="h1">一包搞定的台味幸福：<strong>吉祥滷意</strong>（肉燥滷汁）</h1>
-      <p class="lead">
-        不想煮、又想吃得像家裡？這包就是答案。嚴選台灣豬、蔥酥、蒜頭與家傳比例，
-        在<strong>40 度以上的廚房慢火熬 8 小時</strong>，香氣一淋上飯就立刻開吃。
-      </p>
-      <div class="cta-row">
-        <a class="btn primary" href="./order.html">🧾 立即下單</a>
-        <button class="btn" type="button" onclick="window.selectHomeTab('heat')">🔥 怎麼加熱？</button>
+
+  <!-- TASTy-like hero: photo first -->
+  <section class="tasty-hero">
+    <div class="tasty-hero-media">
+      <img src="./images/photo1.jpg" alt="吉祥滷意滷肉飯" />
+      <div class="tasty-hero-overlay">
+        <div class="tasty-brandbar">
+          <div class="tasty-brand-left">
+            <div class="tasty-kicker">TAIWAN BRAISED SAUCE</div>
+            <div class="tasty-h1">吉祥滷意</div>
+            <div class="tasty-sub">冷凍真空滷汁（肉燥）｜8 小時慢火熬煮</div>
+          </div>
+          <a class="tasty-cta" href="./order.html">🧾 立即下單</a>
+        </div>
       </div>
-      <div class="badges">
-        <span class="badge">✅ 絕無添加香料/防腐劑</span>
-        <span class="badge">📦 200g 真空包</span>
-        <span class="badge">🧊 7-11 冷凍交貨便</span>
-        <span class="badge">🎁 買十送一</span>
-      </div>
+    </div>
+
+    <!-- 2x2 entrance tiles -->
+    <div class="tasty-tiles">
+      <a class="tile tile-1" href="./order.html">
+        <div class="tile-en">ORDER</div>
+        <div class="tile-zh">立即下單</div>
+        <div class="tile-sm">買十送一｜滿 NT$1800 免運</div>
+      </a>
+
+      <button class="tile tile-2" type="button" onclick="window.selectHomeTab('heat')">
+        <div class="tile-en">HEAT</div>
+        <div class="tile-zh">加熱方式</div>
+        <div class="tile-sm">隔水 / 電鍋 / 微波</div>
+      </button>
+
+      <button class="tile tile-3" type="button" onclick="window.selectHomeTab('ideas')">
+        <div class="tile-en">IDEAS</div>
+        <div class="tile-zh">料理靈感</div>
+        <div class="tile-sm">露營｜野餐｜家庭</div>
+      </button>
+
+      <button class="tile tile-4" type="button" onclick="window.selectHomeTab('buy')">
+        <div class="tile-en">INFO</div>
+        <div class="tile-zh">購買須知</div>
+        <div class="tile-sm">7-11 冷凍交貨便</div>
+      </button>
+    </div>
+
+    <div class="tasty-bullets">
+      <span>✅ 台灣豬嚴選</span>
+      <span>✅ 絕無添加防腐劑</span>
+      <span>📦 200g 真空包</span>
+      <span>🧊 7-11 冷凍交貨便</span>
+      <span>🎁 買十送一</span>
     </div>
   </section>
 
-  <!-- Value cards (scan) -->
   <section class="grid">
+    <!-- Value cards scan -->
     <div class="card col-12">
       <h2>一眼看懂：為什麼大家會囤</h2>
       <div class="value-grid">
@@ -63,16 +95,7 @@
       </div>
     </div>
 
-    <!-- Appetite photo FIRST (你指定：先食慾再 Tabs) -->
-    <div class="card col-12">
-      <h2>先讓你餓一下 😋</h2>
-      <figure class="photo">
-        <img src="./images/photo1.jpg" alt="滷肉飯" />
-        <figcaption>一匙淋下去，白飯就有靈魂。</figcaption>
-      </figure>
-    </div>
-
-    <!-- Tabs block -->
+    <!-- Tabs block (你指定：照片後面再 Tabs，先讓人有食慾) -->
     <div class="card col-12" id="tabsBlock">
       <h2>你想先看哪一個？</h2>
 
@@ -84,7 +107,6 @@
       </div>
 
       <div class="tabpanels">
-        <!-- 商品介紹 -->
         <div class="panel" role="tabpanel" data-panel="product">
           <table class="table">
             <tr><th>品名</th><td>吉祥滷意（滷汁-肉燥）</td></tr>
@@ -102,9 +124,13 @@
               把「像家裡的味道」真空冷凍保存，交到你手上。
             </p>
           </div>
+
+          <div class="cta-row">
+            <a class="btn primary" href="./order.html">🧾 立即下單</a>
+            <button class="btn" type="button" onclick="window.selectHomeTab('heat')">🔥 怎麼加熱？</button>
+          </div>
         </div>
 
-        <!-- 加熱方式 -->
         <div class="panel hide" role="tabpanel" data-panel="heat">
           <div class="panel">
             <b>🫕 隔水加熱（最快最香）</b>
@@ -118,20 +144,29 @@
             <b>⚡ 微波加熱（最急）</b>
             <p class="muted">1 稍解凍 → 2 倒入可微波容器 → 3 1～3 分鐘</p>
           </div>
-          <div class="badges">
-            <span class="badge">🍚 黃金比例：20g 滷汁 ：150g 白飯</span>
+          <div class="panel">
+            <b>🍚 黃金比例</b>
+            <p class="muted">20g 滷汁：150g 白飯（想更濃就加到 30g）。</p>
+          </div>
+
+          <div class="cta-row">
+            <a class="btn primary" href="./order.html">🧾 立即下單</a>
+            <a class="btn" href="./guide-711.html">🧊 7-11 填門市教學</a>
           </div>
         </div>
 
-        <!-- 料理靈感 -->
         <div class="panel hide" role="tabpanel" data-panel="ideas">
           <div class="panel"><b>🍚 3 分鐘滷肉飯</b><p class="muted">熱白飯＋20g 滷汁＝立刻開吃。</p></div>
           <div class="panel"><b>🍜 露營拌麵</b><p class="muted">煮麵＋滷汁＋蔥花，香到不想洗鍋。</p></div>
           <div class="panel"><b>🥚 家庭常備滷蛋</b><p class="muted">滷汁加水煮蛋，冰箱放著隨時加菜。</p></div>
           <div class="panel"><b>⛺ 露營一鍋料理</b><p class="muted">蔬菜＋豆腐＋滷汁，立刻變下飯菜。</p></div>
+
+          <div class="cta-row">
+            <a class="btn primary" href="./order.html">🧾 立即下單</a>
+            <button class="btn" type="button" onclick="window.selectHomeTab('heat')">🔥 怎麼加熱？</button>
+          </div>
         </div>
 
-        <!-- 購買須知 -->
         <div class="panel hide" role="tabpanel" data-panel="buy">
           <div class="panel">
             <b>🎁 優惠＆運費</b>
@@ -151,6 +186,11 @@
           <div class="panel">
             <b>🏦 匯款帳號</b>
             <p class="muted">中國信託 (822) 668540149274</p>
+          </div>
+
+          <div class="cta-row">
+            <a class="btn primary" href="./order.html">🧾 立即下單</a>
+            <a class="btn" href="./guide-711.html">🧊 7-11 填門市教學</a>
           </div>
         </div>
       </div>
@@ -175,16 +215,13 @@
           <p class="muted" style="margin:0 0 8px;">
             送禮/自用都體面：真空冷凍保存，打開就是台味幸福。
           </p>
-          <div class="badges">
-            <span class="badge">✅ 台灣豬嚴選</span>
-            <span class="badge">✅ 絕無添加防腐劑</span>
-            <span class="badge">🫕 5～10 分鐘上桌</span>
-            <span class="badge">🎁 買十送一</span>
-          </div>
           <div class="cta-row">
             <a class="btn primary" href="./order.html">🧾 立即下單</a>
             <button class="btn" type="button" onclick="window.selectHomeTab('heat')">🔥 怎麼加熱？</button>
           </div>
+          <p class="muted" style="margin-top:10px;">
+            貼心小提醒：因為沒有囤貨，所以下單匯款後約 1～2 週準備並寄出。
+          </p>
         </div>
       </div>
     </div>
@@ -194,7 +231,6 @@
   <div class="footer">© 吉祥滷意｜冷凍真空滷汁（肉燥）</div>
 </main>
 
-<!-- Bottom sticky CTA -->
 <div class="dock">
   <div class="dock-inner">
     <div>🎁 <b>買十送一</b>｜滿 <b>NT$1800</b> 免運</div>
