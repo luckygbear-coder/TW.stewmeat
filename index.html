@@ -2,11 +2,10 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="utf-8" />
-  <!-- ✅ 防止頁面因點擊/雙擊放大：user-scalable=no + maximum-scale=1 -->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <title>吉祥滷意｜冷凍真空滷汁</title>
 
-  <!-- ✅ PWA（保留，可加到主畫面） -->
+  <!-- PWA -->
   <link rel="manifest" href="./manifest.webmanifest">
   <meta name="theme-color" content="#b5122b">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -14,389 +13,36 @@
   <meta name="apple-mobile-web-app-title" content="吉祥滷意">
   <link rel="apple-touch-icon" href="./icons/icon-192.png">
 
-  <style>
-    :root{
-      --bg:#fff1d6;
-      --card:#fff7e6;
-      --ink:#3f2a34;
-      --muted:#7a5a6a;
-      --stroke:#f5d3a6;
-      --shadow:0 10px 22px rgba(0,0,0,.14);
-
-      --red:#b5122b;
-      --navy:#182433;
-      --teal:#0e8a8a;
-      --sand:#c7a27e;
-
-      --radius:18px;
-      --maxw:480px;
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0}
-    body{
-      font-family:"Noto Sans TC",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
-      color:var(--ink);
-      background: linear-gradient(180deg,#ffe6bf 0%, var(--bg) 30%, #fff7ea 100%);
-      -webkit-text-size-adjust: 100%;
-      touch-action: manipulation; /* ✅ 減少雙擊放大觸發 */
-    }
-
-    /* ✅ 防止點擊後選字/長按選單造成「像放大」的誤會：只針對非輸入區 */
-    body, .btn, .quick-item, .tab, .chip, .pill, .dock, .topbar {
-      -webkit-user-select: none;
-      user-select: none;
-      -webkit-touch-callout: none;
-    }
-    /* ✅ 但輸入框仍要能選字/貼上 */
-    input, textarea, select, pre {
-      -webkit-user-select: text;
-      user-select: text;
-      -webkit-touch-callout: default;
-    }
-
-    .wrap{
-      max-width: var(--maxw);
-      margin: 0 auto;
-      padding: 12px 12px 140px;
-    }
-
-    /* Topbar */
-    .topbar{
-      position: sticky; top: 0; z-index: 50;
-      background: rgba(255,241,214,.92);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(245,211,166,.75);
-    }
-    .topbar-inner{
-      max-width: var(--maxw);
-      margin: 0 auto;
-      padding: 10px 12px;
-      display:flex;
-      align-items:center;
-      gap:10px;
-      justify-content:flex-end; /* ✅ 只保留右邊按鈕，空間更有效利用 */
-    }
-
-    .top-actions{display:flex;gap:8px;align-items:center; flex-wrap:nowrap;}
-
-    .btn{
-      display:inline-flex; align-items:center; justify-content:center;
-      gap:8px;
-      padding: 12px 14px;
-      border-radius: 16px;
-      border: 2px solid rgba(245,211,166,.9);
-      background: #fff;
-      color: var(--ink);
-      font-weight: 900;
-      box-shadow: 0 6px 14px rgba(0,0,0,.10);
-      cursor:pointer;
-      text-decoration:none;
-      -webkit-tap-highlight-color: transparent; /* ✅ 點擊不出現藍色高亮 */
-      white-space: nowrap; /* ✅ 按鈕文字不換行 */
-    }
-    .btn.small{padding:10px 12px;border-radius:14px;font-size:12px}
-    .btn.primary{background:var(--red);color:#fff;border-color: rgba(0,0,0,.08)}
-    .btn.navy{background:var(--navy);color:#fff;border-color: rgba(0,0,0,.08)}
-    .btn:active{transform: translateY(1px)}
-    .btn:disabled{opacity:.55; cursor:not-allowed; transform:none;}
-
-    /* Card */
-    .card{
-      background: var(--card);
-      border: 2px solid rgba(245,211,166,.9);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 14px;
-      margin-top: 12px;
-    }
-    h1{ margin: 10px 0 8px; font-size: 24px; line-height:1.25; }
-    h2{ margin: 0 0 10px; font-size: 18px; }
-    .muted{ color: var(--muted); }
-    .pill{
-      display:inline-flex; gap:8px; align-items:center;
-      padding: 8px 12px;
-      border-radius: 999px;
-      border:2px dashed rgba(245,211,166,.95);
-      background: rgba(255,255,255,.9);
-      font-weight: 900;
-      font-size: 12px;
-    }
-    .chips{ display:flex; flex-wrap:wrap; gap:8px; margin: 12px 0; }
-    .chip{
-      padding: 8px 10px;
-      border-radius: 999px;
-      border: 2px solid rgba(245,211,166,.9);
-      background: #fff;
-      font-weight: 900;
-      font-size: 12px;
-      white-space: nowrap;
-    }
-    .cta-row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
-
-    /* Quick grid */
-    .quick-grid{
-      margin-top: 12px;
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-    .quick-item{
-      border:0;
-      border-radius: 18px;
-      padding: 18px 14px;
-      color:#fff;
-      font-weight: 900;
-      box-shadow: var(--shadow);
-      cursor:pointer;
-      text-align:center;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .quick-item .qi-title{ letter-spacing: 4px; font-size: 14px; opacity:.95; }
-    .quick-item .qi-sub{ margin-top: 6px; font-size: 16px; }
-    .quick-item.red{ background: var(--red); }
-    .quick-item.navy{ background: var(--navy); }
-    .quick-item.teal{ background: var(--teal); }
-    .quick-item.sand{ background: var(--sand); }
-
-    /* Carousel */
-    .carousel{
-      position: relative;
-      border-radius: 18px;
-      overflow: hidden;
-      border: 2px solid rgba(245,211,166,.9);
-      background: rgba(255,255,255,.85);
-      box-shadow: 0 10px 20px rgba(0,0,0,.12);
-    }
-    .carousel-track{
-      display:flex;
-      transform: translateX(0);
-      transition: transform .42s cubic-bezier(.2,.85,.2,1);
-      touch-action: pan-y;
-      will-change: transform;
-    }
-    .carousel-slide{ flex: 0 0 100%; padding: 10px; }
-    .carousel-slide img{
-      width:100%;
-      height:auto;
-      max-height: 320px;
-      object-fit: contain;
-      display:block;
-      border-radius: 16px;
-      border: 2px solid rgba(245,211,166,.85);
-      background:#fff;
-    }
-    .carousel-arrow{
-      position:absolute; top:50%; transform: translateY(-50%);
-      width:44px; height:44px;
-      border-radius: 999px;
-      border:2px solid rgba(255,255,255,.7);
-      background: rgba(0,0,0,.25);
-      color:#fff; font-size: 26px; font-weight: 900;
-      display:grid; place-items:center;
-      cursor:pointer;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .carousel-arrow.left{ left:10px; }
-    .carousel-arrow.right{ right:10px; }
-    .carousel-dots{
-      position:absolute;
-      left:0; right:0; bottom:10px;
-      display:flex;
-      justify-content:center;
-      gap:8px;
-    }
-    .dot{
-      width:10px; height:10px; border-radius:999px;
-      background: rgba(255,255,255,.75);
-      border: 1px solid rgba(0,0,0,.12);
-      cursor:pointer;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .dot.is-on{ background: var(--red); }
-
-    /* Tabs */
-    .tabs{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      padding-bottom: 10px;
-      border-bottom: 1px dashed rgba(245,211,166,.9);
-      margin-bottom: 12px;
-    }
-    .tab{
-      border:2px solid rgba(245,211,166,.9);
-      background:#fff;
-      border-radius: 999px;
-      padding: 10px 12px;
-      font-weight: 900;
-      cursor:pointer;
-      -webkit-tap-highlight-color: transparent;
-      white-space: nowrap;
-    }
-    .tab[aria-selected="true"]{
-      background: var(--red);
-      color:#fff;
-      border-color: rgba(0,0,0,.08);
-    }
-    .hide{ display:none !important; }
-
-    .panel{
-      background:#fff;
-      border:2px solid rgba(245,211,166,.85);
-      border-radius: 16px;
-      padding: 12px;
-      box-shadow: 0 6px 14px rgba(0,0,0,.08);
-    }
-    .list{ display:grid; gap:10px; }
-    .li{
-      padding: 12px;
-      border-radius: 16px;
-      border:2px solid rgba(245,211,166,.85);
-      background:#fff;
-    }
-    .li b{ display:block; margin-bottom:6px; }
-
-    /* Order form */
-    .form{ display:grid; gap:10px; }
-    .row{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
-    }
-    @media (max-width:420px){ .row{ grid-template-columns:1fr; } }
-    label{
-      display:block;
-      font-weight:900;
-      font-size:12px;
-      color:var(--muted);
-      margin: 0 0 6px;
-    }
-
-    /* ✅ iOS Safari：輸入框字體 <16px 會自動放大，這裡全部固定 16px */
-    input, textarea, select{
-      width:100%;
-      padding:12px 12px;
-      border-radius:14px;
-      border:2px solid rgba(245,211,166,.95);
-      background:#fff;
-      font-size:16px;            /* ✅ 關鍵：避免點擊輸入框放大 */
-      outline:none;
-    }
-    textarea{min-height:88px;resize:vertical}
-    input[readonly]{background: rgba(255,255,255,.65); color: var(--muted);}
-
-    .calc{ display:grid; gap:10px; margin-top: 6px; }
-    .calc-grid{
-      display:grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap:10px;
-      align-items:end;
-    }
-    .money{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
-    }
-    .box{
-      border:2px solid rgba(245,211,166,.9);
-      background:rgba(255,255,255,.9);
-      border-radius:16px;
-      padding:12px;
-    }
-    .box b{display:block;margin-bottom:6px}
-    .kpi{
-      font-weight:1000;
-      font-size:18px;
-    }
-    .kpi small{font-size:12px;color:var(--muted);font-weight:900}
-
-    /* Toast */
-    .toast{
-      position: fixed;
-      left: 50%;
-      bottom: 110px;
-      transform: translateX(-50%);
-      background: rgba(24,36,51,.92);
-      color: #fff;
-      padding: 10px 12px;
-      border-radius: 999px;
-      font-weight: 900;
-      font-size: 12px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity .22s ease;
-      z-index: 80;
-      max-width: calc(var(--maxw) - 24px);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .toast.on{opacity:1}
-
-    /* Dock（✅ 重新排版：文字不換行 + 讓按鈕穩定好點） */
-    .dock{
-      position: fixed;
-      left: 0; right: 0; bottom: 0;
-      background: rgba(255,241,214,.94);
-      backdrop-filter: blur(10px);
-      border-top: 1px solid rgba(245,211,166,.75);
-      padding: 10px 12px;
-      z-index: 60;
-    }
-    .dock-inner{
-      max-width: var(--maxw);
-      margin: 0 auto;
-      display:flex;
-      gap: 10px;
-      align-items:center;
-      justify-content: space-between;
-      font-weight: 900;
-      font-size: 12px;
-    }
-    .dock-text{
-      flex: 1 1 auto;
-      min-width: 0;
-      white-space: nowrap;      /* ✅ 不換行 */
-      overflow: hidden;         /* ✅ 過長用省略號 */
-      text-overflow: ellipsis;  /* ✅ 省略號 */
-    }
-    .dock-cta{
-      flex: 0 0 auto;
-      white-space: nowrap;
-    }
-
-    .footer{
-      margin-top: 16px;
-      text-align:center;
-      color: var(--muted);
-      font-weight: 900;
-      font-size: 12px;
-    }
-  </style>
+  <link rel="stylesheet" href="./assets/style.css">
 </head>
 
 <body>
   <header class="topbar">
     <div class="topbar-inner">
-      <!-- ✅ 已移除左上角 logo + 名稱區塊（不影響功能） -->
-
       <div class="top-actions">
         <a class="btn small" href="https://www.instagram.com/9.12lin" target="_blank" rel="noopener">📷 IG:@9.12lin</a>
-        <a class="btn small navy" href="https://line.me/ti/p/~chris770912" target="_blank" rel="noopener" id="lineTop">💬 LINE：chris770912</a>
-        <a class="btn primary small" href="#order">🧾 下單</a>
+
+        <!-- ✅ 加好友 -->
+        <a class="btn small navy" href="https://line.me/ti/p/~chris770912" target="_blank" rel="noopener" id="lineAddTop">
+          ➕ 加 LINE：chris770912
+        </a>
+
+        <!-- ✅ 直接用 LINE 預填訊息（下單/詢問） -->
+        <a class="btn primary small" href="#" rel="noopener" id="lineAskTop">💬 LINE 下單/詢問</a>
+
+        <a class="btn small" href="#order">🧾 下單</a>
       </div>
     </div>
   </header>
 
   <main class="wrap">
 
-    <!-- 先讓人有食慾 -->
     <section class="card">
-      <div class="pill">🇹🇼 嚴選台灣豬・慢火熬煮・冷凍真空包</div>
+      <div class="pill">🇹🇼 台灣豬嚴選・慢火熬煮・冷凍真空包</div>
       <h1>一包搞定的台味幸福：<span style="color:var(--red)">吉祥滷意</span></h1>
       <p class="muted">
         嚴選台灣豬＋家傳秘方古法滷製，慢火熬煮 8 小時的美味。
-        露營、野餐、家庭晚餐——只要加熱，幸福立刻上桌。
+        露營、野餐、家庭晚餐——只要加熱，立刻上桌。
       </p>
 
       <div class="carousel" data-carousel>
@@ -413,11 +59,8 @@
         <span class="chip">🎁 買十送一</span>
         <span class="chip">💰 每包 NT$180</span>
       </div>
-
-
     </section>
 
-    <!-- 快捷入口 -->
     <section class="quick-grid">
       <button class="quick-item red" type="button" onclick="document.getElementById('order').scrollIntoView({behavior:'smooth'})">
         <div class="qi-title">ORDER</div><div class="qi-sub">立即下單</div>
@@ -433,7 +76,6 @@
       </button>
     </section>
 
-    <!-- Tabs -->
     <section class="card" id="tabs">
       <div class="tabs">
         <button class="tab" data-tab="product" aria-selected="true">商品資訊</button>
@@ -504,7 +146,6 @@
       </div>
     </section>
 
-    <!-- 下單表單 + 試算 + 一鍵複製 -->
     <section class="card" id="order">
       <h2>🧾 立即下單（填完一鍵複製訊息給我確認）</h2>
       <p class="muted" style="margin-top:0">
@@ -601,7 +242,11 @@
         <div class="cta-row">
           <button class="btn primary" type="button" id="copyOrder">📋 一鍵複製下單訊息</button>
           <button class="btn" type="button" id="copyPay">🏦 複製匯款資訊</button>
-          <a class="btn navy" href="https://line.me/ti/p/~chris770912" target="_blank" rel="noopener" id="lineSend">💬 用 LINE 送出訂單</a>
+
+          <!-- ✅ 你要的三個 LINE 功能 -->
+          <button class="btn navy" type="button" id="lineAskBtn">💬 LINE 下單 / 詢問</button>
+          <a class="btn" href="https://line.me/ti/p/~chris770912" target="_blank" rel="noopener" id="lineFastAdd">💬 加 LINE 快速下單</a>
+          <a class="btn" href="https://line.me/ti/p/~chris770912" target="_blank" rel="noopener" id="lineService">💬 客服 LINE</a>
         </div>
 
         <div class="panel" style="margin-top:10px">
@@ -630,298 +275,12 @@
 
   <div class="toast" id="toast">已複製 ✅</div>
 
-  <script>
-    // ✅ PWA SW（保留）
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js"));
-    }
+  <!-- ✅ 右下角浮動 LINE 客服泡泡 -->
+  <button class="line-fab" type="button" id="lineFab" aria-label="LINE 客服">
+    <span class="line-fab-dot" aria-hidden="true"></span>
+    💬
+  </button>
 
-    // ===== 固定單價 =====
-    const UNIT_PRICE = 180;
-
-    // ✅ 運費規則（129 / 滿1800免運）
-    const SHIP_FEE = 129;
-    const FREE_SHIP_AT = 1800;
-
-    // ✅ 你的圖片路徑（不裁切輪播）
-    const IMAGES = [
-      "images/photo1.jpg",
-      "images/photo2.jpg",
-      "images/photo3.jpg",
-      "images/packs.jpg",
-      "images/set.jpg",
-      "images/spread.jpg",
-      "images/bowl.jpg"
-    ];
-
-    // ===== Tabs =====
-    const tabs = Array.from(document.querySelectorAll(".tab[data-tab]"));
-    const panels = Array.from(document.querySelectorAll("[data-panel]"));
-    function setTab(id){
-      tabs.forEach(t => t.setAttribute("aria-selected", t.dataset.tab === id ? "true" : "false"));
-      panels.forEach(p => p.classList.toggle("hide", p.dataset.panel !== id));
-    }
-    tabs.forEach(t => t.addEventListener("click", () => setTab(t.dataset.tab)));
-    window.selectTab = function(id){
-      document.getElementById("tabs").scrollIntoView({behavior:"smooth", block:"start"});
-      setTab(id);
-    };
-
-    // ===== Carousel =====
-    (function initCarousel(){
-      const root = document.querySelector("[data-carousel]");
-      const track = root.querySelector("[data-track]");
-      const dotsWrap = root.querySelector("[data-dots]");
-      const btnPrev = root.querySelector("[data-prev]");
-      const btnNext = root.querySelector("[data-next]");
-
-      track.innerHTML = IMAGES.map((src, i) => `
-        <div class="carousel-slide">
-          <img src="${src}" alt="美味實拍 ${i+1}" loading="lazy"
-               onerror="this.style.opacity=.25; this.alt='圖片載入失敗：請確認 images/ 檔名是否正確';">
-        </div>
-      `).join("");
-
-      const slides = Array.from(track.children);
-      let idx = 0;
-      let w = 0;
-      let timer = null;
-      let dragging = false;
-      let startX = 0;
-      let currentX = 0;
-
-      function measure(){ w = root.getBoundingClientRect().width; go(idx, false); }
-      function renderDots(){
-        dotsWrap.innerHTML = "";
-        slides.forEach((_, i) => {
-          const d = document.createElement("button");
-          d.className = "dot" + (i===idx ? " is-on" : "");
-          d.type = "button";
-          d.addEventListener("click", ()=> go(i));
-          dotsWrap.appendChild(d);
-        });
-      }
-      function go(i, animate=true){
-        idx = (i + slides.length) % slides.length;
-        track.style.transition = animate ? "transform .42s cubic-bezier(.2,.85,.2,1)" : "none";
-        track.style.transform = `translateX(${-idx * w}px)`;
-        renderDots();
-        if(!animate) requestAnimationFrame(()=> track.style.transition = "transform .42s cubic-bezier(.2,.85,.2,1)");
-      }
-      function next(){ go(idx+1); }
-      function prev(){ go(idx-1); }
-      function stopAuto(){ if(timer) clearInterval(timer); timer=null; }
-      function startAuto(){ stopAuto(); timer = setInterval(()=>{ if(!dragging) next(); }, 4200); }
-
-      btnPrev.addEventListener("click", ()=>{ stopAuto(); prev(); startAuto(); });
-      btnNext.addEventListener("click", ()=>{ stopAuto(); next(); startAuto(); });
-
-      track.addEventListener("touchstart", (e)=>{
-        dragging = true; stopAuto();
-        startX = e.touches[0].clientX; currentX = startX;
-        track.style.transition = "none";
-      }, {passive:true});
-
-      track.addEventListener("touchmove", (e)=>{
-        if(!dragging) return;
-        currentX = e.touches[0].clientX;
-        const dx = currentX - startX;
-        track.style.transform = `translateX(${(-idx*w)+dx}px)`;
-      }, {passive:true});
-
-      track.addEventListener("touchend", ()=>{
-        if(!dragging) return;
-        dragging = false;
-        const dx = currentX - startX;
-        const threshold = Math.min(90, w*0.18);
-        track.style.transition = "transform .42s cubic-bezier(.2,.85,.2,1)";
-        if(dx > threshold) prev();
-        else if(dx < -threshold) next();
-        else go(idx);
-        startAuto();
-      });
-
-      window.addEventListener("resize", measure);
-
-      renderDots();
-      measure();
-      startAuto();
-    })();
-
-    // ===== Toast =====
-    const toast = document.getElementById("toast");
-    let toastTimer = null;
-    function showToast(msg="已複製 ✅"){
-      toast.textContent = msg;
-      toast.classList.add("on");
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(()=> toast.classList.remove("on"), 1600);
-    }
-
-    // ===== Order calc + copy =====
-    const qtyEl = document.getElementById("qty");
-    const priceEl = document.getElementById("price");
-    const freeEl = document.getElementById("freePacks");
-    const shipEl = document.getElementById("shipFee");
-    const grandEl = document.getElementById("grand");
-    const noteEl = document.getElementById("grandNote");
-
-    const orderNoEl = document.getElementById("orderNo");
-    const createdAtEl = document.getElementById("createdAt");
-
-    const nameEl = document.getElementById("name");
-    const phoneEl = document.getElementById("phone");
-    const storeEl = document.getElementById("store");
-    const contactEl = document.getElementById("contact");
-    const contactIdEl = document.getElementById("contactId");
-    const noteMsgEl = document.getElementById("note");
-    const previewEl = document.getElementById("preview");
-
-    function n(v){ const x = Number(v); return Number.isFinite(x) ? x : 0; }
-    function fmt(v){ return "NT$" + Math.round(v).toLocaleString("zh-Hant-TW"); }
-
-    function pad2(x){ return String(x).padStart(2,"0"); }
-    function nowLocal(){
-      const d = new Date();
-      const y = d.getFullYear();
-      const m = pad2(d.getMonth()+1);
-      const dd = pad2(d.getDate());
-      const hh = pad2(d.getHours());
-      const mm = pad2(d.getMinutes());
-      const ss = pad2(d.getSeconds());
-      return { d, text: `${y}-${m}-${dd} ${hh}:${mm}:${ss}`, key: `${y}${m}${dd}${hh}${mm}${ss}` };
-    }
-
-    // ✅ 訂單編號
-    function genOrderNo(){
-      const t = nowLocal();
-      const rnd = Math.floor(Math.random()*1000);
-      const r3 = String(rnd).padStart(3,"0");
-      return `JLY-${t.key}-${r3}`;
-    }
-
-    function calc(){
-      const qty = Math.max(1, Math.floor(n(qtyEl.value)));
-      const price = UNIT_PRICE;
-      priceEl.value = String(price);
-
-      const free = Math.floor(qty / 10);
-      const product = qty * price;
-
-      let ship = SHIP_FEE;
-      if(product >= FREE_SHIP_AT) ship = 0;
-
-      const grand = product + ship;
-
-      freeEl.textContent = `${free} 包`;
-      shipEl.textContent = ship === 0 ? "免運" : fmt(ship);
-      grandEl.textContent = fmt(grand);
-      noteEl.textContent = `（商品 ${fmt(product)} + 運費 ${ship===0 ? "NT$0" : fmt(ship)}）`;
-
-      return { qty, price, free, product, ship, grand };
-    }
-
-    function buildMessage(){
-      const c = calc();
-      const storeLine = `7-11門市：${(storeEl.value || "（請填門市名稱）")}`;
-
-      const contactText = contactEl.value;
-      const contactId = contactIdEl.value || "9.12lin";
-
-      const msg =
-`【吉祥滷意 下單資料】
-訂單編號：${orderNoEl.value}
-建立時間：${createdAtEl.value}
-
-姓名：${nameEl.value || "（未填）"}
-電話：${phoneEl.value || "（未填）"}
-取貨方式：7-11 冷凍店到店
-${storeLine}
-
-訂購：${c.qty} 包（買十送一：${c.free} 包）
-單價：${fmt(c.price)} / 包
-商品小計：${fmt(c.product)}
-運費：${c.ship===0 ? "免運（滿1800）" : fmt(c.ship)}
-合計：${fmt(c.grand)}
-
-聯絡方式：${contactText}｜${contactId}
-備註：${noteMsgEl.value || "—"}
-
-請協助確認訂單，謝謝！`;
-
-      previewEl.textContent = msg;
-      return msg;
-    }
-
-    async function copyText(text){
-      try{
-        await navigator.clipboard.writeText(text);
-        showToast("已複製 ✅");
-      }catch(e){
-        const ta = document.createElement("textarea");
-        ta.value = text;
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand("copy");
-        document.body.removeChild(ta);
-        showToast("已複製 ✅");
-      }
-    }
-
-    // ✅ LINE：預填訊息
-    function openLineWithMessage(text){
-      const encoded = encodeURIComponent(text);
-      const urlHttps = `https://line.me/R/msg/text/?${encoded}`;
-      const urlScheme = `line://msg/text/${encoded}`;
-
-      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-      if(isMobile){
-        window.location.href = urlScheme;
-        setTimeout(()=>{ window.location.href = urlHttps; }, 450);
-      }else{
-        window.open(urlHttps, "_blank", "noopener");
-      }
-    }
-
-    document.getElementById("copyOrder").addEventListener("click", async ()=>{
-      const msg = buildMessage();
-      await copyText(msg);
-    });
-
-    document.getElementById("copyPay").addEventListener("click", async ()=>{
-      const pay =
-`【匯款資訊】
-中國信託 (822)
-帳號：668540149274
-
-匯款後請回傳：金額＋末五碼＋姓名
-LINE：chris770912`;
-      await copyText(pay);
-    });
-
-    function bindLineBtn(id){
-      const el = document.getElementById(id);
-      if(!el) return;
-      el.addEventListener("click", (e)=>{
-        e.preventDefault();
-        const msg = buildMessage();
-        openLineWithMessage(msg);
-      });
-    }
-    bindLineBtn("lineTop");
-    bindLineBtn("lineSend");
-
-    const inputs = [qtyEl, nameEl, phoneEl, storeEl, contactEl, contactIdEl, noteMsgEl];
-    inputs.forEach(el => el.addEventListener("input", buildMessage));
-
-    // init：訂單號與時間
-    (function initOrderMeta(){
-      const t = nowLocal();
-      createdAtEl.value = t.text;
-      orderNoEl.value = genOrderNo();
-    })();
-
-    calc(); buildMessage();
-  </script>
+  <script src="./assets/app.js"></script>
 </body>
 </html>
