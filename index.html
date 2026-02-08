@@ -4,836 +4,399 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>吉祥滷意｜冷凍真空滷汁（肉燥）</title>
+
   <style>
-    :root{
-      --bg:#fff1d6;
-      --card:#fff7e6;
-      --ink:#3f2a34;
-      --muted:#7a5a6a;
-      --stroke:#f5d3a6;
-      --shadow:0 10px 22px rgba(0,0,0,.14);
-
-      --red:#b5122b;
-      --navy:#182433;
-      --teal:#0e8a8a;
-      --sand:#c7a27e;
-
-      --radius:18px;
-      --maxw:480px;
+    /* ===== 全站基礎 ===== */
+    :root {
+      --red: #c61c23;
+      --dark: #2b2b2b;
+      --light: #fafafa;
+      --muted: #7a7a7a;
+      --border: #e2e2e2;
+      --radius: 12px;
+      --maxw: 980px;
+      --space: 12px;
     }
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0}
-    body{
-      font-family:"Noto Sans TC",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
-      color:var(--ink);
-      background: linear-gradient(180deg,#ffe6bf 0%, var(--bg) 30%, #fff7ea 100%);
-      -webkit-text-size-adjust: 100%;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Noto Sans TC", sans-serif;
+      background: var(--light);
+      color: var(--dark);
+      line-height: 1.6;
     }
-    .wrap{
-      max-width: var(--maxw);
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; display: block; }
+
+    .container {
       margin: 0 auto;
-      padding: 12px 12px 140px;
-    }
-
-    /* Topbar */
-    .topbar{
-      position: sticky; top: 0; z-index: 50;
-      background: rgba(255,241,214,.92);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(245,211,166,.75);
-    }
-    .topbar-inner{
+      padding: 0 var(--space);
       max-width: var(--maxw);
-      margin: 0 auto;
-      padding: 10px 12px;
-      display:flex;
-      align-items:center;
-      gap:10px;
-      justify-content:space-between;
     }
-    .brand{
-      display:flex; align-items:center; gap:10px;
-      min-width:0;
-    }
-    .logo-dot{
-      width:40px;height:40px;border-radius:999px;
-      background: radial-gradient(circle at 30% 30%, #fff 0%, #ffd3a1 45%, #f0a35c 100%);
-      border:2px solid rgba(245,211,166,.9);
-      box-shadow: 0 6px 14px rgba(0,0,0,.08);
-      flex: 0 0 auto;
-    }
-    .brand-txt{min-width:0}
-    .brand-txt b{display:block;font-size:15px}
-    .brand-txt span{
-      display:block;font-size:12px;color:var(--muted);
-      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:52vw;
-    }
-    .top-actions{display:flex;gap:8px;align-items:center}
+    h1, h2, h3 { font-weight: bold; }
+    h1 { font-size: 28px; color: var(--red); margin: 20px 0; }
+    h2 { font-size: 22px; margin: 16px 0; }
+    .muted { color: var(--muted); font-size: 14px; }
 
-    .btn{
-      display:inline-flex; align-items:center; justify-content:center;
-      gap:8px;
-      padding: 12px 14px;
-      border-radius: 16px;
-      border: 2px solid rgba(245,211,166,.9);
-      background: #fff;
-      color: var(--ink);
-      font-weight: 900;
-      box-shadow: 0 6px 14px rgba(0,0,0,.10);
-      cursor:pointer;
-      text-decoration:none;
-      user-select:none;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .btn.small{padding:10px 12px;border-radius:14px;font-size:12px}
-    .btn.primary{background:var(--red);color:#fff;border-color: rgba(0,0,0,.08)}
-    .btn.navy{background:var(--navy);color:#fff;border-color: rgba(0,0,0,.08)}
-    .btn:active{transform: translateY(1px)}
-
-    /* Card */
-    .card{
-      background: var(--card);
-      border: 2px solid rgba(245,211,166,.9);
+    button {
+      cursor: pointer;
+      border: none;
       border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 14px;
-      margin-top: 12px;
+      font-weight: bold;
     }
-    h1{ margin: 10px 0 8px; font-size: 24px; line-height:1.25; }
-    h2{ margin: 0 0 10px; font-size: 18px; }
-    .muted{ color: var(--muted); }
-    .pill{
-      display:inline-flex; gap:8px; align-items:center;
-      padding: 8px 12px;
-      border-radius: 999px;
-      border:2px dashed rgba(245,211,166,.95);
-      background: rgba(255,255,255,.9);
-      font-weight: 900;
-      font-size: 12px;
-    }
-    .chips{ display:flex; flex-wrap:wrap; gap:8px; margin: 12px 0; }
-    .chip{
-      padding: 8px 10px;
-      border-radius: 999px;
-      border: 2px solid rgba(245,211,166,.9);
-      background: #fff;
-      font-weight: 900;
-      font-size: 12px;
-    }
-    .cta-row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
-
-    /* Quick grid */
-    .quick-grid{
-      margin-top: 12px;
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-    .quick-item{
-      border:0;
-      border-radius: 18px;
-      padding: 18px 14px;
-      color:#fff;
-      font-weight: 900;
-      box-shadow: var(--shadow);
-      cursor:pointer;
-      text-align:center;
-    }
-    .quick-item .qi-title{ letter-spacing: 4px; font-size: 14px; opacity:.95; }
-    .quick-item .qi-sub{ margin-top: 6px; font-size: 16px; }
-    .quick-item.red{ background: var(--red); }
-    .quick-item.navy{ background: var(--navy); }
-    .quick-item.teal{ background: var(--teal); }
-    .quick-item.sand{ background: var(--sand); }
-
-    /* Carousel */
-    .carousel{
-      position: relative;
-      border-radius: 18px;
-      overflow: hidden;
-      border: 2px solid rgba(245,211,166,.9);
-      background: rgba(255,255,255,.85);
-      box-shadow: 0 10px 20px rgba(0,0,0,.12);
-    }
-    .carousel-track{
-      display:flex;
-      transform: translateX(0);
-      transition: transform .42s cubic-bezier(.2,.85,.2,1);
-      touch-action: pan-y;
-      will-change: transform;
-    }
-    .carousel-slide{ flex: 0 0 100%; padding: 10px; }
-    .carousel-slide img{
-      width:100%;
-      height:auto;
-      max-height: 320px;
-      object-fit: contain;      /* ✅ 完整顯示不裁切 */
-      display:block;
-      border-radius: 16px;
-      border: 2px solid rgba(245,211,166,.85);
-      background:#fff;
-    }
-    .carousel-arrow{
-      position:absolute; top:50%; transform: translateY(-50%);
-      width:44px; height:44px;
-      border-radius: 999px;
-      border:2px solid rgba(255,255,255,.7);
-      background: rgba(0,0,0,.25);
-      color:#fff; font-size: 26px; font-weight: 900;
-      display:grid; place-items:center;
-      cursor:pointer;
-    }
-    .carousel-arrow.left{ left:10px; }
-    .carousel-arrow.right{ right:10px; }
-    .carousel-dots{
-      position:absolute;
-      left:0; right:0; bottom:10px;
-      display:flex;
-      justify-content:center;
-      gap:8px;
-    }
-    .dot{
-      width:10px; height:10px; border-radius:999px;
-      background: rgba(255,255,255,.75);
-      border: 1px solid rgba(0,0,0,.12);
-      cursor:pointer;
-    }
-    .dot.is-on{ background: var(--red); }
-
-    /* Tabs */
-    .tabs{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-      padding-bottom: 10px;
-      border-bottom: 1px dashed rgba(245,211,166,.9);
-      margin-bottom: 12px;
-    }
-    .tab{
-      border:2px solid rgba(245,211,166,.9);
-      background:#fff;
-      border-radius: 999px;
-      padding: 10px 12px;
-      font-weight: 900;
-      cursor:pointer;
-    }
-    .tab[aria-selected="true"]{
+    .btn-primary {
       background: var(--red);
-      color:#fff;
-      border-color: rgba(0,0,0,.08);
-    }
-    .hide{ display:none !important; }
-
-    .panel{
-      background:#fff;
-      border:2px solid rgba(245,211,166,.85);
-      border-radius: 16px;
-      padding: 12px;
-      box-shadow: 0 6px 14px rgba(0,0,0,.08);
-    }
-    .list{ display:grid; gap:10px; }
-    .li{
-      padding: 12px;
-      border-radius: 16px;
-      border:2px solid rgba(245,211,166,.85);
-      background:#fff;
-    }
-    .li b{ display:block; margin-bottom:6px; }
-
-    /* Order form */
-    .form{ display:grid; gap:10px; }
-    .row{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
-    }
-    @media (max-width:420px){ .row{ grid-template-columns:1fr; } }
-    label{
-      display:block;
-      font-weight:900;
-      font-size:12px;
-      color:var(--muted);
-      margin: 0 0 6px;
-    }
-    input, textarea, select{
-      width:100%;
-      padding:12px 12px;
-      border-radius:14px;
-      border:2px solid rgba(245,211,166,.95);
-      background:#fff;
-      font-size:14px;
-      outline:none;
-    }
-    textarea{min-height:88px;resize:vertical}
-    input[readonly]{background: rgba(255,255,255,.65); color: var(--muted);}
-
-    .calc{ display:grid; gap:10px; margin-top: 6px; }
-    .calc-grid{
-      display:grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap:10px;
-      align-items:end;
-    }
-    .money{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
-    }
-    .box{
-      border:2px solid rgba(245,211,166,.9);
-      background:rgba(255,255,255,.9);
-      border-radius:16px;
-      padding:12px;
-    }
-    .box b{display:block;margin-bottom:6px}
-    .kpi{
-      font-weight:1000;
-      font-size:18px;
-    }
-    .kpi small{font-size:12px;color:var(--muted);font-weight:900}
-
-    /* Toast */
-    .toast{
-      position: fixed;
-      left: 50%;
-      bottom: 110px;
-      transform: translateX(-50%);
-      background: rgba(24,36,51,.92);
       color: #fff;
-      padding: 10px 12px;
-      border-radius: 999px;
-      font-weight: 900;
-      font-size: 12px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity .22s ease;
-      z-index: 80;
-      max-width: calc(var(--maxw) - 24px);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      padding: 12px 18px;
     }
-    .toast.on{opacity:1}
+    .btn-secondary {
+      border: 2px solid var(--red);
+      color: var(--red);
+      padding: 10px 16px;
+    }
 
-    /* Dock */
-    .dock{
-      position: fixed;
-      left: 0; right: 0; bottom: 0;
-      background: rgba(255,241,214,.94);
-      backdrop-filter: blur(10px);
-      border-top: 1px solid rgba(245,211,166,.75);
-      padding: 10px 12px;
-      z-index: 60;
+    /* ===== Navbar ===== */
+    .navbar {
+      background: white;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 900;
     }
-    .dock-inner{
-      max-width: var(--maxw);
-      margin: 0 auto;
-      display:flex;
-      gap: 10px;
-      align-items:center;
+    .navbar .container {
+      display: flex;
       justify-content: space-between;
-      font-weight: 900;
-      font-size: 12px;
+      align-items: center;
+      padding: 12px 0;
     }
-    .footer{
-      margin-top: 16px;
-      text-align:center;
+    .navbar-brand { font-size: 20px; font-weight: bold; color: var(--red); }
+    .navbar-links a { margin-left: 14px; font-size: 14px; }
+
+    /* ===== 輪播 ===== */
+    .gallery {
+      position: relative;
+      margin: 24px 0;
+      overflow: hidden;
+      border-radius: var(--radius);
+    }
+    .gallery-track {
+      display: flex;
+      transition: transform .5s ease;
+    }
+    .gallery-slide {
+      flex: 0 0 100%;
+    }
+    .gallery-nav {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+    .gallery-nav button {
+      pointer-events: auto;
+      background: rgba(255,255,255,0.8);
+      border-radius: 50%;
+      font-size: 24px;
+      width: 40px;
+      height: 40px;
+      line-height: 40px;
+      text-align: center;
+    }
+    .gallery-dots {
+      text-align: center;
+      margin-top: 6px;
+    }
+    .gallery-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      background: var(--border);
+      border-radius: 50%;
+      margin: 0 4px;
+    }
+    .gallery-dot.active {
+      background: var(--red);
+    }
+
+    /* ===== 商品區塊 ===== */
+    .product-info {
+      padding: 20px 0;
+    }
+    .product-price {
+      font-size: 24px;
+      color: var(--red);
+      font-weight: bold;
+    }
+    .chips {
+      margin-top: 10px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .chip {
+      background: #fff;
+      border: 1px solid var(--border);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 13px;
       color: var(--muted);
-      font-weight: 900;
-      font-size: 12px;
+    }
+
+    /* ===== Tabs ===== */
+    .tabs {
+      display: flex;
+      gap: 10px;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 8px;
+      margin-top: 24px;
+    }
+    .tab-item {
+      padding: 8px 12px;
+      font-size: 16px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+    }
+    .tab-item.active {
+      border-color: var(--red);
+      color: var(--red);
+    }
+    .tab-content {
+      display: none;
+      padding-top: 16px;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    .tab-content .item {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .tab-content .item:last-child { border-bottom: none; }
+
+    /* ===== 下單表單 ===== */
+    .order-card {
+      background: white;
+      border: 1px solid var(--border);
+      padding: 18px;
+      border-radius: var(--radius);
+      margin-top: 24px;
+    }
+    .order-card label {
+      display: block;
+      margin-top: 12px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .order-card input,
+    .order-card select,
+    .order-card textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-top: 6px;
+    }
+
+    .summary {
+      font-size: 18px;
+      margin: 10px 0;
     }
   </style>
 </head>
 
 <body>
-  <header class="topbar">
-    <div class="topbar-inner">
-      <div class="brand">
-        <div class="logo-dot" aria-hidden="true"></div>
-        <div class="brand-txt">
-          <b>吉祥滷意</b>
-          <span>冷凍真空滷汁（肉燥）｜台灣豬｜無添加香料防腐劑</span>
-        </div>
-      </div>
-
-      <div class="top-actions">
-        <a class="btn small" href="https://www.instagram.com/9.12lin" target="_blank" rel="noopener">📷 IG</a>
-        <!-- ✅ 粉專按鈕改成 LINE：chris770912（直接加好友對話） -->
-        <a class="btn small navy" href="https://line.me/ti/p/~chris770912" target="_blank" rel="noopener">💬 LINE：chris770912</a>
-        <a class="btn primary small" href="#order">🧾 下單</a>
-      </div>
+  <header class="navbar container">
+    <div class="navbar-brand">吉祥滷意</div>
+    <div class="navbar-links">
+      <a class="btn-small" href="https://www.instagram.com/9.12lin" target="_blank">IG</a>
+      <a class="btn-small" href="https://line.me/ti/p/~chris770912" target="_blank">LINE：chris770912</a>
     </div>
   </header>
 
-  <main class="wrap">
+  <main class="container">
 
-    <!-- 先讓人有食慾 -->
-    <section class="card">
-      <div class="pill">🇹🇼 台灣豬嚴選・慢火熬煮・冷凍真空包</div>
-      <h1>一包搞定的台味幸福：<span style="color:var(--red)">吉祥滷意</span>（肉燥滷汁）</h1>
-      <p class="muted">
-        嚴選台灣豬＋家傳秘方古法滷製，慢火熬煮 8 小時的美味。
-        露營、野餐、家庭晚餐——只要加熱，立刻上桌。
-      </p>
-
-      <div class="carousel" data-carousel>
-        <div class="carousel-track" data-track></div>
-        <button class="carousel-arrow left" type="button" aria-label="上一張" data-prev>‹</button>
-        <button class="carousel-arrow right" type="button" aria-label="下一張" data-next>›</button>
-        <div class="carousel-dots" data-dots></div>
+    <!-- 輪播 -->
+    <div class="gallery" id="gallery">
+      <div class="gallery-track" id="track"></div>
+      <div class="gallery-nav">
+        <button id="prevBtn">‹</button>
+        <button id="nextBtn">›</button>
       </div>
+      <div class="gallery-dots" id="dots"></div>
+    </div>
+
+    <!-- 商品介紹 -->
+    <section class="product-info">
+      <h1>冷凍真空滷汁（肉燥）</h1>
+      <p class="product-price">NT$180 / 包</p>
+      <p class="muted">露營・野餐・家庭必備｜台灣豬｜無添加香料防腐劑</p>
 
       <div class="chips">
-        <span class="chip">✅ 絕無添加香料/防腐劑</span>
-        <span class="chip">✅ 200g 冷凍真空包</span>
-        <span class="chip">✅ 7-11 冷凍交貨便</span>
-        <span class="chip">🎁 買十送一</span>
-        <span class="chip">💰 每包 NT$180</span>
-      </div>
-
-      <div class="cta-row">
-        <a class="btn primary" href="#order">🧾 立即下單</a>
-        <button class="btn navy" type="button" onclick="selectTab('heat')">🔥 立即下單＋怎麼加熱</button>
+        <span class="chip">200g 冷凍真空包</span>
+        <span class="chip">買十送一</span>
+        <span class="chip">7-11 冷凍交貨便</span>
+        <span class="chip">滿 NT$1800 免運</span>
       </div>
     </section>
 
-    <!-- 快捷入口 -->
-    <section class="quick-grid">
-      <button class="quick-item red" type="button" onclick="document.getElementById('order').scrollIntoView({behavior:'smooth'})">
-        <div class="qi-title">ORDER</div><div class="qi-sub">立即下單</div>
-      </button>
-      <button class="quick-item navy" type="button" onclick="selectTab('heat')">
-        <div class="qi-title">HEAT</div><div class="qi-sub">怎麼加熱</div>
-      </button>
-      <button class="quick-item sand" type="button" onclick="selectTab('cook')">
-        <div class="qi-title">COOK</div><div class="qi-sub">料理教學</div>
-      </button>
-      <button class="quick-item teal" type="button" onclick="selectTab('story')">
-        <div class="qi-title">ABOUT</div><div class="qi-sub">品牌故事</div>
-      </button>
+    <!-- Tabs 內容 -->
+    <div class="tabs">
+      <div class="tab-item active" data-tab="info">商品資訊</div>
+      <div class="tab-item" data-tab="heat">加熱方式</div>
+      <div class="tab-item" data-tab="cook">料理教學</div>
+      <div class="tab-item" data-tab="story">品牌故事</div>
+      <div class="tab-item" data-tab="ship">運送 / 下單</div>
+    </div>
+
+    <div class="tab-content active" id="info">
+      <div class="item"><b>品名：</b>吉祥滷意（滷汁-肉燥）</div>
+      <div class="item"><b>成份：</b>台灣豬、水、醬油、糖、鹽、蔥酥、蒜頭</div>
+      <div class="item"><b>保存：</b>冷凍 / 開封後請盡速食用</div>
+      <div class="item"><b>有效期限：</b>90 天（冷凍保存）</div>
+    </div>
+
+    <div class="tab-content" id="heat">
+      <div class="item"><b>隔水加熱</b>：水滾後轉小火 5–10 分鐘</div>
+      <div class="item"><b>電鍋加熱</b>：外鍋半碗水，10 分鐘</div>
+      <div class="item"><b>微波加熱</b>：解凍後 1–3 分鐘</div>
+    </div>
+
+    <div class="tab-content" id="cook">
+      <div class="item">1) 經典滷肉飯</div>
+      <div class="item">2) 露營拌麵 / 拌飯</div>
+      <div class="item">3) 家常配菜升級</div>
+    </div>
+
+    <div class="tab-content" id="story">
+      <div class="item">吉祥滷意用香氣征服全家，是你開飯前最安心的等待。</div>
+    </div>
+
+    <div class="tab-content" id="ship">
+      <div class="item">7-11 冷凍交貨便 NT$150（含包材）</div>
+      <div class="item">滿 NT$1800 免運</div>
+      <div class="item">收款：中國信託 822 668540149274</div>
+    </div>
+
+    <!-- 下單表單 -->
+    <section class="order-card">
+      <h2>🧾 下單</h2>
+
+      <label>數量（包）</label>
+      <input type="number" id="qty" value="1" min="1">
+
+      <label>收件人姓名</label>
+      <input id="name">
+
+      <label>聯絡電話</label>
+      <input id="phone">
+
+      <label>7-11 門市 / 地址（如需要）</label>
+      <input id="store">
+
+      <label>備註</label>
+      <textarea id="note"></textarea>
+
+      <p class="summary" id="summary"></p>
+
+      <button class="btn-primary" onclick="copyOrder()">📋 一鍵複製下單訊息</button>
+      <button class="btn-secondary" onclick="copyPayment()">🏦 複製匯款資訊</button>
     </section>
 
-    <!-- Tabs -->
-    <section class="card" id="tabs">
-      <div class="tabs">
-        <button class="tab" data-tab="product" aria-selected="true">商品資訊</button>
-        <button class="tab" data-tab="heat">加熱方式</button>
-        <button class="tab" data-tab="cook">料理教學</button>
-        <button class="tab" data-tab="story">品牌故事</button>
-        <button class="tab" data-tab="ship">運送/下單</button>
-      </div>
-
-      <div class="tab-panel" data-panel="product">
-        <div class="panel">
-          <b>📦 商品資訊</b>
-          <p class="muted" style="margin:8px 0 0">
-            品名：吉祥滷意（滷汁-肉燥）｜淨重：200g｜單價：NT$180/包<br>
-            成份：台灣豬、水、醬油、糖、鹽、蔥酥、蒜頭<br>
-            保存方法：冷凍保存；開封後請盡速食用<br>
-            有效期限：90 天（冷凍）
-          </p>
-        </div>
-      </div>
-
-      <div class="tab-panel hide" data-panel="heat">
-        <div class="list">
-          <div class="li">
-            <b>🫕 隔水加熱（最快最香）</b>
-            <div class="muted">真空包不用撕開 → 滾水後轉小火 → 5～10 分鐘</div>
-          </div>
-          <div class="li">
-            <b>🍚 電鍋加熱（最懶人）</b>
-            <div class="muted">外鍋半碗水 → 稍解凍後倒入碗盤 → 約 10 分鐘</div>
-          </div>
-          <div class="li">
-            <b>⚡ 微波加熱（最急）</b>
-            <div class="muted">稍解凍 → 倒入可微波容器 → 1～3 分鐘</div>
-          </div>
-          <div class="li">
-            <b>🍚 黃金比例</b>
-            <div class="muted"><b>20g 滷汁：150g 白飯</b></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="tab-panel hide" data-panel="cook">
-        <div class="list">
-          <div class="li"><b>1）經典滷肉飯</b><div class="muted">白飯＋滷汁 → 加滷蛋 → 完成。</div></div>
-          <div class="li"><b>2）露營拌麵/拌飯</b><div class="muted">煮麵/煮飯 → 滷汁拌一拌 → 加蔥花更香。</div></div>
-          <div class="li"><b>3）家常配菜升級</b><div class="muted">燙青菜/豆腐/蛋 → 淋滷汁，瞬間變主角。</div></div>
-        </div>
-      </div>
-
-      <div class="tab-panel hide" data-panel="story">
-        <div class="panel">
-          <b>🏮 品牌故事</b>
-          <p class="muted" style="margin:8px 0 0">
-            「吉祥滷意」想做的是：讓你打開一包，就像把台味幸福端上桌。<br>
-            台灣豬為底，搭配蔥酥蒜頭與醬油糖鹽的比例慢火熬煮，香氣抱住白飯，越吃越想念。
-          </p>
-        </div>
-      </div>
-
-      <div class="tab-panel hide" data-panel="ship">
-        <div class="list">
-          <div class="li"><b>🌟 7-11 冷凍交貨便</b><div class="muted">運費 NT$150（含包裝耗材）｜滿 NT$1800 免運</div></div>
-          <div class="li"><b>🎁 買十送一</b><div class="muted">每買 10 包 → 送 1 包（系統自動計算）</div></div>
-          <div class="li"><b>🏦 收款帳號</b><div class="muted">中國信託 (822)｜668540149274</div></div>
-          <div class="li"><b>⏳ 出貨時間</b><div class="muted">下單匯款後約 1～2 週準備並寄出</div></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 下單表單 + 試算 + 一鍵複製 -->
-    <section class="card" id="order">
-      <h2>🧾 立即下單（填完一鍵複製訊息給我確認）</h2>
-      <p class="muted" style="margin-top:0">
-        ✅ 每包 <b>NT$180</b>｜🎁 買十送一｜🌟 7-11 冷凍交貨便運費 <b>NT$150</b>（滿 <b>NT$1800</b> 免運）
-      </p>
-
-      <div class="calc box">
-        <b>🧮 數量＆運費試算</b>
-        <div class="calc-grid">
-          <div>
-            <label for="qty">訂購數量（包）</label>
-            <input id="qty" type="number" min="1" step="1" value="1" inputmode="numeric" />
-          </div>
-          <div>
-            <label for="price">單價（固定）</label>
-            <input id="price" type="number" value="180" readonly />
-          </div>
-        </div>
-
-        <div class="money">
-          <div class="box">
-            <b>贈送</b>
-            <div class="kpi" id="freePacks">0 包 <small>（每滿10送1）</small></div>
-          </div>
-          <div class="box">
-            <b>運費</b>
-            <div class="kpi" id="shipFee">NT$150 <small>（滿1800免運）</small></div>
-          </div>
-        </div>
-
-        <div class="box">
-          <b>合計</b>
-          <div class="kpi" id="grand">NT$330 <small id="grandNote">（商品 180 + 運費 150）</small></div>
-        </div>
-      </div>
-
-      <div class="form" style="margin-top:12px">
-        <div class="row">
-          <div>
-            <label for="name">收件人姓名</label>
-            <input id="name" placeholder="例如：王小明" autocomplete="name" />
-          </div>
-          <div>
-            <label for="phone">聯絡電話</label>
-            <input id="phone" placeholder="例如：0912xxxxxx" inputmode="tel" autocomplete="tel" />
-          </div>
-        </div>
-
-        <div class="row">
-          <div>
-            <label for="method">取貨方式</label>
-            <select id="method">
-              <option value="711">7-11 冷凍交貨便</option>
-              <option value="home">宅配/其他（請在備註說明）</option>
-            </select>
-          </div>
-          <div>
-            <label for="store">7-11 分店名稱（如：XX門市）</label>
-            <input id="store" placeholder="例如：台北忠孝東門市" />
-          </div>
-        </div>
-
-        <div>
-          <label for="addr">收件地址（若用宅配/其他再填）</label>
-          <input id="addr" placeholder="例：台北市…（7-11取貨可不填）" autocomplete="street-address" />
-        </div>
-
-        <div class="row">
-          <div>
-            <label for="contact">方便聯絡方式</label>
-            <select id="contact">
-              <option value="LINE" selected>LINE</option>
-              <option value="FB">FB 私訊</option>
-              <option value="IG">IG 私訊</option>
-              <option value="PHONE">電話</option>
-            </select>
-          </div>
-          <div>
-            <label for="contactId">帳號/ID（預設 9.12lin）</label>
-            <input id="contactId" placeholder="例如：你的LINE/IG帳號（可不填）" />
-          </div>
-        </div>
-
-        <div>
-          <label for="note">備註（可填匯款末五碼/希望出貨時間等）</label>
-          <textarea id="note" placeholder="例如：匯款末五碼、想週末到店取貨…"></textarea>
-        </div>
-
-        <div class="cta-row">
-          <button class="btn primary" type="button" id="copyOrder">📋 一鍵複製下單訊息</button>
-          <button class="btn" type="button" id="copyPay">🏦 複製匯款資訊</button>
-          <a class="btn navy" href="https://line.me/ti/p/~chris7709" target="_blank" rel="noopener">💬 直接加 LINE 對話</a>
-        </div>
-
-        <div class="panel" style="margin-top:10px">
-          <b>📌 訂單訊息預覽</b>
-          <pre id="preview" style="margin:8px 0 0;white-space:pre-wrap;font-family:inherit;line-height:1.55" class="muted"></pre>
-        </div>
-
-        <p class="muted">
-          貼心小提醒：因為沒有囤貨，下單匯款後約 1～2 週準備並寄出。
-          若有任何疑問，歡迎直接加 LINE：<b>chris770912</b>
-        </p>
-      </div>
-    </section>
-
-    <div class="footer">© 吉祥滷意｜冷凍真空滷汁（肉燥）</div>
   </main>
 
-  <div class="dock">
-    <div class="dock-inner">
-      <div>🎁 <b>買十送一</b>｜滿 <b>NT$1800</b> 免運｜🧊 7-11 冷凍交貨便</div>
-      <a class="btn primary small" href="#order">🧾 立即下單</a>
-    </div>
-  </div>
-
-  <div class="toast" id="toast">已複製 ✅</div>
-
   <script>
-    // ===== 固定單價 =====
-    const UNIT_PRICE = 180;
-
-    // ✅ 你的圖片路徑（不裁切輪播）
+    // ===== 輪播 =====
     const IMAGES = [
       "images/packs.jpg",
       "images/set.jpg",
       "images/spread.jpg",
       "images/bowl.jpg"
     ];
+    const track = document.getElementById("track");
+    IMAGES.forEach(src => {
+      const div = document.createElement("div");
+      div.className = "gallery-slide";
+      div.innerHTML = `<img src="${src}" alt="">`;
+      track.appendChild(div);
+    });
+
+    let idx = 0;
+    function updateCarousel() {
+      const w = document.querySelector(".gallery").offsetWidth;
+      track.style.transform = `translateX(${-idx * w}px)`;
+      document.querySelectorAll(".gallery-dot").forEach((d,i)=>{
+        d.classList.toggle("active", i === idx);
+      });
+    }
+    document.getElementById("prevBtn").onclick = () => { idx = (idx-1+IMAGES.length)%IMAGES.length; updateCarousel(); };
+    document.getElementById("nextBtn").onclick = () => { idx = (idx+1)%IMAGES.length; updateCarousel(); };
+    window.onresize = updateCarousel;
+
+    const dots = document.getElementById("dots");
+    IMAGES.forEach((_,i)=>{
+      const d = document.createElement("span");
+      d.className = "gallery-dot" + (i===0?" active":"");
+      d.onclick =()=>{ idx=i; updateCarousel(); };
+      dots.appendChild(d);
+    });
+    updateCarousel();
 
     // ===== Tabs =====
-    const tabs = Array.from(document.querySelectorAll(".tab[data-tab]"));
-    const panels = Array.from(document.querySelectorAll("[data-panel]"));
-    function setTab(id){
-      tabs.forEach(t => t.setAttribute("aria-selected", t.dataset.tab === id ? "true" : "false"));
-      panels.forEach(p => p.classList.toggle("hide", p.dataset.panel !== id));
-    }
-    tabs.forEach(t => t.addEventListener("click", () => setTab(t.dataset.tab)));
-    window.selectTab = function(id){
-      document.getElementById("tabs").scrollIntoView({behavior:"smooth", block:"start"});
-      setTab(id);
-    };
-
-    // ===== Carousel =====
-    (function initCarousel(){
-      const root = document.querySelector("[data-carousel]");
-      const track = root.querySelector("[data-track]");
-      const dotsWrap = root.querySelector("[data-dots]");
-      const btnPrev = root.querySelector("[data-prev]");
-      const btnNext = root.querySelector("[data-next]");
-
-      track.innerHTML = IMAGES.map((src, i) => `
-        <div class="carousel-slide">
-          <img src="${src}" alt="美味實拍 ${i+1}" loading="lazy"
-               onerror="this.style.opacity=.25; this.alt='圖片載入失敗：請確認 images/ 檔名是否正確';">
-        </div>
-      `).join("");
-
-      const slides = Array.from(track.children);
-      let idx = 0;
-      let w = 0;
-      let timer = null;
-      let dragging = false;
-      let startX = 0;
-      let currentX = 0;
-
-      function measure(){ w = root.getBoundingClientRect().width; go(idx, false); }
-      function renderDots(){
-        dotsWrap.innerHTML = "";
-        slides.forEach((_, i) => {
-          const d = document.createElement("button");
-          d.className = "dot" + (i===idx ? " is-on" : "");
-          d.type = "button";
-          d.addEventListener("click", ()=> go(i));
-          dotsWrap.appendChild(d);
-        });
-      }
-      function go(i, animate=true){
-        idx = (i + slides.length) % slides.length;
-        track.style.transition = animate ? "transform .42s cubic-bezier(.2,.85,.2,1)" : "none";
-        track.style.transform = `translateX(${-idx * w}px)`;
-        renderDots();
-        if(!animate) requestAnimationFrame(()=> track.style.transition = "transform .42s cubic-bezier(.2,.85,.2,1)");
-      }
-      function next(){ go(idx+1); }
-      function prev(){ go(idx-1); }
-      function stopAuto(){ if(timer) clearInterval(timer); timer=null; }
-      function startAuto(){ stopAuto(); timer = setInterval(()=>{ if(!dragging) next(); }, 4200); }
-
-      btnPrev.addEventListener("click", ()=>{ stopAuto(); prev(); startAuto(); });
-      btnNext.addEventListener("click", ()=>{ stopAuto(); next(); startAuto(); });
-
-      track.addEventListener("touchstart", (e)=>{
-        dragging = true; stopAuto();
-        startX = e.touches[0].clientX; currentX = startX;
-        track.style.transition = "none";
-      }, {passive:true});
-
-      track.addEventListener("touchmove", (e)=>{
-        if(!dragging) return;
-        currentX = e.touches[0].clientX;
-        const dx = currentX - startX;
-        track.style.transform = `translateX(${(-idx*w)+dx}px)`;
-      }, {passive:true});
-
-      track.addEventListener("touchend", ()=>{
-        if(!dragging) return;
-        dragging = false;
-        const dx = currentX - startX;
-        const threshold = Math.min(90, w*0.18);
-        track.style.transition = "transform .42s cubic-bezier(.2,.85,.2,1)";
-        if(dx > threshold) prev();
-        else if(dx < -threshold) next();
-        else go(idx);
-        startAuto();
-      });
-
-      window.addEventListener("resize", measure);
-
-      renderDots();
-      measure();
-      startAuto();
-    })();
-
-    // ===== Toast =====
-    const toast = document.getElementById("toast");
-    let toastTimer = null;
-    function showToast(msg="已複製 ✅"){
-      toast.textContent = msg;
-      toast.classList.add("on");
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(()=> toast.classList.remove("on"), 1600);
-    }
-
-    // ===== Order calc + copy =====
-    const qtyEl = document.getElementById("qty");
-    const priceEl = document.getElementById("price");
-    const freeEl = document.getElementById("freePacks");
-    const shipEl = document.getElementById("shipFee");
-    const grandEl = document.getElementById("grand");
-    const noteEl = document.getElementById("grandNote");
-
-    const nameEl = document.getElementById("name");
-    const phoneEl = document.getElementById("phone");
-    const methodEl = document.getElementById("method");
-    const storeEl = document.getElementById("store");
-    const addrEl = document.getElementById("addr");
-    const contactEl = document.getElementById("contact");
-    const contactIdEl = document.getElementById("contactId");
-    const noteMsgEl = document.getElementById("note");
-    const previewEl = document.getElementById("preview");
-
-    function n(v){ const x = Number(v); return Number.isFinite(x) ? x : 0; }
-    function fmt(v){ return "NT$" + Math.round(v).toLocaleString("zh-Hant-TW"); }
-
-    function calc(){
-      const qty = Math.max(1, Math.floor(n(qtyEl.value)));
-      const price = UNIT_PRICE;
-      priceEl.value = String(price);
-
-      const free = Math.floor(qty / 10); // 買10送1
-      const product = qty * price;
-
-      let ship = 150;
-      if(product >= 1800) ship = 0;
-
-      const grand = product + ship;
-
-      freeEl.textContent = `${free} 包`;
-      shipEl.textContent = ship === 0 ? "免運" : fmt(ship);
-      grandEl.textContent = fmt(grand);
-      noteEl.textContent = `（商品 ${fmt(product)} + 運費 ${ship===0 ? "NT$0" : fmt(ship)}）`;
-
-      return { qty, price, free, product, ship, grand };
-    }
-
-    function buildMessage(){
-      const c = calc();
-
-      const methodText = methodEl.value === "711"
-        ? "7-11 冷凍交貨便"
-        : "宅配/其他";
-
-      const storeLine = (methodEl.value === "711")
-        ? `7-11門市：${(storeEl.value || "（請填門市名稱）")}`
-        : `收件地址：${(addrEl.value || "（請填地址）")}`;
-
-      const contactText = contactEl.value;
-      const contactId = contactIdEl.value || "9.12lin";
-
-      const msg =
-`【吉祥滷意 下單資料】
-姓名：${nameEl.value || "（未填）"}
-電話：${phoneEl.value || "（未填）"}
-取貨方式：${methodText}
-${storeLine}
-
-訂購：${c.qty} 包（買十送一：${c.free} 包）
-單價：${fmt(c.price)} / 包
-商品小計：${fmt(c.product)}
-運費：${c.ship===0 ? "免運（滿1800）" : fmt(c.ship)}
-合計：${fmt(c.grand)}
-
-聯絡方式：${contactText}｜${contactId}
-備註：${noteMsgEl.value || "—"}
-
-請協助確認訂單，謝謝！`;
-
-      previewEl.textContent = msg;
-      return msg;
-    }
-
-    async function copyText(text){
-      try{
-        await navigator.clipboard.writeText(text);
-        showToast("已複製 ✅");
-      }catch(e){
-        const ta = document.createElement("textarea");
-        ta.value = text;
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand("copy");
-        document.body.removeChild(ta);
-        showToast("已複製 ✅");
-      }
-    }
-
-    document.getElementById("copyOrder").addEventListener("click", async ()=>{
-      const msg = buildMessage();
-      await copyText(msg);
+    document.querySelectorAll(".tab-item").forEach(el=>{
+      el.onclick =()=> {
+        document.querySelectorAll(".tab-item").forEach(x=>x.classList.remove("active"));
+        document.querySelectorAll(".tab-content").forEach(x=>x.classList.remove("active"));
+        el.classList.add("active");
+        document.getElementById(el.dataset.tab).classList.add("active");
+      };
     });
 
-    document.getElementById("copyPay").addEventListener("click", async ()=>{
+    // ===== 下單試算 & 一鍵複製 =====
+    function fmt(n){ return "NT$" + n.toLocaleString("zh-Hant-TW"); }
+    function calc(){
+      const q = Math.max(1, parseInt(qty.value||1));
+      const product = q * 180;
+      const free = Math.floor(q/10);
+      const ship = product >= 1800 ? 0 : 150;
+      return {q, product, free, ship, total: product+ship};
+    }
+    function updateSummary(){
+      const c = calc();
+      summary.textContent = `數量 ${c.q} 包（送 ${c.free} 包）｜商品 ${fmt(c.product)}｜運費 ${c.ship===0?"免運":fmt(c.ship)}｜合計 ${fmt(c.total)}`;
+    }
+    qty.oninput = updateSummary;
+    updateSummary();
+
+    function copyOrder(){
+      const c = calc();
+      const msg =
+`【吉祥滷意 下單】
+姓名：${name.value}
+電話：${phone.value}
+7-11門市/地址：${store.value}
+
+數量：${c.q} 包（送 ${c.free}）
+商品 NT$${c.product}
+運費：${c.ship===0?"免運":c.ship}
+合計：${c.total}
+
+LINE：chris770912
+備註：${note.value}`;
+      navigator.clipboard.writeText(msg);
+      alert("下單訊息 已複製到剪貼簿");
+    }
+    function copyPayment(){
       const pay =
 `【匯款資訊】
-中國信託 (822)
-帳號：668540149274
-
-匯款後請回傳：金額＋末五碼＋姓名
+中國信託 822 668540149274
+請回傳：金額＋匯款末五碼＋姓名
 LINE：chris770912`;
-      await copyText(pay);
-    });
-
-    const inputs = [qtyEl, nameEl, phoneEl, methodEl, storeEl, addrEl, contactEl, contactIdEl, noteMsgEl];
-    inputs.forEach(el => el.addEventListener("input", buildMessage));
-    methodEl.addEventListener("change", buildMessage);
-
-    // init
-    calc(); buildMessage();
+      navigator.clipboard.writeText(pay);
+      alert("匯款資訊 已複製到剪貼簿");
+    }
   </script>
+
 </body>
 </html>
