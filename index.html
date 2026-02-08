@@ -67,7 +67,6 @@
     .btn.small{padding:10px 12px;border-radius:14px;font-size:12px}
     .btn.primary{background:var(--red);color:#fff;border-color:rgba(0,0,0,.08)}
     .btn.navy{background:var(--navy);color:#fff;border-color:rgba(0,0,0,.08)}
-    .btn.ghost{background:rgba(255,255,255,.75)}
     .btn:active{transform: translateY(1px)}
     .card{
       background:var(--card);
@@ -182,25 +181,10 @@
     .li b{display:block;margin-bottom:6px;}
 
     /* Order form */
-    .form{
-      display:grid;
-      gap:10px;
-    }
-    .row{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
-    }
-    @media (max-width:420px){
-      .row{grid-template-columns:1fr;}
-    }
-    label{
-      display:block;
-      font-weight:900;
-      font-size:12px;
-      color:var(--muted);
-      margin: 0 0 6px;
-    }
+    .form{display:grid;gap:10px;}
+    .row{display:grid;grid-template-columns: 1fr 1fr;gap:10px;}
+    @media (max-width:420px){ .row{grid-template-columns:1fr;} }
+    label{display:block;font-weight:900;font-size:12px;color:var(--muted);margin:0 0 6px;}
     input, textarea, select{
       width:100%;
       padding:12px 12px;
@@ -210,30 +194,16 @@
       font-size:14px;
       outline:none;
     }
+    input[readonly]{
+      background: rgba(255,255,255,.65);
+      color: var(--muted);
+    }
     textarea{min-height:88px;resize:vertical}
-    .hint{
-      font-size:12px;
-      color:var(--muted);
-      font-weight:900;
-      line-height:1.5;
-    }
+    .hint{font-size:12px;color:var(--muted);font-weight:900;line-height:1.5;}
 
-    .calc{
-      display:grid;
-      gap:10px;
-      margin-top: 6px;
-    }
-    .calc-grid{
-      display:grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap:10px;
-      align-items:end;
-    }
-    .money{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
-    }
+    .calc{display:grid;gap:10px;margin-top: 6px;}
+    .calc-grid{display:grid;grid-template-columns: 1.2fr .8fr;gap:10px;align-items:end;}
+    .money{display:grid;grid-template-columns: 1fr 1fr;gap:10px;}
     .box{
       border:2px solid rgba(245,211,166,.9);
       background:rgba(255,255,255,.9);
@@ -241,31 +211,18 @@
       padding:12px;
     }
     .box b{display:block;margin-bottom:6px}
-    .kpi{
-      font-weight:1000;
-      font-size:18px;
-    }
+    .kpi{font-weight:1000;font-size:18px;}
     .kpi small{font-size:12px;color:var(--muted);font-weight:900}
 
     .toast{
-      position: fixed;
-      left: 50%;
-      bottom: 110px;
-      transform: translateX(-50%);
-      background: rgba(24,36,51,.92);
-      color: #fff;
-      padding: 10px 12px;
-      border-radius: 999px;
-      font-weight: 900;
-      font-size: 12px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity .22s ease;
-      z-index: 80;
+      position: fixed;left: 50%;bottom: 110px;transform: translateX(-50%);
+      background: rgba(24,36,51,.92);color: #fff;
+      padding: 10px 12px;border-radius: 999px;
+      font-weight: 900;font-size: 12px;
+      opacity: 0;pointer-events: none;
+      transition: opacity .22s ease;z-index: 80;
       max-width: calc(var(--maxw) - 24px);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      white-space: nowrap;overflow: hidden;text-overflow: ellipsis;
     }
     .toast.on{opacity:1}
 
@@ -325,6 +282,7 @@
         <span class="chip">✅ 200g 冷凍真空包</span>
         <span class="chip">✅ 7-11 冷凍交貨便</span>
         <span class="chip">🎁 買十送一</span>
+        <span class="chip">💰 每包 NT$180</span>
       </div>
 
       <div class="cta-row">
@@ -361,7 +319,7 @@
         <div class="panel">
           <b>📦 商品資訊</b>
           <p class="muted" style="margin:8px 0 0">
-            品名：吉祥滷意（滷汁-肉燥）｜淨重：200g<br>
+            品名：吉祥滷意（滷汁-肉燥）｜淨重：200g｜單價：NT$180/包<br>
             成份：台灣豬、水、醬油、糖、鹽、蔥酥、蒜頭<br>
             保存方法：冷凍保存；開封後請盡速食用<br>
             有效期限：90 天（冷凍）
@@ -399,19 +357,18 @@
       <div class="tab-panel hide" data-panel="ship">
         <div class="list">
           <div class="li"><b>🌟 7-11 冷凍交貨便</b><div class="muted">運費 NT$150（含包裝耗材）｜滿 NT$1800 免運</div></div>
-          <div class="li"><b>🎁 買十送一</b><div class="muted">每買 10 包 → 送 1 包（系統會自動算）</div></div>
+          <div class="li"><b>🎁 買十送一</b><div class="muted">每買 10 包 → 送 1 包（系統自動計算）</div></div>
           <div class="li"><b>🏦 收款帳號</b><div class="muted">中國信託 (822)｜668540149274</div></div>
           <div class="li"><b>⏳ 出貨時間</b><div class="muted">下單匯款後約 1～2 週準備並寄出</div></div>
         </div>
       </div>
     </section>
 
-    <!-- ✅ 下單表單 + 試算 + 一鍵複製 -->
     <section class="card" id="order">
       <h2>🧾 立即下單（填完一鍵複製訊息給我確認）</h2>
       <p class="hint" style="margin-top:0">
-        ✅ 請填：收件人/電話/地址、7-11 門市（如走交貨便）、備註<br>
-        ✅ 系統會自動算：買十送一、運費 150、滿 1800 免運
+        ✅ 請填：收件人/電話、7-11 門市（如走交貨便）、備註<br>
+        ✅ 系統自動算：每包 180、買十送一、運費 150、滿 1800 免運
       </p>
 
       <div class="calc box">
@@ -422,8 +379,8 @@
             <input id="qty" type="number" min="1" step="1" value="1" inputmode="numeric" />
           </div>
           <div>
-            <label for="price">單價（每包 NT$）</label>
-            <input id="price" type="number" min="0" step="1" value="0" inputmode="numeric" />
+            <label for="price">單價（固定）</label>
+            <input id="price" type="number" value="180" readonly />
           </div>
         </div>
 
@@ -440,11 +397,7 @@
 
         <div class="box">
           <b>合計</b>
-          <div class="kpi" id="grand">NT$150 <small id="grandNote">（商品 0 + 運費 150）</small></div>
-        </div>
-
-        <div class="hint">
-          小提醒：你也可以先不填單價（預設 0）。若你要讓客人直接結帳，告訴我你的「每包售價」，我再幫你把單價固定起來。
+          <div class="kpi" id="grand">NT$330 <small id="grandNote">（商品 180 + 運費 150）</small></div>
         </div>
       </div>
 
@@ -497,7 +450,7 @@
 
         <div>
           <label for="note">備註</label>
-          <textarea id="note" placeholder="例如：希望週末到店取貨 / 需要多送筷子湯匙 / 匯款末五碼…"></textarea>
+          <textarea id="note" placeholder="例如：匯款末五碼、希望哪天到店取貨…"></textarea>
         </div>
 
         <div class="cta-row">
@@ -512,7 +465,7 @@
         </div>
 
         <p class="hint">
-          貼心小提醒：因為沒有囤貨，下單匯款後約 1～2 週準備並寄出。若有任何疑問，歡迎私訊或加 LINE：<b>chris770912</b>
+          貼心小提醒：因為沒有囤貨，下單匯款後約 1～2 週準備並寄出。若有任何疑問，歡迎加 LINE：<b>chris770912</b>
         </p>
       </div>
     </section>
@@ -530,7 +483,8 @@
   <div class="toast" id="toast">已複製 ✅</div>
 
   <script>
-    // ✅ 圖片路徑
+    const UNIT_PRICE = 180;
+
     const IMAGES = [
       "images/packs.jpg",
       "images/set.jpg",
@@ -567,12 +521,7 @@
       `).join("");
 
       const slides = Array.from(track.children);
-      let idx = 0;
-      let w = 0;
-      let timer = null;
-      let dragging = false;
-      let startX = 0;
-      let currentX = 0;
+      let idx = 0, w = 0, timer = null, dragging=false, startX=0, currentX=0;
 
       function measure(){ w = root.getBoundingClientRect().width; go(idx, false); }
       function renderDots(){
@@ -626,7 +575,6 @@
       });
 
       window.addEventListener("resize", measure);
-
       renderDots(); measure(); startAuto();
     })();
 
@@ -663,18 +611,14 @@
 
     function calc(){
       const qty = Math.max(1, Math.floor(n(qtyEl.value)));
-      const price = Math.max(0, Math.floor(n(priceEl.value)));
+      const price = UNIT_PRICE;
+      priceEl.value = String(price);
 
       const free = Math.floor(qty / 10); // 買10送1
       const product = qty * price;
 
       let ship = 150;
       if(product >= 1800) ship = 0;
-
-      // 若選宅配/其他：先維持150顯示，讓你未來可改
-      if(methodEl.value !== "711"){
-        // 你之後若要宅配另計，可在這邊改規則
-      }
 
       const grand = product + ship;
 
@@ -708,7 +652,7 @@
 ${storeLine}
 
 訂購：${c.qty} 包（買十送一：${c.free} 包）
-單價：${c.price ? fmt(c.price) : "（未填/0）"}
+單價：${fmt(c.price)} / 包
 商品小計：${fmt(c.product)}
 運費：${c.ship===0 ? "免運（滿1800）" : fmt(c.ship)}
 合計：${fmt(c.grand)}
@@ -727,7 +671,6 @@ ${storeLine}
         await navigator.clipboard.writeText(text);
         showToast("已複製 ✅");
       }catch(e){
-        // fallback
         const ta = document.createElement("textarea");
         ta.value = text;
         document.body.appendChild(ta);
@@ -754,12 +697,10 @@ LINE：chris770912`;
       await copyText(pay);
     });
 
-    // update preview live
-    const inputs = [qtyEl, priceEl, nameEl, phoneEl, methodEl, storeEl, addrEl, contactEl, contactIdEl, noteMsgEl];
+    const inputs = [qtyEl, nameEl, phoneEl, methodEl, storeEl, addrEl, contactEl, contactIdEl, noteMsgEl];
     inputs.forEach(el => el.addEventListener("input", buildMessage));
     methodEl.addEventListener("change", buildMessage);
 
-    // initial
     calc(); buildMessage();
   </script>
 </body>
