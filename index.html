@@ -2,16 +2,16 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- ✅ 防止頁面因點擊/雙擊放大：user-scalable=no + maximum-scale=1 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <title>吉祥滷意｜冷凍真空滷汁（肉燥）</title>
 
-  <!-- ✅ PWA -->
+  <!-- ✅ PWA（保留，可加到主畫面） -->
   <link rel="manifest" href="./manifest.webmanifest">
   <meta name="theme-color" content="#b5122b">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="吉祥滷意">
-  <!-- iOS 可選：放你自己的 icon -->
   <link rel="apple-touch-icon" href="./icons/icon-192.png">
 
   <style>
@@ -38,7 +38,22 @@
       color:var(--ink);
       background: linear-gradient(180deg,#ffe6bf 0%, var(--bg) 30%, #fff7ea 100%);
       -webkit-text-size-adjust: 100%;
+      touch-action: manipulation; /* ✅ 減少雙擊放大觸發 */
     }
+
+    /* ✅ 防止點擊後選字/長按選單造成「像放大」的誤會：只針對非輸入區 */
+    body, .btn, .quick-item, .tab, .chip, .pill, .dock, .topbar {
+      -webkit-user-select: none;
+      user-select: none;
+      -webkit-touch-callout: none;
+    }
+    /* ✅ 但輸入框仍要能選字/貼上 */
+    input, textarea, select, pre {
+      -webkit-user-select: text;
+      user-select: text;
+      -webkit-touch-callout: default;
+    }
+
     .wrap{
       max-width: var(--maxw);
       margin: 0 auto;
@@ -92,8 +107,7 @@
       box-shadow: 0 6px 14px rgba(0,0,0,.10);
       cursor:pointer;
       text-decoration:none;
-      user-select:none;
-      -webkit-tap-highlight-color: transparent;
+      -webkit-tap-highlight-color: transparent; /* ✅ 點擊不出現藍色高亮 */
     }
     .btn.small{padding:10px 12px;border-radius:14px;font-size:12px}
     .btn.primary{background:var(--red);color:#fff;border-color: rgba(0,0,0,.08)}
@@ -149,6 +163,7 @@
       box-shadow: var(--shadow);
       cursor:pointer;
       text-align:center;
+      -webkit-tap-highlight-color: transparent;
     }
     .quick-item .qi-title{ letter-spacing: 4px; font-size: 14px; opacity:.95; }
     .quick-item .qi-sub{ margin-top: 6px; font-size: 16px; }
@@ -193,6 +208,7 @@
       color:#fff; font-size: 26px; font-weight: 900;
       display:grid; place-items:center;
       cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
     }
     .carousel-arrow.left{ left:10px; }
     .carousel-arrow.right{ right:10px; }
@@ -208,6 +224,7 @@
       background: rgba(255,255,255,.75);
       border: 1px solid rgba(0,0,0,.12);
       cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
     }
     .dot.is-on{ background: var(--red); }
 
@@ -227,6 +244,7 @@
       padding: 10px 12px;
       font-weight: 900;
       cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
     }
     .tab[aria-selected="true"]{
       background: var(--red);
@@ -266,13 +284,15 @@
       color:var(--muted);
       margin: 0 0 6px;
     }
+
+    /* ✅ iOS Safari：輸入框字體 <16px 會自動放大，這裡全部固定 16px */
     input, textarea, select{
       width:100%;
       padding:12px 12px;
       border-radius:14px;
       border:2px solid rgba(245,211,166,.95);
       background:#fff;
-      font-size:14px;
+      font-size:16px;            /* ✅ 關鍵：避免點擊輸入框放大 */
       outline:none;
     }
     textarea{min-height:88px;resize:vertical}
@@ -554,7 +574,6 @@
           </div>
         </div>
 
-        <!-- ✅ 只保留 7-11 -->
         <div class="row">
           <div>
             <label for="method">取貨方式</label>
@@ -592,7 +611,6 @@
         <div class="cta-row">
           <button class="btn primary" type="button" id="copyOrder">📋 一鍵複製下單訊息</button>
           <button class="btn" type="button" id="copyPay">🏦 複製匯款資訊</button>
-          <button class="btn navy" type="button" id="sheetSend">📊 送出訂單到 Google Sheet</button>
           <a class="btn navy" href="https://line.me/ti/p/~chris770912" target="_blank" rel="noopener" id="lineSend">💬 用 LINE 送出訂單</a>
         </div>
 
@@ -621,7 +639,7 @@
   <div class="toast" id="toast">已複製 ✅</div>
 
   <script>
-    // ✅ PWA SW
+    // ✅ PWA SW（保留）
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js"));
     }
@@ -629,13 +647,9 @@
     // ===== 固定單價 =====
     const UNIT_PRICE = 180;
 
-    // ✅ 運費規則
+    // ✅ 運費規則（129 / 滿1800免運）
     const SHIP_FEE = 129;
     const FREE_SHIP_AT = 1800;
-
-    // ✅ Google Sheet 接收端（把這行換成你的 Apps Script Web App URL）
-    // 例如：https://script.google.com/macros/s/AKfycbxxxxxx/exec
-    const SHEET_ENDPOINT = "PASTE_YOUR_APPS_SCRIPT_WEBAPP_URL_HERE";
 
     // ✅ 你的圖片路徑（不裁切輪播）
     const IMAGES = [
@@ -749,7 +763,7 @@
       toastTimer = setTimeout(()=> toast.classList.remove("on"), 1600);
     }
 
-    // ===== Order calc + copy + sheet =====
+    // ===== Order calc + copy =====
     const qtyEl = document.getElementById("qty");
     const priceEl = document.getElementById("price");
     const freeEl = document.getElementById("freePacks");
@@ -762,7 +776,6 @@
 
     const nameEl = document.getElementById("name");
     const phoneEl = document.getElementById("phone");
-    const methodEl = document.getElementById("method");
     const storeEl = document.getElementById("store");
     const contactEl = document.getElementById("contact");
     const contactIdEl = document.getElementById("contactId");
@@ -784,7 +797,7 @@
       return { d, text: `${y}-${m}-${dd} ${hh}:${mm}:${ss}`, key: `${y}${m}${dd}${hh}${mm}${ss}` };
     }
 
-    // ✅ 訂單編號：JLY + yyyymmddhhmmss + 3碼亂數（不重複概率極低）
+    // ✅ 訂單編號
     function genOrderNo(){
       const t = nowLocal();
       const rnd = Math.floor(Math.random()*1000);
@@ -797,7 +810,7 @@
       const price = UNIT_PRICE;
       priceEl.value = String(price);
 
-      const free = Math.floor(qty / 10); // 買10送1
+      const free = Math.floor(qty / 10);
       const product = qty * price;
 
       let ship = SHIP_FEE;
@@ -815,7 +828,6 @@
 
     function buildMessage(){
       const c = calc();
-      const methodText = "7-11 冷凍店到店";
       const storeLine = `7-11門市：${(storeEl.value || "（請填門市名稱）")}`;
 
       const contactText = contactEl.value;
@@ -828,7 +840,7 @@
 
 姓名：${nameEl.value || "（未填）"}
 電話：${phoneEl.value || "（未填）"}
-取貨方式：${methodText}
+取貨方式：7-11 冷凍店到店
 ${storeLine}
 
 訂購：${c.qty} 包（買十送一：${c.free} 包）
@@ -861,7 +873,7 @@ ${storeLine}
       }
     }
 
-    // ✅ LINE：預填訊息（無法自動送出）
+    // ✅ LINE：預填訊息
     function openLineWithMessage(text){
       const encoded = encodeURIComponent(text);
       const urlHttps = `https://line.me/R/msg/text/?${encoded}`;
@@ -874,53 +886,6 @@ ${storeLine}
       }else{
         window.open(urlHttps, "_blank", "noopener");
       }
-    }
-
-    // ✅ Google Sheet 記單
-    async function sendToSheet(payload){
-      if(!SHEET_ENDPOINT || SHEET_ENDPOINT.includes("PASTE_YOUR_APPS_SCRIPT_WEBAPP_URL_HERE")){
-        showToast("請先貼上 Google Sheet WebApp URL");
-        return { ok:false, err:"missing_endpoint" };
-      }
-      try{
-        const res = await fetch(SHEET_ENDPOINT, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify(payload)
-        });
-        const data = await res.json().catch(()=> ({}));
-        if(res.ok && (data.ok === true || data.status === "ok")){
-          showToast("已送出到 Sheet ✅");
-          return { ok:true, data };
-        }
-        showToast("送出失敗：請檢查 Sheet 設定");
-        return { ok:false, data };
-      }catch(err){
-        showToast("送出失敗：網路或權限問題");
-        return { ok:false, err };
-      }
-    }
-
-    function buildPayload(){
-      const c = calc();
-      return {
-        orderNo: orderNoEl.value,
-        createdAt: createdAtEl.value,
-        name: nameEl.value || "",
-        phone: phoneEl.value || "",
-        method: "7-11 冷凍店到店",
-        store: storeEl.value || "",
-        qty: c.qty,
-        freePacks: c.free,
-        unitPrice: c.price,
-        productSubtotal: c.product,
-        shipFee: c.ship,
-        grandTotal: c.grand,
-        contact: contactEl.value,
-        contactId: (contactIdEl.value || "9.12lin"),
-        note: noteMsgEl.value || "",
-        message: previewEl.textContent || buildMessage()
-      };
     }
 
     document.getElementById("copyOrder").addEventListener("click", async ()=>{
@@ -939,27 +904,12 @@ LINE：chris770912`;
       await copyText(pay);
     });
 
-    document.getElementById("sheetSend").addEventListener("click", async ()=>{
-      // 基本檢查（避免空門市）
-      if(!storeEl.value){
-        showToast("請先填 7-11 門市名稱");
-        storeEl.focus();
-        return;
-      }
-      buildMessage();
-      const payload = buildPayload();
-      await sendToSheet(payload);
-    });
-
     function bindLineBtn(id){
       const el = document.getElementById(id);
       if(!el) return;
-      el.addEventListener("click", async (e)=>{
+      el.addEventListener("click", (e)=>{
         e.preventDefault();
-        // 先更新訊息
         const msg = buildMessage();
-        // 可選：也一起寫進 Sheet（不想自動就把這兩行註解）
-        // if(storeEl.value) await sendToSheet(buildPayload());
         openLineWithMessage(msg);
       });
     }
@@ -969,7 +919,7 @@ LINE：chris770912`;
     const inputs = [qtyEl, nameEl, phoneEl, storeEl, contactEl, contactIdEl, noteMsgEl];
     inputs.forEach(el => el.addEventListener("input", buildMessage));
 
-    // init：生成訂單號與時間
+    // init：訂單號與時間
     (function initOrderMeta(){
       const t = nowLocal();
       createdAtEl.value = t.text;
