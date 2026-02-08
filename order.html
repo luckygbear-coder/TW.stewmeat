@@ -3,10 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>吉祥滷意｜立即下單</title>
+  <title>立即下單｜吉祥滷意</title>
   <link rel="stylesheet" href="./assets/style.css" />
 </head>
-<body data-page="order">
+<body>
 
 <header class="topbar">
   <div class="nav">
@@ -14,129 +14,90 @@
       <img class="logo" src="./assets/logo.svg" alt="吉祥滷意 LOGO" />
       <div class="brand-title">
         <b>吉祥滷意</b>
-        <span>冷凍真空滷汁（肉燥）</span>
+        <span>立即下單｜冷凍真空滷汁（肉燥）</span>
       </div>
     </a>
 
-    <div style="display:flex; gap:8px; hint:0; align-items:center;">
-      <div class="social">
-        <a class="social-btn" href="#" target="_blank" rel="noopener">📷 IG</a>
-        <a class="social-btn" href="#" target="_blank" rel="noopener">📘 粉專</a>
-      </div>
-      <a class="btn primary small" href="./order.html">🧾 立即下單</a>
+    <div class="social">
+      <a class="social-btn" href="#" target="_blank" rel="noopener">📷 IG</a>
+      <a class="social-btn" href="#" target="_blank" rel="noopener">📘 粉專</a>
     </div>
   </div>
 </header>
 
 <main class="container">
-  <section class="card col-12">
-    <h2>🧾 立即下單（最順流程）</h2>
-    <p class="muted">
-      Step 1 填資料 → Step 2 試算 → Step 3 一鍵複製下單文字 → 貼到粉專/LINE 對單即可。<br/>
-      因無囤貨：匯款後約 <b>1～2 週</b> 準備並寄出（7-11 冷凍交貨便）。
-    </p>
-  </section>
 
   <section class="grid">
-    <div class="card col-7">
-      <h2>📝 Step 1｜填寫訂購資訊</h2>
-
-      <div class="form">
-        <div class="field">
-          <label for="name">姓名</label>
-          <input id="name" placeholder="例：王小明" />
-        </div>
-        <div class="field">
-          <label for="phone">手機</label>
-          <input id="phone" placeholder="例：09xx-xxx-xxx" />
-        </div>
-
-        <div class="field">
-          <label for="store">7-11 冷凍交貨便取貨門市（建議：門市名＋地址/店號）</label>
-          <input id="store" placeholder="例：7-11 XX門市（冷凍交貨便）｜台北市OO區OO路OO號" />
-        </div>
-        <div class="field">
-          <label for="note">備註（露營日期/希望到貨時間/收件人等）</label>
-          <textarea id="note" placeholder="例：想要下週末露營用，謝謝！"></textarea>
-        </div>
-
-        <div class="field">
-          <label for="qty">訂購數量（包）</label>
-          <input id="qty" type="number" min="1" value="1" />
-        </div>
-        <div class="field">
-          <label for="price">單價（NT$，可自行調整）</label>
-          <input id="price" type="number" min="0" value="180" />
-        </div>
-      </div>
-
-      <div class="cta-row">
-        <button class="btn" id="fillSample" type="button">✍️ 一鍵填入範例</button>
-        <a class="btn" href="./guide-711.html">🧊 門市怎麼填？</a>
-        <a class="btn" href="./index.html">🏠 回首頁</a>
-      </div>
-
-      <h2 style="margin-top:14px;">🏦 付款資訊</h2>
-      <table class="table">
-        <tr><th>收款帳號</th><td><b>中國信託 (822) 668540149274</b></td></tr>
-        <tr><th>客服/對單</th><td>私訊粉專小編 或 LINE：<b>0985210319</b></td></tr>
-        <tr><th>出貨時間</th><td>匯款後約 <b>1～2 週</b> 準備並寄出（無囤貨）</td></tr>
-      </table>
+    <div class="card col-12">
+      <h2>🧾 立即下單（買十送一｜滿 NT$1800 免運）</h2>
+      <p class="muted">
+        7-11 冷凍交貨便運費 NT$150（含包裝耗材）。<br/>
+        因無囤貨：下單匯款後約 1～2 週準備並寄出。
+      </p>
     </div>
 
-    <div class="card col-5">
-      <h2>💰 Step 2｜金額試算</h2>
-      <div class="checkout">
-        <div class="sum"><span>買十送一（送）</span><b id="gift">0 包</b></div>
-        <div class="sum"><span>實拿數量</span><b id="totalQty">0 包</b></div>
-        <div class="sum"><span>小計</span><b id="subtotal">NT$ 0</b></div>
-        <div class="sum"><span>運費</span><b id="shipping">NT$ 0</b></div>
-        <div class="sum"><span>應付總額</span><b id="total">NT$ 0</b></div>
-
-        <h2 style="margin:6px 0 0;">📨 Step 3｜一鍵複製下單文字</h2>
-        <textarea id="orderText" readonly></textarea>
-        <button class="btn primary" id="copyOrder" type="button">一鍵複製下單文字</button>
-
-        <div id="successPanel" class="success-panel hide">
-          <h3>✅ 已複製！下一步這樣做（最順）</h3>
-          <p class="muted" style="margin:0 0 10px;">
-            1) 把剛剛文字貼到粉專/LINE 給小編對單<br/>
-            2) 匯款完成後回傳「末 5 碼」或截圖更快確認<br/>
-            3) 因無囤貨：匯款後約 1～2 週準備寄出
-          </p>
-          <div class="cta-row">
-            <a class="btn primary" href="./guide-711.html">🧊 7-11 填門市教學</a>
-            <a class="btn" href="./index.html">🏠 回首頁</a>
+    <div class="card col-12">
+      <div class="mockup-wrap">
+        <div class="pouch" aria-label="真空包裝示意">
+          <div class="pouch-seal"></div>
+          <div class="pouch-label">
+            <img src="./images/label.jpg" alt="包裝標示（示意）" loading="lazy" />
+          </div>
+          <div class="pouch-title">
+            吉祥滷意（肉燥）
+            <small>冷凍真空包｜200g</small>
           </div>
         </div>
 
-        <p class="muted" style="margin:0;">
-          小提醒：門市請填「門市名＋地址/店號」，不容易對錯單。
-        </p>
+        <div>
+          <div class="panel">
+            <b>📦 商品規格</b>
+            <p class="muted" style="margin-top:8px; line-height:1.7;">
+              品名：吉祥滷意（滷汁-肉燥）<br/>
+              成份：台灣豬、水、醬油、糖、鹽、蔥酥、蒜頭<br/>
+              保存：冷凍保存；開封後請盡速食用<br/>
+              有效期限：90 天（冷凍）
+            </p>
+          </div>
+
+          <div class="panel">
+            <b>💡 黃金比例</b>
+            <p class="muted" style="margin-top:8px;">
+              20g 滷汁：150g 白飯（想更濃就加到 30g）。
+            </p>
+          </div>
+
+          <div class="cta-row">
+            <a class="btn" href="./index.html" style="background:#fff;">🏠 回首頁</a>
+            <a class="btn" href="./guide-711.html">🧊 7-11 填門市教學</a>
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="card col-12">
-      <h2>✅ 購買須知</h2>
-      <p>
-        ・保存方式：冷凍保存。開封後請盡速食用。<br/>
-        ・有效期限：90 天（冷凍）。建議兩週內食用風味最佳。<br/>
-        ・物流：7-11 冷凍交貨便，運費 NT$150（含包裝耗材）；訂購滿 NT$1800 免運。<br/>
-        ・優惠：買十送一（以包數計算）。
-      </p>
-    </div>
-  </section>
+      <h2>填資料 → 顯示「下單成功導引」</h2>
 
-  <div class="footer">© 吉祥滷意｜冷凍真空滷汁（肉燥）</div>
-</main>
+      <form data-order-form>
+        <div class="panel">
+          <b>🧍 訂購資訊</b>
 
-<div class="dock">
-  <div class="dock-inner">
-    <div>🎁 <b>買十送一</b>｜滿 <b>NT$1800</b> 免運</div>
-    <a class="btn primary small" href="./order.html">🧾 立即下單</a>
-  </div>
-</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;">
+            <label>
+              <div style="font-weight:900; font-size:13px; margin-bottom:6px;">姓名</div>
+              <input name="name" required
+                style="width:100%; padding:12px 12px; border-radius:14px; border:2px solid rgba(245,211,166,0.9); outline:none;"
+                placeholder="例：王小明" />
+            </label>
 
-<script src="./assets/app.js"></script>
-</body>
-</html>
+            <label>
+              <div style="font-weight:900; font-size:13px; margin-bottom:6px;">電話</div>
+              <input name="phone" required
+                style="width:100%; padding:12px 12px; border-radius:14px; border:2px solid rgba(245,211,166,0.9); outline:none;"
+                placeholder="例：0912xxxxxx" />
+            </label>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;">
+            <label>
+              <div style="font-weight:900; font-size:13px; margin-bottom:
