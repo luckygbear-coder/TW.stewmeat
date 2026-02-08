@@ -17,7 +17,6 @@
     btnL?.addEventListener("click", () => show(idx - 1));
     btnR?.addEventListener("click", () => show(idx + 1));
 
-    // auto
     setInterval(() => show(idx + 1), 4500);
   }
 
@@ -40,11 +39,8 @@
     }
 
     tabs.forEach((t) => t.addEventListener("click", () => select(t.dataset.tab)));
-
-    // default
     select(tabs[0]?.dataset.tab || "product");
 
-    // expose
     window.selectHomeTab = function (id) {
       const target = document.getElementById("tabsBlock");
       if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -52,83 +48,130 @@
     };
   }
 
-  // ===== Order form submit (front-only demo) =====
-  function initOrder() {
-    const formWrap = document.querySelector("[data-order-form]");
-    const form = formWrap?.querySelector("form");
-    if (!form) return;
+  // ===== 美味實拍 Carousel（像西堤：滑動＋轉場）=====
+  function initCarousel() {
+    const root = document.querySelector("[data-carousel]");
+    if (!root) return;
 
-    const success = document.querySelector("[data-order-success]");
-    const summary = document.querySelector("[data-order-summary]");
+    const track = root.querySelector("[data-track]");
+    const slides = Array.from(root.querySelectorAll(".carousel-slide"));
+    const btnPrev = root.querySelector("[data-prev]");
+    const btnNext = root.querySelector("[data-next]");
+    const dotsWrap = root.querySelector("[data-dots]");
 
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
+    let idx = 0;
+    let width = 0;
+    let timer = null;
+    let dragging = false;
+    let startX = 0;
+    let currentX = 0;
 
-      const fd = new FormData(form);
-      const qty = Math.max(1, Number(fd.get("qty") || 1));
-      const name = String(fd.get("name") || "").trim();
-      const phone = String(fd.get("phone") || "").trim();
-      const note = String(fd.get("note") || "").trim();
+    function measure() {
+      width = root.getBoundingClientRect().width;
+      go(idx, false);
+    }
 
-      const pricePer = 200; // 可改
-      const ship = 150;
-      const subtotal = qty * pricePer;
+    function renderDots() {
+      if (!dotsWrap) return;
+      dotsWrap.innerHTML = "";
+      slides.forEach((_, i) => {
+        const d = document.createElement("button");
+        d.className = "dot" + (i === idx ? " is-on" : "");
+        d.type = "button";
+        d.addEventListener("click", () => go(i));
+        dotsWrap.appendChild(d);
+      });
+    }
 
-      const free = Math.floor(qty / 10); // 買十送一
-      const freeShip = subtotal >= 1800;
-      const shipping = freeShip ? 0 : ship;
-      const total = subtotal + shipping;
+    function go(i, animate = true) {
+      idx = (i + slides.length) % slides.length;
+      if (!animate) track.style.transition = "none";
+      else track.style.transition = "transform .42s cubic-bezier(.2,.85,.2,1)";
+      track.style.transform = `translateX(${-idx * width}px)`;
+      renderDots();
+      if (!animate) requestAnimationFrame(() => (track.style.transition = "transform .42s cubic-bezier(.2,.85,.2,1)"));
+    }
 
-      summary.innerHTML = `
-        <div class="panel">
-          <h3>✅ 下單成功（請依照下方步驟完成）</h3>
-          <p class="muted" style="line-height:1.7;">
-            訂購人：${name || "（未填）"}<br/>
-            電話：${phone || "（未填）"}<br/>
-            數量：${qty} 包（買十送一：送 ${free} 包）<br/>
-            小計：NT$ ${subtotal}<br/>
-            運費：NT$ ${shipping} ${freeShip ? "（滿 NT$1800 免運）" : ""}<br/>
-            <b style="color:#b5122b;">應付總額：NT$ ${total}</b><br/>
-            備註：${note || "（無）"}
-          </p>
-        </div>
+    function next() { go(idx + 1); }
+    function prev() { go(idx - 1); }
 
-        <div class="panel">
-          <h3>🏦 匯款資訊</h3>
-          <p class="muted" style="line-height:1.7;">
-            中國信託 (822)<br/>
-            帳號：668540149274
-          </p>
-        </div>
+    function stopAuto() { if (timer) clearInterval(timer); timer = null; }
+    function startAuto() {
+      stopAuto();
+      timer = setInterval(() => { if (!dragging) next(); }, 4200);
+    }
 
-        <div class="panel">
-          <h3>🧊 下一步：填 7-11 取貨門市</h3>
-          <p class="muted" style="line-height:1.7;">
-            1）先完成匯款<br/>
-            2）再到 7-11 交貨便系統填「取貨門市」<br/>
-            3）把門市名稱＋店號回傳給小編/LINE：0985-210-319
-          </p>
-          <div class="cta-row" style="margin-top:10px;">
-            <a class="btn primary" href="./guide-711.html">📷 看教學：怎麼填門市</a>
-            <a class="btn" href="./index.html">🏠 回首頁</a>
-          </div>
-        </div>
+    // Buttons
+    btnPrev?.addEventListener("click", () => { stopAuto(); prev(); startAuto(); });
+    btnNext?.addEventListener("click", () => { stopAuto(); next(); startAuto(); });
 
-        <div class="panel">
-          <h3>⏳ 出貨時間</h3>
-          <p class="muted">因無囤貨：下單匯款後約 1～2 週準備並寄出。</p>
-        </div>
-      `;
+    // Touch / swipe
+    track.addEventListener("touchstart", (e) => {
+      dragging = true;
+      stopAuto();
+      startX = e.touches[0].clientX;
+      currentX = startX;
+      track.style.transition = "none";
+    }, { passive: true });
 
-      formWrap.classList.add("hide");
-      success.classList.remove("hide");
-      success.scrollIntoView({ behavior: "smooth", block: "start" });
+    track.addEventListener("touchmove", (e) => {
+      if (!dragging) return;
+      currentX = e.touches[0].clientX;
+      const dx = currentX - startX;
+      track.style.transform = `translateX(${(-idx * width) + dx}px)`;
+    }, { passive: true });
+
+    track.addEventListener("touchend", () => {
+      if (!dragging) return;
+      dragging = false;
+      const dx = currentX - startX;
+      const threshold = Math.min(90, width * 0.18);
+      track.style.transition = "transform .42s cubic-bezier(.2,.85,.2,1)";
+
+      if (dx > threshold) prev();
+      else if (dx < -threshold) next();
+      else go(idx);
+
+      startAuto();
     });
+
+    // Mouse drag (optional on desktop)
+    track.addEventListener("mousedown", (e) => {
+      dragging = true;
+      stopAuto();
+      startX = e.clientX;
+      currentX = startX;
+      track.style.transition = "none";
+    });
+    window.addEventListener("mousemove", (e) => {
+      if (!dragging) return;
+      currentX = e.clientX;
+      const dx = currentX - startX;
+      track.style.transform = `translateX(${(-idx * width) + dx}px)`;
+    });
+    window.addEventListener("mouseup", () => {
+      if (!dragging) return;
+      dragging = false;
+      const dx = currentX - startX;
+      const threshold = Math.min(90, width * 0.18);
+      track.style.transition = "transform .42s cubic-bezier(.2,.85,.2,1)";
+      if (dx > threshold) prev();
+      else if (dx < -threshold) next();
+      else go(idx);
+      startAuto();
+    });
+
+    window.addEventListener("resize", measure);
+
+    // init
+    renderDots();
+    measure();
+    startAuto();
   }
 
   document.addEventListener("DOMContentLoaded", () => {
     initHero();
     initTabs();
-    initOrder();
+    initCarousel();
   });
 })();
