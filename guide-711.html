@@ -1,80 +1,148 @@
 <!doctype html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>吉祥滷意｜7-11 冷凍交貨便填門市教學</title>
-  <link rel="stylesheet" href="./assets/style.css" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>7-11 冷凍交貨便填門市教學｜吉祥滷意</title>
+  <link rel="stylesheet" href="./assets/style.css">
+  <style>
+    /* 只屬於教學頁的補充樣式（不影響其他頁） */
+    .step { margin-top: 14px; }
+    .step h3 { margin: 0 0 6px; }
+    .step .muted { line-height: 1.7; }
+    .shot {
+      border-radius: 16px;
+      overflow: hidden;
+      border: 2px dashed rgba(245,211,166,.9);
+      background: #fff7e6;
+      display: grid;
+      place-items: center;
+      min-height: 180px;
+    }
+    .shot img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .shot .ph {
+      color: #7a5a6a;
+      font-weight: 700;
+      padding: 24px;
+      text-align: center;
+    }
+    .shots {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    @media (min-width: 768px) {
+      .shots { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
 </head>
 <body>
 
 <header class="topbar">
   <div class="nav">
     <a class="brand" href="./index.html">
-      <img class="logo" src="./assets/logo.svg" alt="吉祥滷意 LOGO" />
+      <img class="logo" src="./assets/logo.svg" alt="吉祥滷意">
       <div class="brand-title">
         <b>吉祥滷意</b>
-        <span>冷凍真空滷汁（肉燥）</span>
+        <span>7-11 冷凍交貨便｜填門市教學</span>
       </div>
     </a>
-
-    <div style="display:flex; gap:8px; align-items:center;">
-      <div class="social">
-        <a class="social-btn" href="#" target="_blank" rel="noopener">📷 IG</a>
-        <a class="social-btn" href="#" target="_blank" rel="noopener">📘 粉專</a>
-      </div>
-      <a class="btn primary small" href="./order.html">🧾 立即下單</a>
+    <div class="cta-row">
+      <a class="btn" href="./order.html">🧾 回下單</a>
+      <a class="btn primary small" href="./index.html">🏠 回首頁</a>
     </div>
   </div>
 </header>
 
 <main class="container">
-  <section class="card col-12">
-    <h2>🧊 7-11 冷凍交貨便｜門市怎麼填（示意教學）</h2>
-    <p class="muted">
-      填門市最重要：<b>門市名＋地址/店號</b>（避免同名門市對錯單）。<br/>
-      你在下單頁的「取貨門市」欄位照下面格式貼上就對了。
-    </p>
-  </section>
-
   <section class="grid">
-    <div class="card col-7">
-      <h2>📌 建議格式（照抄）</h2>
-      <table class="table">
-        <tr><th>最佳</th><td><b>7-11 XX門市（冷凍交貨便）｜台北市OO區OO路OO號</b></td></tr>
-        <tr><th>也可</th><td><b>7-11 XX門市（冷凍交貨便）｜店號 123456</b></td></tr>
-        <tr><th>不建議</th><td>只寫「7-11」或只寫地區（太容易誤會）</td></tr>
-      </table>
 
-      <h2 style="margin-top:14px;">🧭 四步驟</h2>
-      <div class="steps">
-        <div class="step"><div class="step-no">1</div><div><b>先決定取貨門市</b><p class="muted">選你常去或離你最近的 7-11。</p></div></div>
-        <div class="step"><div class="step-no">2</div><div><b>記下門市名＋地址/店號</b><p class="muted">同名門市很多，加地址最保險。</p></div></div>
-        <div class="step"><div class="step-no">3</div><div><b>貼到下單頁「取貨門市」欄位</b><p class="muted">格式：門市名＋地址/店號＋（冷凍交貨便）。</p></div></div>
-        <div class="step"><div class="step-no">4</div><div><b>一鍵複製下單文字 → 傳給小編對單</b><p class="muted">私訊粉專 / LINE：0985210319</p></div></div>
+    <div class="card col-12">
+      <h2>📦 下單完成後，下一步怎麼做？</h2>
+      <p class="muted">
+        完成匯款後，請依照下列步驟填寫 <b>7-11 冷凍交貨便</b> 的「取貨門市」。<br>
+        填完後，把 <b>門市名稱＋店號</b> 回傳給我們即可。
+      </p>
+      <div class="panel">
+        <b>📲 回傳方式</b>
+        <p class="muted" style="margin-top:8px;">
+          LINE / 小編：<b>0985-210-319</b>
+        </p>
+      </div>
+    </div>
+
+    <div class="card col-12">
+      <h2>🧭 操作步驟（照做不會錯）</h2>
+
+      <div class="step panel">
+        <h3>Step 1｜進入 7-11 交貨便（冷凍）</h3>
+        <p class="muted">
+          開啟 7-11 交貨便寄件頁，選擇「<b>冷凍</b>」服務。<br>
+          （若你有固定的官方入口網址，之後可直接放在這裡）
+        </p>
       </div>
 
-      <div class="cta-row">
+      <div class="step panel">
+        <h3>Step 2｜填寫寄件 / 收件資訊</h3>
+        <p class="muted">
+          依畫面填入基本資料（姓名、電話）。<br>
+          收件人請填「你自己」，以門市取貨。
+        </p>
+      </div>
+
+      <div class="step panel">
+        <h3>Step 3｜選擇取貨門市</h3>
+        <p class="muted">
+          使用地圖或搜尋功能，選擇你最方便的 7-11 門市，確認送出。
+        </p>
+      </div>
+
+      <div class="step panel">
+        <h3>Step 4｜把門市資訊回傳給我們</h3>
+        <p class="muted">
+          回傳「<b>門市名稱＋門市店號</b>」到 LINE / 小編。<br>
+          我們收到後就會安排出貨。
+        </p>
+      </div>
+    </div>
+
+    <div class="card col-12">
+      <h2>📷 截圖教學（把圖放進來就會顯示）</h2>
+      <p class="muted">
+        檔名固定即可：<br>
+        <code>images/711-1.jpg</code>、<code>images/711-2.jpg</code>、<code>images/711-3.jpg</code>、<code>images/711-4.jpg</code>
+      </p>
+
+      <div class="shots">
+        <div class="shot">
+          <img src="./images/711-1.jpg" alt="7-11 教學 1"
+               onerror="this.remove(); this.parentNode.innerHTML='<div class=ph>放入 images/711-1.jpg<br>（進入交貨便頁）</div>';">
+        </div>
+        <div class="shot">
+          <img src="./images/711-2.jpg" alt="7-11 教學 2"
+               onerror="this.remove(); this.parentNode.innerHTML='<div class=ph>放入 images/711-2.jpg<br>（填寫資料）</div>';">
+        </div>
+        <div class="shot">
+          <img src="./images/711-3.jpg" alt="7-11 教學 3"
+               onerror="this.remove(); this.parentNode.innerHTML='<div class=ph>放入 images/711-3.jpg<br>（選擇門市）</div>';">
+        </div>
+        <div class="shot">
+          <img src="./images/711-4.jpg" alt="7-11 教學 4"
+               onerror="this.remove(); this.parentNode.innerHTML='<div class=ph>放入 images/711-4.jpg<br>（完成確認）</div>';">
+        </div>
+      </div>
+
+      <div class="cta-row" style="margin-top:12px;">
         <a class="btn primary" href="./order.html">🧾 回下單頁</a>
         <a class="btn" href="./index.html">🏠 回首頁</a>
       </div>
     </div>
 
-    <div class="card col-5">
-      <h2>📱 下單文字示意（像截圖）</h2>
-      <div class="phone-mock">
-        <div class="phone-top">下單資訊（示意）</div>
-        <div class="phone-body">
-          <div class="bubble">取貨門市：7-11 XX門市（冷凍交貨便）｜台北市OO區OO路OO號</div>
-          <div class="bubble">訂購數量：12 包（買十送一：送 1 包）</div>
-          <div class="bubble">匯款帳號：中信(822) 668540149274</div>
-        </div>
-      </div>
-
-      <p class="muted" style="margin-top:10px;">
-        ※ 用示意方式教你填法，避免 7-11 介面更新造成真正截圖失效。
-      </p>
-    </div>
   </section>
 
   <div class="footer">© 吉祥滷意｜冷凍真空滷汁（肉燥）</div>
@@ -82,10 +150,11 @@
 
 <div class="dock">
   <div class="dock-inner">
-    <div>🎁 <b>買十送一</b>｜滿 <b>NT$1800</b> 免運</div>
-    <a class="btn primary small" href="./order.html">🧾 立即下單</a>
+    <div>🧊 填完門市後，回傳 LINE：<b>0985-210-319</b></div>
+    <a class="btn primary small" href="./order.html">🧾 回下單</a>
   </div>
 </div>
 
+<script src="./assets/app.js"></script>
 </body>
 </html>
