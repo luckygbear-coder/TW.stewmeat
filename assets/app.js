@@ -24,13 +24,13 @@ function initTabs(){
   tabs.forEach(t=>{
     t.addEventListener("click", ()=>{
       selectTab(t.dataset.tab);
+      const block = document.querySelector("#tabsBlock");
+      if(block) block.scrollIntoView({behavior:"smooth", block:"start"});
     });
   });
 
-  // default
   selectTab(tabs[0]?.dataset.tab || "product");
 
-  // optional: buttons can jump to a tab
   window.selectHomeTab = (id)=>{
     selectTab(id);
     const block = document.querySelector("#tabsBlock");
