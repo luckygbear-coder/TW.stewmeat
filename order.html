@@ -1,103 +1,86 @@
 <!doctype html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>立即下單｜吉祥滷意</title>
-  <link rel="stylesheet" href="./assets/style.css" />
+  <link rel="stylesheet" href="./assets/style.css">
 </head>
 <body>
 
 <header class="topbar">
   <div class="nav">
     <a class="brand" href="./index.html">
-      <img class="logo" src="./assets/logo.svg" alt="吉祥滷意 LOGO" />
+      <img class="logo" src="./assets/logo.svg" alt="吉祥滷意">
       <div class="brand-title">
         <b>吉祥滷意</b>
-        <span>立即下單｜冷凍真空滷汁（肉燥）</span>
+        <span>冷凍真空滷汁（肉燥）</span>
       </div>
     </a>
-
-    <div class="social">
-      <a class="social-btn" href="#" target="_blank" rel="noopener">📷 IG</a>
-      <a class="social-btn" href="#" target="_blank" rel="noopener">📘 粉專</a>
-    </div>
+    <a class="btn primary small" href="./index.html">回首頁</a>
   </div>
 </header>
 
 <main class="container">
 
   <section class="grid">
+
     <div class="card col-12">
-      <h2>🧾 立即下單（買十送一｜滿 NT$1800 免運）</h2>
+      <h2>🧾 立即下單</h2>
       <p class="muted">
-        7-11 冷凍交貨便運費 NT$150（含包裝耗材）。<br/>
-        因無囤貨：下單匯款後約 1～2 週準備並寄出。
+        🎁 買十送一｜滿 NT$1800 免運<br>
+        🧊 7-11 冷凍交貨便（運費 NT$150）
       </p>
     </div>
 
-    <div class="card col-12">
-      <div class="mockup-wrap">
-        <div class="pouch" aria-label="真空包裝示意">
-          <div class="pouch-seal"></div>
-          <div class="pouch-label">
-            <img src="./images/label.jpg" alt="包裝標示（示意）" loading="lazy" />
-          </div>
-          <div class="pouch-title">
-            吉祥滷意（肉燥）
-            <small>冷凍真空包｜200g</small>
-          </div>
-        </div>
+    <!-- 表單 -->
+    <div class="card col-12" data-order-form>
+      <form>
+        <div class="panel">
+          <label>
+            <b>姓名</b>
+            <input name="name" required placeholder="例：王小明">
+          </label>
 
-        <div>
-          <div class="panel">
-            <b>📦 商品規格</b>
-            <p class="muted" style="margin-top:8px; line-height:1.7;">
-              品名：吉祥滷意（滷汁-肉燥）<br/>
-              成份：台灣豬、水、醬油、糖、鹽、蔥酥、蒜頭<br/>
-              保存：冷凍保存；開封後請盡速食用<br/>
-              有效期限：90 天（冷凍）
-            </p>
-          </div>
+          <label>
+            <b>電話</b>
+            <input name="phone" required placeholder="例：0912xxxxxx">
+          </label>
 
-          <div class="panel">
-            <b>💡 黃金比例</b>
-            <p class="muted" style="margin-top:8px;">
-              20g 滷汁：150g 白飯（想更濃就加到 30g）。
-            </p>
-          </div>
+          <label>
+            <b>訂購數量（包）</b>
+            <input type="number" name="qty" min="1" value="1" required>
+          </label>
+
+          <label>
+            <b>備註（選填）</b>
+            <textarea name="note" rows="3" placeholder="例：希望週末前寄出"></textarea>
+          </label>
 
           <div class="cta-row">
-            <a class="btn" href="./index.html" style="background:#fff;">🏠 回首頁</a>
-            <a class="btn" href="./guide-711.html">🧊 7-11 填門市教學</a>
+            <button class="btn primary" type="submit">✅ 送出下單</button>
+            <a class="btn" href="./index.html">再看看商品</a>
           </div>
         </div>
-      </div>
+      </form>
     </div>
 
-    <div class="card col-12">
-      <h2>填資料 → 顯示「下單成功導引」</h2>
+    <!-- 成功畫面 -->
+    <div class="card col-12 hide" data-order-success>
+      <div data-order-summary></div>
+    </div>
 
-      <form data-order-form>
-        <div class="panel">
-          <b>🧍 訂購資訊</b>
+  </section>
 
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;">
-            <label>
-              <div style="font-weight:900; font-size:13px; margin-bottom:6px;">姓名</div>
-              <input name="name" required
-                style="width:100%; padding:12px 12px; border-radius:14px; border:2px solid rgba(245,211,166,0.9); outline:none;"
-                placeholder="例：王小明" />
-            </label>
+</main>
 
-            <label>
-              <div style="font-weight:900; font-size:13px; margin-bottom:6px;">電話</div>
-              <input name="phone" required
-                style="width:100%; padding:12px 12px; border-radius:14px; border:2px solid rgba(245,211,166,0.9); outline:none;"
-                placeholder="例：0912xxxxxx" />
-            </label>
-          </div>
+<div class="dock">
+  <div class="dock-inner">
+    <div>🎁 買十送一｜滿 NT$1800 免運</div>
+    <a class="btn primary small" href="./index.html">🏠 回首頁</a>
+  </div>
+</div>
 
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;">
-            <label>
-              <div style="font-weight:900; font-size:13px; margin-bottom:
+<script src="./assets/app.js"></script>
+</body>
+</html>
