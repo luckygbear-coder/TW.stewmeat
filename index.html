@@ -74,26 +74,10 @@
       display:flex;
       align-items:center;
       gap:10px;
-      justify-content:space-between;
+      justify-content:flex-end; /* ✅ 只保留右邊按鈕，空間更有效利用 */
     }
-    .brand{
-      display:flex; align-items:center; gap:10px;
-      min-width:0;
-    }
-    .logo-dot{
-      width:40px;height:40px;border-radius:999px;
-      background: radial-gradient(circle at 30% 30%, #fff 0%, #ffd3a1 45%, #f0a35c 100%);
-      border:2px solid rgba(245,211,166,.9);
-      box-shadow: 0 6px 14px rgba(0,0,0,.08);
-      flex: 0 0 auto;
-    }
-    .brand-txt{min-width:0}
-    .brand-txt b{display:block;font-size:15px}
-    .brand-txt span{
-      display:block;font-size:12px;color:var(--muted);
-      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:52vw;
-    }
-    .top-actions{display:flex;gap:8px;align-items:center}
+
+    .top-actions{display:flex;gap:8px;align-items:center; flex-wrap:nowrap;}
 
     .btn{
       display:inline-flex; align-items:center; justify-content:center;
@@ -108,6 +92,7 @@
       cursor:pointer;
       text-decoration:none;
       -webkit-tap-highlight-color: transparent; /* ✅ 點擊不出現藍色高亮 */
+      white-space: nowrap; /* ✅ 按鈕文字不換行 */
     }
     .btn.small{padding:10px 12px;border-radius:14px;font-size:12px}
     .btn.primary{background:var(--red);color:#fff;border-color: rgba(0,0,0,.08)}
@@ -144,6 +129,7 @@
       background: #fff;
       font-weight: 900;
       font-size: 12px;
+      white-space: nowrap;
     }
     .cta-row{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; }
 
@@ -245,6 +231,7 @@
       font-weight: 900;
       cursor:pointer;
       -webkit-tap-highlight-color: transparent;
+      white-space: nowrap;
     }
     .tab[aria-selected="true"]{
       background: var(--red);
@@ -346,7 +333,7 @@
     }
     .toast.on{opacity:1}
 
-    /* Dock */
+    /* Dock（✅ 重新排版：文字不換行 + 讓按鈕穩定好點） */
     .dock{
       position: fixed;
       left: 0; right: 0; bottom: 0;
@@ -366,6 +353,18 @@
       font-weight: 900;
       font-size: 12px;
     }
+    .dock-text{
+      flex: 1 1 auto;
+      min-width: 0;
+      white-space: nowrap;      /* ✅ 不換行 */
+      overflow: hidden;         /* ✅ 過長用省略號 */
+      text-overflow: ellipsis;  /* ✅ 省略號 */
+    }
+    .dock-cta{
+      flex: 0 0 auto;
+      white-space: nowrap;
+    }
+
     .footer{
       margin-top: 16px;
       text-align:center;
@@ -379,13 +378,7 @@
 <body>
   <header class="topbar">
     <div class="topbar-inner">
-      <div class="brand">
-        <div class="logo-dot" aria-hidden="true"></div>
-        <div class="brand-txt">
-          <b>吉祥滷意</b>
-          <span>冷凍真空滷汁（肉燥）｜台灣豬｜無添加香料防腐劑</span>
-        </div>
-      </div>
+      <!-- ✅ 已移除左上角 logo + 名稱區塊（不影響功能） -->
 
       <div class="top-actions">
         <a class="btn small" href="https://www.instagram.com/9.12lin" target="_blank" rel="noopener">📷 IG</a>
@@ -421,7 +414,10 @@
         <span class="chip">💰 每包 NT$180</span>
       </div>
 
-
+      <div class="cta-row">
+        <a class="btn primary" href="#order">🧾 立即下單</a>
+        <button class="btn navy" type="button" onclick="selectTab('heat')">🔥 立即下單＋怎麼加熱</button>
+      </div>
     </section>
 
     <!-- 快捷入口 -->
@@ -454,8 +450,8 @@
         <div class="panel">
           <b>📦 商品資訊</b>
           <p class="muted" style="margin:8px 0 0">
-            品名：吉祥滷意（滷汁-肉燥）｜淨重：200g｜<br>
-            成份：台灣豬、水、醬油、糖、鹽、蔥酥、蒜<br>
+            品名：吉祥滷意（滷汁-肉燥）｜淨重：200g｜單價：NT$180/包<br>
+            成份：台灣豬、水、醬油、糖、鹽、蔥酥、蒜頭<br>
             保存方法：冷凍保存；開封後請盡速食用<br>
             有效期限：90 天（冷凍）
           </p>
@@ -496,7 +492,7 @@
           <b>🏮 品牌故事</b>
           <p class="muted" style="margin:8px 0 0">
             「吉祥滷意」想做的是：讓你打開一包，就像把台味幸福端上桌。<br>
-            嚴選台灣豬，搭配蔥酥蒜頭與醬油糖鹽的黃金比例慢火熬煮，香氣抱住白飯，越吃越想念。
+            台灣豬為底，搭配蔥酥蒜頭與醬油糖鹽的比例慢火熬煮，香氣抱住白飯，越吃越想念。
           </p>
         </div>
       </div>
@@ -513,7 +509,7 @@
 
     <!-- 下單表單 + 試算 + 一鍵複製 -->
     <section class="card" id="order">
-      <h2>立即下單（填完一鍵複製訊息給我確認）</h2>
+      <h2>🧾 立即下單（填完一鍵複製訊息給我確認）</h2>
       <p class="muted" style="margin-top:0">
         ✅ 每包 <b>NT$180</b>｜🎁 買十送一｜🌟 7-11 冷凍店到店運費 <b>NT$129</b>（滿 <b>NT$1800</b> 免運）
       </p>
@@ -628,8 +624,10 @@
 
   <div class="dock">
     <div class="dock-inner">
-      <div>🎁 <b>買十送一</b>｜滿 <b>NT$1800</b> 免運｜🧊 7-11 冷凍店到店</div>
-      <a class="btn primary small" href="#order">立即下單</a>
+      <div class="dock-text">🎁 <b>買十送一</b>｜滿 <b>NT$1800</b> 免運｜🧊 7-11 冷凍店到店</div>
+      <div class="dock-cta">
+        <a class="btn primary small" href="#order">🧾 立即下單</a>
+      </div>
     </div>
   </div>
 
