@@ -358,7 +358,8 @@
 
       <div class="top-actions">
         <a class="btn small" href="https://www.instagram.com/9.12lin" target="_blank" rel="noopener">📷 IG</a>
-        <a class="btn small navy" href="https://line.me/ti/p/~chris770912" target="_blank" rel="noopener">💬 LINE：chris770912</a>
+        <!-- ✅ 粉專按鈕改成 LINE：chris770912（直接加好友對話） -->
+        <a class="btn small navy" href="https://line.me/ti/p/~chris770912" target="_blank" rel="noopener" id="lineTop">💬 LINE：chris770912</a>
         <a class="btn primary small" href="#order">🧾 下單</a>
       </div>
     </div>
@@ -475,7 +476,7 @@
 
       <div class="tab-panel hide" data-panel="ship">
         <div class="list">
-          <div class="li"><b>🌟 7-11 冷凍交貨便</b><div class="muted">運費 NT$150（含包裝耗材）｜滿 NT$1800 免運</div></div>
+          <div class="li"><b>🌟 7-11 冷凍店到店</b><div class="muted">運費 NT$129（含包裝耗材）｜滿 NT$1800 免運</div></div>
           <div class="li"><b>🎁 買十送一</b><div class="muted">每買 10 包 → 送 1 包（系統自動計算）</div></div>
           <div class="li"><b>🏦 收款帳號</b><div class="muted">中國信託 (822)｜668540149274</div></div>
           <div class="li"><b>⏳ 出貨時間</b><div class="muted">下單匯款後約 1～2 週準備並寄出</div></div>
@@ -487,7 +488,7 @@
     <section class="card" id="order">
       <h2>🧾 立即下單（填完一鍵複製訊息給我確認）</h2>
       <p class="muted" style="margin-top:0">
-        ✅ 每包 <b>NT$180</b>｜🎁 買十送一｜🌟 7-11 冷凍交貨便運費 <b>NT$150</b>（滿 <b>NT$1800</b> 免運）
+        ✅ 每包 <b>NT$180</b>｜🎁 買十送一｜🌟 7-11 冷凍店到店運費 <b>NT$129</b>（滿 <b>NT$1800</b> 免運）
       </p>
 
       <div class="calc box">
@@ -510,13 +511,13 @@
           </div>
           <div class="box">
             <b>運費</b>
-            <div class="kpi" id="shipFee">NT$150 <small>（滿1800免運）</small></div>
+            <div class="kpi" id="shipFee">NT$129 <small>（滿1800免運）</small></div>
           </div>
         </div>
 
         <div class="box">
           <b>合計</b>
-          <div class="kpi" id="grand">NT$330 <small id="grandNote">（商品 180 + 運費 150）</small></div>
+          <div class="kpi" id="grand">NT$309 <small id="grandNote">（商品 180 + 運費 129）</small></div>
         </div>
       </div>
 
@@ -536,8 +537,7 @@
           <div>
             <label for="method">取貨方式</label>
             <select id="method">
-              <option value="711">7-11 冷凍交貨便</option>
-              <option value="home">宅配/其他（請在備註說明）</option>
+              <option value="711" selected>7-11 冷凍店到店</option>
             </select>
           </div>
           <div>
@@ -548,7 +548,7 @@
 
         <div>
           <label for="addr">收件地址（若用宅配/其他再填）</label>
-          <input id="addr" placeholder="例：台北市…（7-11取貨可不填）" autocomplete="street-address" />
+          <input id="addr" placeholder="不提供宅配，此欄不需填寫" autocomplete="street-address" />
         </div>
 
         <div class="row">
@@ -562,21 +562,20 @@
             </select>
           </div>
           <div>
-            <label for="contactId">帳號/ID（可不填，預設 LINE：chris770912）</label>
+            <label for="contactId">帳號/ID（預設 9.12lin）</label>
             <input id="contactId" placeholder="例如：你的LINE/IG帳號（可不填）" />
           </div>
         </div>
 
         <div>
           <label for="note">備註（可填匯款末五碼/希望出貨時間等）</label>
-          <textarea id="note" placeholder="例如：匯款末五碼、想週末到店取貨…"></textarea>
+          <textarea id="note" placeholder="例如：匯款末五碼、希望哪天到店取貨…"></textarea>
         </div>
 
         <div class="cta-row">
           <button class="btn primary" type="button" id="copyOrder">📋 一鍵複製下單訊息</button>
           <button class="btn" type="button" id="copyPay">🏦 複製匯款資訊</button>
-          <!-- ✅ 改成 button：會自動把訂單訊息帶進 LINE -->
-          <button class="btn navy" type="button" id="lineSend">💬 直接加 LINE 對話（自動貼上訂單）</button>
+          <a class="btn navy" href="https://line.me/ti/p/~chris770912" target="_blank" rel="noopener" id="lineSend">💬 直接加 LINE 對話</a>
         </div>
 
         <div class="panel" style="margin-top:10px">
@@ -596,7 +595,7 @@
 
   <div class="dock">
     <div class="dock-inner">
-      <div>🎁 <b>買十送一</b>｜滿 <b>NT$1800</b> 免運｜🧊 7-11 冷凍交貨便</div>
+      <div>🎁 <b>買十送一</b>｜滿 <b>NT$1800</b> 免運｜🧊 7-11 冷凍店到店</div>
       <a class="btn primary small" href="#order">🧾 立即下單</a>
     </div>
   </div>
@@ -606,6 +605,10 @@
   <script>
     // ===== 固定單價 =====
     const UNIT_PRICE = 180;
+
+    // ✅ 運費規則（你指定）
+    const SHIP_FEE = 129;
+    const FREE_SHIP_AT = 1800;
 
     // ✅ 你的圖片路徑（不裁切輪播）
     const IMAGES = [
@@ -748,8 +751,8 @@
       const free = Math.floor(qty / 10); // 買10送1
       const product = qty * price;
 
-      let ship = 150;
-      if(product >= 1800) ship = 0;
+      let ship = SHIP_FEE;
+      if(product >= FREE_SHIP_AT) ship = 0;
 
       const grand = product + ship;
 
@@ -764,17 +767,12 @@
     function buildMessage(){
       const c = calc();
 
-      const methodText = methodEl.value === "711"
-        ? "7-11 冷凍交貨便"
-        : "宅配/其他";
-
-      const storeLine = (methodEl.value === "711")
-        ? `7-11門市：${(storeEl.value || "（請填門市名稱）")}`
-        : `收件地址：${(addrEl.value || "（請填地址）")}`;
+      // ✅ 只接受 7-11 冷凍店到店（不刪欄位，但訊息固定用 7-11）
+      const methodText = "7-11 冷凍店到店";
+      const storeLine = `7-11門市：${(storeEl.value || "（請填門市名稱）")}`;
 
       const contactText = contactEl.value;
-      // ✅ 預設改成你的主聯絡 LINE
-      const contactId = contactIdEl.value || "chris770912";
+      const contactId = contactIdEl.value || "9.12lin";
 
       const msg =
 `【吉祥滷意 下單資料】
@@ -813,6 +811,22 @@ ${storeLine}
       }
     }
 
+    // ✅ LINE：開啟「文字訊息預填」(無法自動送出，只能帶入)
+    function openLineWithMessage(text){
+      const encoded = encodeURIComponent(text);
+      const urlHttps = `https://line.me/R/msg/text/?${encoded}`;
+      const urlScheme = `line://msg/text/${encoded}`;
+
+      // 先試 scheme（手機裝LINE會更順），再 fallback https
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      if(isMobile){
+        window.location.href = urlScheme;
+        setTimeout(()=>{ window.location.href = urlHttps; }, 450);
+      }else{
+        window.open(urlHttps, "_blank", "noopener");
+      }
+    }
+
     document.getElementById("copyOrder").addEventListener("click", async ()=>{
       const msg = buildMessage();
       await copyText(msg);
@@ -829,12 +843,18 @@ LINE：chris770912`;
       await copyText(pay);
     });
 
-    // ✅ LINE：自動帶入訂單訊息
-    document.getElementById("lineSend").addEventListener("click", ()=>{
-      const msg = buildMessage();
-      const url = "https://line.me/R/msg/text/?" + encodeURIComponent(msg);
-      window.open(url, "_blank");
-    });
+    // ✅ 兩個 LINE 按鈕都改成「自動帶入訂單訊息」
+    function bindLineBtn(id){
+      const el = document.getElementById(id);
+      if(!el) return;
+      el.addEventListener("click", (e)=>{
+        e.preventDefault();
+        const msg = buildMessage();
+        openLineWithMessage(msg);
+      });
+    }
+    bindLineBtn("lineTop");
+    bindLineBtn("lineSend");
 
     const inputs = [qtyEl, nameEl, phoneEl, methodEl, storeEl, addrEl, contactEl, contactIdEl, noteMsgEl];
     inputs.forEach(el => el.addEventListener("input", buildMessage));
