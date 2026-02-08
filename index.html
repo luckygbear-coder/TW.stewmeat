@@ -4,56 +4,234 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>吉祥滷意｜冷凍真空滷汁（肉燥）</title>
-  <link rel="stylesheet" href="./assets/style.css" />
+  <style>
+    :root{
+      --bg:#fff1d6;
+      --card:#fff7e6;
+      --ink:#3f2a34;
+      --muted:#7a5a6a;
+      --stroke:#f5d3a6;
+      --shadow:0 10px 22px rgba(0,0,0,.14);
+
+      --red:#b5122b;
+      --navy:#182433;
+      --teal:#0e8a8a;
+      --sand:#c7a27e;
+
+      --radius:18px;
+      --maxw:480px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0}
+    body{
+      font-family:"Noto Sans TC",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+      color:var(--ink);
+      background: linear-gradient(180deg,#ffe6bf 0%, var(--bg) 30%, #fff7ea 100%);
+      -webkit-text-size-adjust: 100%;
+    }
+    .wrap{max-width:var(--maxw);margin:0 auto;padding:12px 12px 120px;}
+    .topbar{
+      position:sticky;top:0;z-index:50;
+      background:rgba(255,241,214,.92);
+      backdrop-filter: blur(10px);
+      border-bottom:1px solid rgba(245,211,166,.75);
+    }
+    .topbar-inner{
+      max-width:var(--maxw);margin:0 auto;padding:10px 12px;
+      display:flex;align-items:center;gap:10px;justify-content:space-between;
+    }
+    .brand{display:flex;align-items:center;gap:10px;min-width:0;}
+    .logo-dot{
+      width:40px;height:40px;border-radius:999px;
+      background: radial-gradient(circle at 30% 30%, #fff 0%, #ffd3a1 45%, #f0a35c 100%);
+      border:2px solid rgba(245,211,166,.9);
+      box-shadow:0 6px 14px rgba(0,0,0,.08);
+      flex:0 0 auto;
+    }
+    .brand-txt{min-width:0}
+    .brand-txt b{display:block;font-size:15px}
+    .brand-txt span{
+      display:block;font-size:12px;color:var(--muted);
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:52vw;
+    }
+    .top-actions{display:flex;gap:8px;align-items:center}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      padding:12px 14px;border-radius:16px;
+      border:2px solid rgba(245,211,166,.9);
+      background:#fff;color:var(--ink);
+      font-weight:900;box-shadow:0 6px 14px rgba(0,0,0,.10);
+      cursor:pointer;text-decoration:none;
+      user-select:none;-webkit-tap-highlight-color:transparent;
+    }
+    .btn.small{padding:10px 12px;border-radius:14px;font-size:12px}
+    .btn.primary{background:var(--red);color:#fff;border-color:rgba(0,0,0,.08)}
+    .btn.navy{background:var(--navy);color:#fff;border-color:rgba(0,0,0,.08)}
+
+    .card{
+      background:var(--card);
+      border:2px solid rgba(245,211,166,.9);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:14px;margin-top:12px;
+    }
+    h1{margin:10px 0 8px;font-size:24px;line-height:1.25;}
+    h2{margin:0 0 10px;font-size:18px;}
+    .muted{color:var(--muted);}
+    .pill{
+      display:inline-flex;gap:8px;align-items:center;
+      padding:8px 12px;border-radius:999px;
+      border:2px dashed rgba(245,211,166,.95);
+      background:rgba(255,255,255,.9);
+      font-weight:900;font-size:12px;
+    }
+    .chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0;}
+    .chip{
+      padding:8px 10px;border-radius:999px;
+      border:2px solid rgba(245,211,166,.9);
+      background:#fff;font-weight:900;font-size:12px;
+    }
+    .cta-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}
+
+    .quick-grid{
+      margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px;
+    }
+    .quick-item{
+      border:0;border-radius:18px;padding:18px 14px;color:#fff;
+      font-weight:900;box-shadow:var(--shadow);cursor:pointer;text-align:center;
+    }
+    .quick-item .qi-title{letter-spacing:4px;font-size:14px;opacity:.95;}
+    .quick-item .qi-sub{margin-top:6px;font-size:16px;}
+    .quick-item.red{background:var(--red);}
+    .quick-item.navy{background:var(--navy);}
+    .quick-item.teal{background:var(--teal);}
+    .quick-item.sand{background:var(--sand);}
+
+    /* ✅ Carousel：不裁切、可滑動、轉場 */
+    .carousel{
+      position:relative;border-radius:18px;overflow:hidden;
+      border:2px solid rgba(245,211,166,.9);
+      background:rgba(255,255,255,.85);
+      box-shadow:0 10px 20px rgba(0,0,0,.12);
+    }
+    .carousel-track{
+      display:flex;transform:translateX(0);
+      transition:transform .42s cubic-bezier(.2,.85,.2,1);
+      touch-action: pan-y;
+      will-change: transform;
+    }
+    .carousel-slide{flex:0 0 100%;padding:10px;}
+    .carousel-slide img{
+      width:100%;
+      height:auto;
+      max-height: 320px;     /* ✅ 防止撐爆跑版 */
+      object-fit: contain;   /* ✅ 完整顯示不裁切 */
+      display:block;
+      border-radius:16px;
+      border:2px solid rgba(245,211,166,.85);
+      background:#fff;
+    }
+    .carousel-arrow{
+      position:absolute;top:50%;transform:translateY(-50%);
+      width:44px;height:44px;border-radius:999px;
+      border:2px solid rgba(255,255,255,.7);
+      background:rgba(0,0,0,.25);
+      color:#fff;font-size:26px;font-weight:900;
+      display:grid;place-items:center;cursor:pointer;
+    }
+    .carousel-arrow.left{left:10px;}
+    .carousel-arrow.right{right:10px;}
+    .carousel-dots{
+      position:absolute;left:0;right:0;bottom:10px;
+      display:flex;justify-content:center;gap:8px;
+    }
+    .dot{
+      width:10px;height:10px;border-radius:999px;
+      background:rgba(255,255,255,.75);
+      border:1px solid rgba(0,0,0,.12);
+      cursor:pointer;
+    }
+    .dot.is-on{background:var(--red);}
+
+    .tabs{
+      display:flex;gap:8px;flex-wrap:wrap;
+      padding-bottom:10px;border-bottom:1px dashed rgba(245,211,166,.9);
+      margin-bottom:12px;
+    }
+    .tab{
+      border:2px solid rgba(245,211,166,.9);
+      background:#fff;border-radius:999px;
+      padding:10px 12px;font-weight:900;cursor:pointer;
+    }
+    .tab[aria-selected="true"]{
+      background:var(--red);color:#fff;border-color:rgba(0,0,0,.08);
+    }
+    .hide{display:none!important;}
+    .panel{
+      background:#fff;border:2px solid rgba(245,211,166,.85);
+      border-radius:16px;padding:12px;
+      box-shadow:0 6px 14px rgba(0,0,0,.08);
+    }
+    .list{display:grid;gap:10px;}
+    .li{
+      padding:12px;border-radius:16px;
+      border:2px solid rgba(245,211,166,.85);
+      background:#fff;
+    }
+    .li b{display:block;margin-bottom:6px;}
+
+    .dock{
+      position:fixed;left:0;right:0;bottom:0;
+      background:rgba(255,241,214,.94);
+      backdrop-filter: blur(10px);
+      border-top:1px solid rgba(245,211,166,.75);
+      padding:10px 12px;z-index:60;
+    }
+    .dock-inner{
+      max-width:var(--maxw);margin:0 auto;
+      display:flex;gap:10px;align-items:center;justify-content:space-between;
+      font-weight:900;font-size:12px;
+    }
+    .footer{margin-top:16px;text-align:center;color:var(--muted);font-weight:900;font-size:12px;}
+  </style>
 </head>
+
 <body>
-
-<header class="topbar">
-  <div class="nav">
-    <a class="brand" href="./index.html">
-      <img class="logo" src="./assets/logo.svg" alt="吉祥滷意 LOGO" />
-      <div class="brand-title">
-        <b>吉祥滷意</b>
-        <span>冷凍真空滷汁（肉燥）｜台灣豬｜無添加香料防腐劑</span>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="logo-dot" aria-hidden="true"></div>
+        <div class="brand-txt">
+          <b>吉祥滷意</b>
+          <span>冷凍真空滷汁（肉燥）｜台灣豬｜無添加香料防腐劑</span>
+        </div>
       </div>
-    </a>
-
-    <div class="social">
-      <a class="social-btn" href="#" target="_blank" rel="noopener">📷 IG</a>
-      <a class="social-btn" href="#" target="_blank" rel="noopener">📘 粉專</a>
-      <a class="btn primary small" href="./order.html">🧾 立即下單</a>
+      <div class="top-actions">
+        <a class="btn small" href="#" target="_blank" rel="noopener">📷 IG</a>
+        <a class="btn small" href="#" target="_blank" rel="noopener">📘 粉專</a>
+        <a class="btn primary small" href="#order">🧾 下單</a>
+      </div>
     </div>
-  </div>
-</header>
+  </header>
 
-<main class="container">
+  <main class="wrap">
 
-  <!-- HERO（先讓人有食慾） -->
-  <section class="hero">
-    <div class="hero-slider" data-hero>
-      <div class="hero-slide is-on">
-        <img src="./images/hero-1.jpg" alt="吉祥滷意 滷肉飯" loading="lazy">
-      </div>
-      <div class="hero-slide">
-        <img src="./images/hero-2.jpg" alt="吉祥滷意 滷肉飯" loading="lazy">
-      </div>
-      <div class="hero-slide">
-        <img src="./images/hero-3.jpg" alt="露營野餐家庭都適合" loading="lazy">
-      </div>
-
-      <button class="hero-arrow left" type="button" aria-label="上一張">‹</button>
-      <button class="hero-arrow right" type="button" aria-label="下一張">›</button>
-
-      <div class="hero-badge">🎁 買十送一｜滿 NT$1800 免運</div>
-    </div>
-
-    <div class="hero-copy">
+    <!-- A：先讓人有食慾 -->
+    <section class="card">
       <div class="pill">🇹🇼 台灣豬嚴選・慢火熬煮・冷凍真空包</div>
-      <h1>一包搞定的台味幸福：<span class="accent">吉祥滷意</span>（肉燥滷汁）</h1>
+      <h1>一包搞定的台味幸福：<span style="color:var(--red)">吉祥滷意</span>（肉燥滷汁）</h1>
       <p class="muted">
         嚴選台灣豬＋家傳秘方古法滷製，慢火熬煮 8 小時的美味。
         露營、野餐、家庭晚餐——只要加熱，立刻上桌。
       </p>
+
+      <!-- ✅ 你指定的四張 -->
+      <div class="carousel" data-carousel>
+        <div class="carousel-track" data-track></div>
+        <button class="carousel-arrow left" type="button" aria-label="上一張" data-prev>‹</button>
+        <button class="carousel-arrow right" type="button" aria-label="下一張" data-next>›</button>
+        <div class="carousel-dots" data-dots></div>
+      </div>
 
       <div class="chips">
         <span class="chip">✅ 絕無添加香料/防腐劑</span>
@@ -63,197 +241,211 @@
       </div>
 
       <div class="cta-row">
-        <a class="btn primary" href="./order.html">🧾 立即下單</a>
-        <button class="btn" type="button" onclick="document.getElementById('tabsBlock').scrollIntoView({behavior:'smooth'})">👇 看更多</button>
-        <a class="btn" href="./guide-711.html">🧊 7-11 填門市教學</a>
+        <a class="btn primary" href="#order">🧾 立即下單</a>
+        <button class="btn navy" type="button" onclick="selectTab('heat')">🔥 立即下單＋怎麼加熱</button>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- 參考 TASTY：大按鈕入口（直覺、好點） -->
-  <section class="quick-grid">
-    <button class="quick-item red" type="button" onclick="location.href='./order.html'">
-      <div class="qi-title">ORDER</div><div class="qi-sub">立即下單</div>
-    </button>
-    <button class="quick-item navy" type="button" onclick="window.selectHomeTab('heat')">
-      <div class="qi-title">HEAT</div><div class="qi-sub">怎麼加熱</div>
-    </button>
-    <button class="quick-item sand" type="button" onclick="window.selectHomeTab('cook')">
-      <div class="qi-title">COOK</div><div class="qi-sub">料理教學</div>
-    </button>
-    <button class="quick-item teal" type="button" onclick="window.selectHomeTab('story')">
-      <div class="qi-title">ABOUT</div><div class="qi-sub">品牌故事</div>
-    </button>
-  </section>
+    <!-- 西堤風格四格入口 -->
+    <section class="quick-grid">
+      <button class="quick-item red" type="button" onclick="document.getElementById('order').scrollIntoView({behavior:'smooth'})">
+        <div class="qi-title">ORDER</div><div class="qi-sub">立即下單</div>
+      </button>
+      <button class="quick-item navy" type="button" onclick="selectTab('heat')">
+        <div class="qi-title">HEAT</div><div class="qi-sub">怎麼加熱</div>
+      </button>
+      <button class="quick-item sand" type="button" onclick="selectTab('cook')">
+        <div class="qi-title">COOK</div><div class="qi-sub">料理教學</div>
+      </button>
+      <button class="quick-item teal" type="button" onclick="selectTab('story')">
+        <div class="qi-title">ABOUT</div><div class="qi-sub">品牌故事</div>
+      </button>
+    </section>
 
-  <!-- ✅ 美味實拍（改成西堤那樣：可滑動輪播 + 不裁切） -->
-  <section class="card">
-    <h2>📷 美味實拍（露營・野餐・家庭都適合）</h2>
-
-    <div class="carousel" data-carousel>
-      <div class="carousel-track" data-track>
-        <div class="carousel-slide">
-          <img src="./images/hero-3.jpg" alt="露營野餐家庭都適合" loading="lazy">
-        </div>
-        <div class="carousel-slide">
-          <img src="./images/pouch.jpg" alt="搭配便當" loading="lazy">
-        </div>
-        <div class="carousel-slide">
-          <img src="./images/packs.jpg" alt="真空包實拍" loading="lazy">
-        </div>
+    <!-- Tabs -->
+    <section class="card" id="tabs">
+      <div class="tabs">
+        <button class="tab" data-tab="product" aria-selected="true">商品資訊</button>
+        <button class="tab" data-tab="heat">加熱方式</button>
+        <button class="tab" data-tab="cook">料理教學</button>
+        <button class="tab" data-tab="story">品牌故事</button>
+        <button class="tab" data-tab="ship">運送/下單</button>
       </div>
 
-      <button class="carousel-arrow left" type="button" aria-label="上一張" data-prev>‹</button>
-      <button class="carousel-arrow right" type="button" aria-label="下一張" data-next>›</button>
-
-      <div class="carousel-dots" data-dots></div>
-    </div>
-
-    <div class="chips" style="margin-top:12px;">
-      <span class="chip">🏕️ 露營：一包搞起一餐</span>
-      <span class="chip">🧺 野餐：不怕手忙腳亂</span>
-      <span class="chip">🏠 家庭：晚餐秒上桌</span>
-    </div>
-
-    <div class="cta-row" style="margin-top:10px;">
-      <a class="btn primary" href="./order.html">🧾 立即下單</a>
-      <button class="btn" type="button" onclick="window.selectHomeTab('heat')">🔥 立即看加熱</button>
-    </div>
-  </section>
-
-  <!-- Tabs -->
-  <section class="card" id="tabsBlock">
-    <div class="tabs" data-tabs>
-      <button class="tab" data-tab="product" aria-selected="true">商品資訊</button>
-      <button class="tab" data-tab="heat">加熱方式</button>
-      <button class="tab" data-tab="cook">料理教學</button>
-      <button class="tab" data-tab="story">品牌故事</button>
-      <button class="tab" data-tab="ship">運送/下單</button>
-    </div>
-
-    <div class="tab-panel" data-panel="product">
-      <div class="grid">
-        <div class="card soft col-12">
-          <h2>📦 商品資訊</h2>
-          <p class="muted">
+      <div class="tab-panel" data-panel="product">
+        <div class="panel">
+          <b>📦 商品資訊</b>
+          <p class="muted" style="margin:8px 0 0">
             品名：吉祥滷意（滷汁-肉燥）｜淨重：200g<br>
             成份：台灣豬、水、醬油、糖、鹽、蔥酥、蒜頭<br>
             保存方法：冷凍保存；開封後請盡速食用<br>
             有效期限：90 天（冷凍）
           </p>
-          <div class="cta-row">
-            <a class="btn primary" href="./order.html">🧾 立即下單</a>
-            <button class="btn" type="button" onclick="window.selectHomeTab('heat')">🔥 怎麼加熱</button>
-          </div>
         </div>
       </div>
-    </div>
 
-    <div class="tab-panel hide" data-panel="heat">
-      <div class="grid">
-        <div class="card soft col-12">
-          <h2>🔥 加熱方式（完整不誤導）</h2>
-          <p class="muted">你那張粉紅「貼心小叮嚀」屬於加熱資訊，放這裡才正確。</p>
-        </div>
-
-        <div class="card soft col-12">
-          <div class="mockup-wrap">
-            <div class="panel">
-              <b>📌 加熱小卡（示意）</b>
-              <div class="imgbox">
-                <img src="./images/label.jpg" alt="加熱方式與標示資訊" loading="lazy" />
-              </div>
-              <p class="muted" style="margin-top:10px;">保存方法冷凍；開封後請盡速食用。</p>
-            </div>
-
-            <div>
-              <div class="panel">
-                <b>🫕 隔水加熱（最快最香）</b>
-                <p class="muted">真空包不用撕開 → 滾水後轉小火 → 5～10 分鐘</p>
-              </div>
-              <div class="panel">
-                <b>🍚 電鍋加熱（最懶人）</b>
-                <p class="muted">外鍋半碗水 → 稍解凍後倒入碗盤 → 約 10 分鐘</p>
-              </div>
-              <div class="panel">
-                <b>⚡ 微波加熱（最急）</b>
-                <p class="muted">稍解凍 → 倒入可微波容器 → 1～3 分鐘</p>
-              </div>
-              <div class="panel">
-                <b>🍚 黃金比例</b>
-                <p class="muted"><b>20g 滷汁：150g 白飯</b>（更濃可加到 30g）</p>
-              </div>
-
-              <div class="cta-row">
-                <a class="btn primary" href="./order.html">🧾 立即下單</a>
-                <a class="btn" href="./guide-711.html">🧊 7-11 填門市</a>
-              </div>
-              <p class="muted" style="margin-top:10px;">因無囤貨：下單匯款後約 1～2 週準備並寄出。</p>
-            </div>
-          </div>
+      <div class="tab-panel hide" data-panel="heat">
+        <div class="list">
+          <div class="li"><b>🫕 隔水加熱（最快最香）</b><div class="muted">真空包不用撕開 → 滾水後轉小火 → 5～10 分鐘</div></div>
+          <div class="li"><b>🍚 電鍋加熱（最懶人）</b><div class="muted">外鍋半碗水 → 稍解凍後倒入碗盤 → 約 10 分鐘</div></div>
+          <div class="li"><b>⚡ 微波加熱（最急）</b><div class="muted">稍解凍 → 倒入可微波容器 → 1～3 分鐘</div></div>
+          <div class="li"><b>🍚 黃金比例</b><div class="muted"><b>20g 滷汁：150g 白飯</b></div></div>
         </div>
       </div>
-    </div>
 
-    <div class="tab-panel hide" data-panel="cook">
-      <div class="grid">
-        <div class="card soft col-12">
-          <h2>🍳 料理教學（3 種快速變化）</h2>
-          <div class="list">
-            <div class="li"><b>1）經典滷肉飯</b><div class="muted">白飯＋滷汁 → 加滷蛋 → 完成。</div></div>
-            <div class="li"><b>2）露營拌麵/拌飯</b><div class="muted">煮麵/煮飯 → 滷汁拌一拌 → 加蔥花更香。</div></div>
-            <div class="li"><b>3）家常配菜升級</b><div class="muted">燙青菜/豆腐/蛋 → 淋滷汁，瞬間變主角。</div></div>
-          </div>
-          <div class="cta-row" style="margin-top:10px;">
-            <a class="btn primary" href="./order.html">🧾 立即下單</a>
-          </div>
+      <div class="tab-panel hide" data-panel="cook">
+        <div class="list">
+          <div class="li"><b>1）經典滷肉飯</b><div class="muted">白飯＋滷汁 → 加滷蛋 → 完成。</div></div>
+          <div class="li"><b>2）露營拌麵/拌飯</b><div class="muted">煮麵/煮飯 → 滷汁拌一拌 → 加蔥花更香。</div></div>
+          <div class="li"><b>3）家常配菜升級</b><div class="muted">燙青菜/豆腐/蛋 → 淋滷汁，瞬間變主角。</div></div>
         </div>
       </div>
-    </div>
 
-    <div class="tab-panel hide" data-panel="story">
-      <div class="grid">
-        <div class="card soft col-12">
-          <h2>🏮 品牌故事</h2>
-          <p class="muted">
+      <div class="tab-panel hide" data-panel="story">
+        <div class="panel">
+          <b>🏮 品牌故事</b>
+          <p class="muted" style="margin:8px 0 0">
             「吉祥滷意」想做的是：讓你打開一包，就像把台味幸福端上桌。<br>
             台灣豬為底，搭配蔥酥蒜頭與醬油糖鹽的比例慢火熬煮，香氣抱住白飯，越吃越想念。
           </p>
-          <div class="cta-row">
-            <a class="btn primary" href="./order.html">🧾 立即下單</a>
-          </div>
         </div>
       </div>
-    </div>
 
-    <div class="tab-panel hide" data-panel="ship">
-      <div class="grid">
-        <div class="card soft col-12">
-          <h2>🚚 運送與下單</h2>
-          <div class="panel"><b>🌟 7-11 冷凍交貨便</b><p class="muted">運費 NT$150（含包裝耗材）｜滿 NT$1800 免運</p></div>
-          <div class="panel"><b>🏦 收款帳號</b><p class="muted">中國信託 (822)｜668540149274</p></div>
-          <div class="panel"><b>⏳ 出貨時間</b><p class="muted">下單匯款後約 1～2 週準備並寄出。</p></div>
-          <div class="cta-row">
-            <a class="btn primary" href="./order.html">🧾 立即下單</a>
-            <a class="btn" href="./guide-711.html">🧊 7-11 填門市</a>
-          </div>
+      <div class="tab-panel hide" data-panel="ship">
+        <div class="list">
+          <div class="li"><b>🌟 7-11 冷凍交貨便</b><div class="muted">運費 NT$150（含包裝耗材）｜滿 NT$1800 免運</div></div>
+          <div class="li"><b>🏦 收款帳號</b><div class="muted">中國信託 (822)｜668540149274</div></div>
+          <div class="li"><b>⏳ 出貨時間</b><div class="muted">下單匯款後約 1～2 週準備並寄出</div></div>
         </div>
       </div>
+    </section>
+
+    <section class="card" id="order">
+      <h2>🧾 立即下單</h2>
+      <p class="muted" style="margin-top:0">
+        貼心小提醒：因為沒有囤貨，下單匯款後約 1～2 週準備並寄出。<br>
+        若有疑問：私訊粉專小編或 LINE：0985210319
+      </p>
+      <div class="cta-row">
+        <a class="btn primary" href="tel:0985210319">📞 直接聯絡</a>
+        <button class="btn" type="button" onclick="selectTab('ship')">🚚 運送/付款說明</button>
+      </div>
+    </section>
+
+    <div class="footer">© 吉祥滷意｜冷凍真空滷汁（肉燥）</div>
+  </main>
+
+  <div class="dock">
+    <div class="dock-inner">
+      <div>🎁 <b>買十送一</b>｜滿 <b>NT$1800</b> 免運｜🧊 7-11 冷凍交貨便</div>
+      <a class="btn primary small" href="#order">🧾 立即下單</a>
     </div>
-
-  </section>
-
-  <div class="footer">© 吉祥滷意｜冷凍真空滷汁（肉燥）</div>
-
-</main>
-
-<div class="dock">
-  <div class="dock-inner">
-    <div>🎁 <b>買十送一</b>｜滿 <b>NT$1800</b> 免運｜🧊 7-11 冷凍交貨便</div>
-    <a class="btn primary small" href="./order.html">🧾 立即下單</a>
   </div>
-</div>
 
-<script src="./assets/app.js"></script>
+  <script>
+    // ✅ 你提供的正式路徑
+    const IMAGES = [
+      "images/packs.jpg",
+      "images/set.jpg",
+      "images/spread.jpg",
+      "images/bowl.jpg"
+    ];
+
+    // Tabs
+    const tabs = Array.from(document.querySelectorAll(".tab[data-tab]"));
+    const panels = Array.from(document.querySelectorAll("[data-panel]"));
+
+    function setTab(id){
+      tabs.forEach(t => t.setAttribute("aria-selected", t.dataset.tab === id ? "true" : "false"));
+      panels.forEach(p => p.classList.toggle("hide", p.dataset.panel !== id));
+    }
+    tabs.forEach(t => t.addEventListener("click", () => setTab(t.dataset.tab)));
+    window.selectTab = function(id){
+      document.getElementById("tabs").scrollIntoView({behavior:"smooth", block:"start"});
+      setTab(id);
+    };
+
+    // Carousel
+    (function initCarousel(){
+      const root = document.querySelector("[data-carousel]");
+      const track = root.querySelector("[data-track]");
+      const dotsWrap = root.querySelector("[data-dots]");
+      const btnPrev = root.querySelector("[data-prev]");
+      const btnNext = root.querySelector("[data-next]");
+
+      track.innerHTML = IMAGES.map((src, i) => `
+        <div class="carousel-slide">
+          <img src="${src}" alt="美味實拍 ${i+1}" loading="lazy"
+               onerror="this.style.opacity=.25; this.alt='圖片載入失敗：請確認 images/ 檔名是否正確';">
+        </div>
+      `).join("");
+
+      const slides = Array.from(track.children);
+      let idx = 0;
+      let w = 0;
+      let timer = null;
+      let dragging = false;
+      let startX = 0;
+      let currentX = 0;
+
+      function measure(){ w = root.getBoundingClientRect().width; go(idx, false); }
+      function renderDots(){
+        dotsWrap.innerHTML = "";
+        slides.forEach((_, i) => {
+          const d = document.createElement("button");
+          d.className = "dot" + (i===idx ? " is-on" : "");
+          d.type = "button";
+          d.addEventListener("click", ()=> go(i));
+          dotsWrap.appendChild(d);
+        });
+      }
+      function go(i, animate=true){
+        idx = (i + slides.length) % slides.length;
+        track.style.transition = animate ? "transform .42s cubic-bezier(.2,.85,.2,1)" : "none";
+        track.style.transform = `translateX(${-idx * w}px)`;
+        renderDots();
+        if(!animate) requestAnimationFrame(()=> track.style.transition = "transform .42s cubic-bezier(.2,.85,.2,1)");
+      }
+      function next(){ go(idx+1); }
+      function prev(){ go(idx-1); }
+      function stopAuto(){ if(timer) clearInterval(timer); timer=null; }
+      function startAuto(){ stopAuto(); timer = setInterval(()=>{ if(!dragging) next(); }, 4200); }
+
+      btnPrev.addEventListener("click", ()=>{ stopAuto(); prev(); startAuto(); });
+      btnNext.addEventListener("click", ()=>{ stopAuto(); next(); startAuto(); });
+
+      // touch swipe
+      track.addEventListener("touchstart", (e)=>{
+        dragging = true; stopAuto();
+        startX = e.touches[0].clientX; currentX = startX;
+        track.style.transition = "none";
+      }, {passive:true});
+
+      track.addEventListener("touchmove", (e)=>{
+        if(!dragging) return;
+        currentX = e.touches[0].clientX;
+        const dx = currentX - startX;
+        track.style.transform = `translateX(${(-idx*w)+dx}px)`;
+      }, {passive:true});
+
+      track.addEventListener("touchend", ()=>{
+        if(!dragging) return;
+        dragging = false;
+        const dx = currentX - startX;
+        const threshold = Math.min(90, w*0.18);
+        track.style.transition = "transform .42s cubic-bezier(.2,.85,.2,1)";
+        if(dx > threshold) prev();
+        else if(dx < -threshold) next();
+        else go(idx);
+        startAuto();
+      });
+
+      window.addEventListener("resize", measure);
+
+      renderDots();
+      measure();
+      startAuto();
+    })();
+  </script>
 </body>
 </html>
