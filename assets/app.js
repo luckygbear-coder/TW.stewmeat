@@ -1,142 +1,120 @@
-// ========= Helpers =========
-function fmt(n){ return n.toLocaleString("zh-Hant-TW"); }
-function calcGift(qty){ return Math.floor(qty / 10); }
-function calcShipping(subtotal){ return subtotal >= 1800 ? 0 : 150; }
+(function () {
+  // ===== Tabs =====
+  function initTabs() {
+    const root = document.querySelector("[data-tabs]");
+    if (!root) return;
 
-// ========= Tabs (Home) =========
-function initTabs(){
-  const tabsWrap = document.querySelector("[data-tabs]");
-  if(!tabsWrap) return;
+    const tabs = Array.from(root.querySelectorAll(".tab[data-tab]"));
+    const panels = Array.from(document.querySelectorAll("[data-panel]"));
 
-  const tabs = Array.from(tabsWrap.querySelectorAll('[role="tab"]'));
-  const panels = Array.from(document.querySelectorAll('[role="tabpanel"]'));
-
-  function selectTab(id){
-    tabs.forEach(t=>{
-      const selected = t.dataset.tab === id;
-      t.setAttribute("aria-selected", selected ? "true" : "false");
-    });
-    panels.forEach(p=>{
-      p.classList.toggle("hide", p.dataset.panel !== id);
-    });
-  }
-
-  tabs.forEach(t=>{
-    t.addEventListener("click", ()=>{
-      selectTab(t.dataset.tab);
-      const block = document.querySelector("#tabsBlock");
-      if(block) block.scrollIntoView({behavior:"smooth", block:"start"});
-    });
-  });
-
-  selectTab(tabs[0]?.dataset.tab || "product");
-
-  window.selectHomeTab = (id)=>{
-    selectTab(id);
-    const block = document.querySelector("#tabsBlock");
-    if(block) block.scrollIntoView({behavior:"smooth", block:"start"});
-  };
-}
-
-// ========= Order =========
-function buildOrderText(data){
-  const lines = [];
-  lines.push("【吉祥滷意（滷汁-肉燥）】下單資訊");
-  lines.push(`姓名：${data.name || "（未填）"}`);
-  lines.push(`手機：${data.phone || "（未填）"}`);
-  lines.push(`取貨門市（7-11 冷凍交貨便）：${data.store || "（未填）"}`);
-  lines.push(`備註：${data.note || "（無）"}`);
-  lines.push("—");
-  lines.push(`訂購數量：${data.qty} 包`);
-  lines.push(`買十送一：送 ${data.gift} 包（實拿共 ${data.totalQty} 包）`);
-  lines.push(`小計：NT$ ${fmt(data.subtotal)}`);
-  lines.push(`運費：NT$ ${fmt(data.shipping)} ${data.shipping === 0 ? "（滿1800免運）" : "（含包材）"}`);
-  lines.push(`應付總額：NT$ ${fmt(data.total)}`);
-  lines.push("—");
-  lines.push("匯款帳號：中國信託(822) 668540149274");
-  lines.push("貼心小提醒：因為沒有囤貨，所以下單匯款後約 1～2 週準備並寄出。");
-  lines.push("若有任何疑問：私訊粉專小編或 LINE：0985210319");
-  return lines.join("\n");
-}
-
-function initOrderPage(){
-  const qtyEl = document.querySelector("#qty");
-  const priceEl = document.querySelector("#price");
-  const nameEl = document.querySelector("#name");
-  const phoneEl = document.querySelector("#phone");
-  const storeEl = document.querySelector("#store");
-  const noteEl = document.querySelector("#note");
-
-  const giftEl = document.querySelector("#gift");
-  const subtotalEl = document.querySelector("#subtotal");
-  const shippingEl = document.querySelector("#shipping");
-  const totalEl = document.querySelector("#total");
-  const totalQtyEl = document.querySelector("#totalQty");
-  const orderTextEl = document.querySelector("#orderText");
-
-  const copyBtn = document.querySelector("#copyOrder");
-  const sampleBtn = document.querySelector("#fillSample");
-  const successPanel = document.querySelector("#successPanel");
-
-  function recalc(){
-    const qty = Math.max(1, parseInt(qtyEl.value || "1", 10));
-    const price = Math.max(0, parseInt(priceEl.value || "0", 10));
-
-    const gift = calcGift(qty);
-    const totalQty = qty + gift;
-    const subtotal = qty * price;
-    const shipping = calcShipping(subtotal);
-    const total = subtotal + shipping;
-
-    giftEl.textContent = `${gift} 包`;
-    totalQtyEl.textContent = `${totalQty} 包`;
-    subtotalEl.textContent = `NT$ ${fmt(subtotal)}`;
-    shippingEl.textContent = `NT$ ${fmt(shipping)}` + (shipping === 0 ? "（免運）" : "（含包材）");
-    totalEl.textContent = `NT$ ${fmt(total)}`;
-
-    const data = {
-      name: nameEl.value.trim(),
-      phone: phoneEl.value.trim(),
-      store: storeEl.value.trim(),
-      note: noteEl.value.trim(),
-      qty, gift, totalQty, subtotal, shipping, total
-    };
-    orderTextEl.value = buildOrderText(data);
-  }
-
-  [qtyEl, priceEl, nameEl, phoneEl, storeEl, noteEl].forEach(el=>{
-    el.addEventListener("input", recalc);
-  });
-
-  copyBtn?.addEventListener("click", async ()=>{
-    try{
-      await navigator.clipboard.writeText(orderTextEl.value);
-      copyBtn.textContent = "✅ 已複製";
-      if(successPanel){
-        successPanel.classList.remove("hide");
-        successPanel.scrollIntoView({behavior:"smooth", block:"start"});
-      }
-      setTimeout(()=> copyBtn.textContent = "一鍵複製下單文字", 1200);
-    }catch(e){
-      alert("複製失敗，請手動全選複製。");
+    function select(id) {
+      tabs.forEach((t) => {
+        const isOn = t.dataset.tab === id;
+        t.setAttribute("aria-selected", isOn ? "true" : "false");
+      });
+      panels.forEach((p) => {
+        const isOn = p.dataset.panel === id;
+        p.classList.toggle("hide", !isOn);
+      });
     }
-  });
 
-  sampleBtn?.addEventListener("click", ()=>{
-    nameEl.value = "王小明";
-    phoneEl.value = "09xx-xxx-xxx";
-    storeEl.value = "7-11 XX門市（冷凍交貨便）｜台北市OO區OO路OO號";
-    noteEl.value = "想要下週末露營用，謝謝！";
-    recalc();
-  });
+    tabs.forEach((t) => {
+      t.addEventListener("click", () => select(t.dataset.tab));
+    });
 
-  recalc();
-}
+    // default
+    const defaultTab = tabs.find(t => t.getAttribute("aria-selected") === "true")?.dataset.tab || "product";
+    select(defaultTab);
 
-// ========= Boot =========
-document.addEventListener("DOMContentLoaded", ()=>{
-  initTabs();
-  if(document.body.dataset.page === "order"){
-    initOrderPage();
+    // expose
+    window.selectHomeTab = function (id) {
+      const target = document.getElementById("tabsBlock");
+      if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+      select(id);
+    };
   }
-});
+
+  // ===== Order form submit (demo) =====
+  function initOrder() {
+    const form = document.querySelector("[data-order-form]");
+    if (!form) return;
+
+    const success = document.querySelector("[data-order-success]");
+    const summary = document.querySelector("[data-order-summary]");
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const fd = new FormData(form);
+      const qty = Number(fd.get("qty") || 1);
+      const name = String(fd.get("name") || "").trim();
+      const phone = String(fd.get("phone") || "").trim();
+      const note = String(fd.get("note") || "").trim();
+
+      // pricing
+      const pricePer = 200; // 你若要改價格就改這裡
+      const ship = 150;
+      const subtotal = qty * pricePer;
+
+      // 買十送一：每滿10包送1包（展示用）
+      const free = Math.floor(qty / 10);
+      const freeShip = subtotal >= 1800;
+      const shipping = freeShip ? 0 : ship;
+      const total = subtotal + shipping;
+
+      const safe = (s) => s.replace(/[<>&"]/g, (c) => ({ "<":"&lt;", ">":"&gt;", "&":"&amp;", "\"":"&quot;" }[c]));
+
+      summary.innerHTML = `
+        <div class="panel">
+          <b>✅ 下單成功（請依照下方步驟完成匯款與 7-11 門市填寫）</b>
+          <p class="muted" style="margin-top:8px; line-height:1.7;">
+            訂購人：${safe(name || "（未填）")}<br/>
+            電話：${safe(phone || "（未填）")}<br/>
+            數量：${qty} 包（買十送一：送 ${free} 包）<br/>
+            小計：NT$ ${subtotal}<br/>
+            運費：NT$ ${shipping} ${freeShip ? "（滿 NT$1800 免運）" : ""}<br/>
+            <b style="color:#d46b2a;">應付總額：NT$ ${total}</b><br/>
+            備註：${safe(note || "（無）")}
+          </p>
+        </div>
+
+        <div class="panel">
+          <b>🏦 匯款資訊</b>
+          <p class="muted" style="margin-top:8px; line-height:1.7;">
+            中國信託 (822)<br/>
+            帳號：668540149274
+          </p>
+        </div>
+
+        <div class="panel">
+          <b>🧊 下一步：7-11 冷凍交貨便填門市</b>
+          <p class="muted" style="margin-top:8px; line-height:1.7;">
+            1）先完成匯款<br/>
+            2）再到 7-11 交貨便系統填「取貨門市」<br/>
+            3）把填好的門市資訊回傳給小編/LINE：0985210319
+          </p>
+          <div class="cta-row" style="margin-top:10px;">
+            <a class="btn primary" href="./guide-711.html">📷 看教學：怎麼填門市</a>
+            <a class="btn" href="./index.html">🏠 回首頁</a>
+          </div>
+        </div>
+
+        <div class="panel">
+          <b>⏳ 出貨時間</b>
+          <p class="muted" style="margin-top:8px; line-height:1.7;">
+            因無囤貨：下單匯款後約 1～2 週準備並寄出。
+          </p>
+        </div>
+      `;
+
+      form.classList.add("hide");
+      success.classList.remove("hide");
+      success.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    initTabs();
+    initOrder();
+  });
+})();
