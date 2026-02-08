@@ -14,53 +14,93 @@
       <img class="logo" src="./assets/logo.svg" alt="吉祥滷意">
       <div class="brand-title">
         <b>吉祥滷意</b>
-        <span>冷凍真空滷汁（肉燥）</span>
+        <span>立即下單｜冷凍真空滷汁（肉燥）</span>
       </div>
     </a>
-    <a class="btn primary small" href="./index.html">回首頁</a>
+    <div class="cta-row">
+      <a class="btn" href="./guide-711.html">🧊 7-11 教學</a>
+      <a class="btn primary small" href="./index.html">🏠 回首頁</a>
+    </div>
   </div>
 </header>
 
 <main class="container">
-
   <section class="grid">
 
     <div class="card col-12">
-      <h2>🧾 立即下單</h2>
+      <h2>🧾 立即下單（買十送一｜滿 NT$1800 免運）</h2>
       <p class="muted">
-        🎁 買十送一｜滿 NT$1800 免運<br>
-        🧊 7-11 冷凍交貨便（運費 NT$150）
+        7-11 冷凍交貨便運費 NT$150（含包裝耗材）。<br>
+        因無囤貨：下單匯款後約 1～2 週準備並寄出。
       </p>
+    </div>
+
+    <div class="card col-12">
+      <div class="mockup-wrap">
+        <div class="panel">
+          <b>📦 商品規格</b>
+          <p class="muted" style="margin-top:8px; line-height:1.7;">
+            品名：吉祥滷意（滷汁-肉燥）｜淨重：200g<br>
+            成份：台灣豬、水、醬油、糖、鹽、蔥酥、蒜頭<br>
+            保存：冷凍保存；開封後請盡速食用<br>
+            有效期限：90 天（冷凍）
+          </p>
+          <div class="imgbox" style="margin-top:10px;">
+            <img src="./images/pouch.jpg" alt="真空包示意" loading="lazy">
+          </div>
+        </div>
+
+        <div class="panel">
+          <b>🏦 匯款資訊</b>
+          <p class="muted" style="margin-top:8px; line-height:1.7;">
+            中國信託 (822)<br>
+            帳號：668540149274
+          </p>
+          <div class="panel" style="margin-top:10px;">
+            <b>🧊 出貨方式</b>
+            <p class="muted">7-11 冷凍交貨便｜運費 NT$150｜滿 NT$1800 免運</p>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- 表單 -->
     <div class="card col-12" data-order-form>
-      <form>
-        <div class="panel">
-          <label>
-            <b>姓名</b>
+      <h2>填寫資料 → 顯示「下單成功導引」</h2>
+
+      <form class="form">
+        <div class="form-row">
+          <label class="field">
+            <span>姓名</span>
             <input name="name" required placeholder="例：王小明">
           </label>
-
-          <label>
-            <b>電話</b>
+          <label class="field">
+            <span>電話</span>
             <input name="phone" required placeholder="例：0912xxxxxx">
           </label>
+        </div>
 
-          <label>
-            <b>訂購數量（包）</b>
+        <div class="form-row">
+          <label class="field">
+            <span>訂購數量（包）</span>
             <input type="number" name="qty" min="1" value="1" required>
+            <small>買十送一：每滿 10 包送 1 包（系統會幫你顯示）</small>
           </label>
-
-          <label>
-            <b>備註（選填）</b>
-            <textarea name="note" rows="3" placeholder="例：希望週末前寄出"></textarea>
-          </label>
-
-          <div class="cta-row">
-            <button class="btn primary" type="submit">✅ 送出下單</button>
-            <a class="btn" href="./index.html">再看看商品</a>
+          <div class="panel">
+            <b>💡 黃金比例</b>
+            <p class="muted" style="margin-top:8px;">20g 滷汁：150g 白飯（更濃可加到 30g）</p>
           </div>
+        </div>
+
+        <label class="field">
+          <span>備註（可不填）</span>
+          <textarea name="note" rows="3" placeholder="例：希望週末前寄出 / 需要加熱小卡"></textarea>
+        </label>
+
+        <div class="cta-row">
+          <button class="btn primary" type="submit">✅ 送出下單</button>
+          <a class="btn" href="./index.html">先看看商品</a>
+          <a class="btn" href="./guide-711.html">🧊 7-11 填門市教學</a>
         </div>
       </form>
     </div>
@@ -72,11 +112,12 @@
 
   </section>
 
+  <div class="footer">© 吉祥滷意｜冷凍真空滷汁（肉燥）</div>
 </main>
 
 <div class="dock">
   <div class="dock-inner">
-    <div>🎁 買十送一｜滿 NT$1800 免運</div>
+    <div>🎁 買十送一｜滿 <b>NT$1800</b> 免運</div>
     <a class="btn primary small" href="./index.html">🏠 回首頁</a>
   </div>
 </div>
