@@ -4,135 +4,204 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>吉祥滷意｜冷凍真空滷汁（肉燥）</title>
-  <meta name="description" content="吉祥滷意（滷汁-肉燥）冷凍真空包：8小時慢火熬煮，台灣豬嚴選，露營/野餐/家庭一包搞定。買十送一，7-11冷凍交貨便。" />
+  <meta name="description" content="吉祥滷意（滷汁-肉燥）冷凍真空包：8小時慢火熬煮，台灣豬嚴選。露營/野餐/家庭一包搞定。買十送一，7-11冷凍交貨便。" />
   <link rel="stylesheet" href="./assets/style.css" />
 </head>
 <body>
-  <header class="topbar">
-    <div class="nav">
-      <a class="brand" href="./index.html">
-        <div class="brand-badge" aria-hidden="true"></div>
-        <div class="brand-title">
-          <b>吉祥滷意</b>
-          <span>冷凍真空滷汁（肉燥）</span>
-        </div>
-      </a>
+<header class="topbar">
+  <div class="nav">
+    <a class="brand" href="./index.html">
+      <img class="logo" src="./assets/logo.svg" alt="吉祥滷意 LOGO" />
+      <div class="brand-title">
+        <b>吉祥滷意</b>
+        <span>冷凍真空滷汁（肉燥）</span>
+      </div>
+    </a>
 
-      <nav class="menu">
-        <a class="pill" href="./index.html">🏠 首頁</a>
-        <a class="pill" href="./heating.html">🔥 加熱方式</a>
-        <a class="pill" href="./recipes.html">🍳 料理教學</a>
-        <a class="pill primary" href="./order.html">🧾 立即下單</a>
-      </nav>
+    <div style="display:flex; gap:8px; align-items:center;">
+      <div class="social">
+        <a class="social-btn" href="#" target="_blank" rel="noopener">📷 IG</a>
+        <a class="social-btn" href="#" target="_blank" rel="noopener">📘 粉專</a>
+      </div>
+      <a class="btn primary small" href="./order.html">🧾 立即下單</a>
     </div>
-  </header>
+  </div>
+</header>
 
-  <main class="container">
-    <section class="hero">
-      <div class="hero-grid">
-        <div class="hero-left">
-          <div class="kicker">🇹🇼 台灣豬嚴選・慢火熬煮・冷凍真空包</div>
-          <h1 class="h1">一包搞定的台味幸福：<strong>吉祥滷意</strong>（肉燥滷汁）</h1>
-          <p class="lead">
-            這是一鍋「想讓家人吃得安心」的滷汁。用嚴選台灣豬、蔥酥、蒜頭與醬油糖鹽，
-            在<strong>室溫 40 度以上的廚房慢火熬煮 8 小時</strong>，熬到入口即化、香氣緊緊抱住白飯。
-            露營、野餐、家庭晚餐——只要加熱，立刻上桌。
+<main class="container">
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="kicker">🇹🇼 台灣豬嚴選｜8小時慢火｜冷凍真空包</div>
+      <h1 class="h1">一包搞定的台味幸福：<strong>吉祥滷意</strong>（肉燥滷汁）</h1>
+      <p class="lead">
+        不想煮、又想吃得像家裡？這包就是答案。嚴選台灣豬、蔥酥、蒜頭與家傳比例，
+        在<strong>40 度以上的廚房慢火熬 8 小時</strong>，香氣一淋上飯就立刻開吃。
+      </p>
+      <div class="cta-row">
+        <a class="btn primary" href="./order.html">🧾 立即下單</a>
+        <button class="btn" type="button" onclick="window.selectHomeTab('heat')">🔥 怎麼加熱？</button>
+      </div>
+      <div class="badges">
+        <span class="badge">✅ 絕無添加香料/防腐劑</span>
+        <span class="badge">📦 200g 真空包</span>
+        <span class="badge">🧊 7-11 冷凍交貨便</span>
+        <span class="badge">🎁 買十送一</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Value cards (scan) -->
+  <section class="grid">
+    <div class="card col-12">
+      <h2>一眼看懂：為什麼大家會囤</h2>
+      <div class="value-grid">
+        <div class="value"><b>✅ 吃得安心</b><span>台灣豬嚴選，絕無添加香料/防腐劑。</span></div>
+        <div class="value"><b>🕒 省時間</b><span>隔水 5～10 分鐘、電鍋約 10 分鐘就上桌。</span></div>
+        <div class="value"><b>⛺ 超百搭</b><span>露營/野餐/家庭晚餐，一包就能撐起整桌。</span></div>
+        <div class="value"><b>🎁 超划算</b><span>買十送一；滿 NT$1800 免運。</span></div>
+      </div>
+    </div>
+
+    <!-- Appetite photo FIRST (你指定：先食慾再 Tabs) -->
+    <div class="card col-12">
+      <h2>先讓你餓一下 😋</h2>
+      <figure class="photo">
+        <img src="./images/photo1.jpg" alt="滷肉飯" />
+        <figcaption>一匙淋下去，白飯就有靈魂。</figcaption>
+      </figure>
+    </div>
+
+    <!-- Tabs block -->
+    <div class="card col-12" id="tabsBlock">
+      <h2>你想先看哪一個？</h2>
+
+      <div class="tabs" data-tabs>
+        <button class="tab" role="tab" aria-selected="true" data-tab="product">🟤 商品介紹</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="heat">🔥 加熱方式</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="ideas">🍳 料理靈感</button>
+        <button class="tab" role="tab" aria-selected="false" data-tab="buy">🛒 購買須知</button>
+      </div>
+
+      <div class="tabpanels">
+        <!-- 商品介紹 -->
+        <div class="panel" role="tabpanel" data-panel="product">
+          <table class="table">
+            <tr><th>品名</th><td>吉祥滷意（滷汁-肉燥）</td></tr>
+            <tr><th>成份</th><td>台灣豬、水、醬油、糖、鹽、蔥酥、蒜頭</td></tr>
+            <tr><th>保存</th><td>冷凍保存；開封後請盡速食用</td></tr>
+            <tr><th>有效期限</th><td>90 天（冷凍）</td></tr>
+            <tr><th>最佳賞味</th><td>建議兩週內食用風味最佳</td></tr>
+          </table>
+
+          <div class="panel" style="margin-top:10px;">
+            <b>品牌故事（3 行就懂）</b>
+            <p class="muted" style="margin-top:6px;">
+              想讓家人吃得安心的一鍋滷汁。<br/>
+              在熱到冒汗的廚房慢火熬 8 小時，熬到入口即化。<br/>
+              把「像家裡的味道」真空冷凍保存，交到你手上。
+            </p>
+          </div>
+        </div>
+
+        <!-- 加熱方式 -->
+        <div class="panel hide" role="tabpanel" data-panel="heat">
+          <div class="panel">
+            <b>🫕 隔水加熱（最快最香）</b>
+            <p class="muted">1 真空包不拆 → 2 滾水後轉小火 → 3 5～10 分鐘</p>
+          </div>
+          <div class="panel">
+            <b>🍚 電鍋加熱（最懶人）</b>
+            <p class="muted">1 外鍋半碗水 → 2 倒入碗中 → 3 約 10 分鐘</p>
+          </div>
+          <div class="panel">
+            <b>⚡ 微波加熱（最急）</b>
+            <p class="muted">1 稍解凍 → 2 倒入可微波容器 → 3 1～3 分鐘</p>
+          </div>
+          <div class="badges">
+            <span class="badge">🍚 黃金比例：20g 滷汁 ：150g 白飯</span>
+          </div>
+        </div>
+
+        <!-- 料理靈感 -->
+        <div class="panel hide" role="tabpanel" data-panel="ideas">
+          <div class="panel"><b>🍚 3 分鐘滷肉飯</b><p class="muted">熱白飯＋20g 滷汁＝立刻開吃。</p></div>
+          <div class="panel"><b>🍜 露營拌麵</b><p class="muted">煮麵＋滷汁＋蔥花，香到不想洗鍋。</p></div>
+          <div class="panel"><b>🥚 家庭常備滷蛋</b><p class="muted">滷汁加水煮蛋，冰箱放著隨時加菜。</p></div>
+          <div class="panel"><b>⛺ 露營一鍋料理</b><p class="muted">蔬菜＋豆腐＋滷汁，立刻變下飯菜。</p></div>
+        </div>
+
+        <!-- 購買須知 -->
+        <div class="panel hide" role="tabpanel" data-panel="buy">
+          <div class="panel">
+            <b>🎁 優惠＆運費</b>
+            <p class="muted">
+              買十送一。<br/>
+              7-11 冷凍交貨便：運費 NT$150（含包裝耗材）。<br/>
+              訂購滿 NT$1800 免運。
+            </p>
+          </div>
+          <div class="panel">
+            <b>⏳ 出貨＆聯絡</b>
+            <p class="muted">
+              因無囤貨：匯款後約 1～2 週準備並寄出。<br/>
+              有疑問：私訊粉專小編或 LINE：0985210319
+            </p>
+          </div>
+          <div class="panel">
+            <b>🏦 匯款帳號</b>
+            <p class="muted">中國信託 (822) 668540149274</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Packaging mockup -->
+    <div class="card col-12">
+      <h2>📦 商品包裝（示意 mockup）</h2>
+      <div class="mockup-wrap">
+        <div class="pouch" aria-label="真空包裝示意">
+          <div class="pouch-seal"></div>
+          <div class="pouch-label">
+            <img src="./images/label.jpg" alt="包裝標示（示意）" />
+          </div>
+          <div class="pouch-title">
+            吉祥滷意（肉燥）
+            <small>冷凍真空包｜200g</small>
+          </div>
+        </div>
+
+        <div>
+          <p class="muted" style="margin:0 0 8px;">
+            送禮/自用都體面：真空冷凍保存，打開就是台味幸福。
           </p>
           <div class="badges">
-            <span class="badge">✅ 絕無添加香料/防腐劑</span>
-            <span class="badge">✅ 200g 真空包</span>
-            <span class="badge">✅ 7-11 冷凍交貨便</span>
+            <span class="badge">✅ 台灣豬嚴選</span>
+            <span class="badge">✅ 絕無添加防腐劑</span>
+            <span class="badge">🫕 5～10 分鐘上桌</span>
             <span class="badge">🎁 買十送一</span>
           </div>
           <div class="cta-row">
             <a class="btn primary" href="./order.html">🧾 立即下單</a>
-            <a class="btn" href="./heating.html">🔥 3 種加熱方式</a>
-            <a class="btn" href="./recipes.html">🍳 料理靈感</a>
+            <button class="btn" type="button" onclick="window.selectHomeTab('heat')">🔥 怎麼加熱？</button>
           </div>
         </div>
-
-        <div class="hero-right">
-          <figure class="photo">
-            <img src="./images/photo1.jpg" alt="吉祥滷意滷肉飯" />
-            <figcaption>一匙淋下去，白飯就有靈魂。</figcaption>
-          </figure>
-          <figure class="photo">
-            <img src="./images/camping.jpg" alt="露營情境" />
-            <figcaption>露營/野餐/家庭：冷凍真空包，方便又安心。</figcaption>
-          </figure>
-        </div>
       </div>
-    </section>
-
-    <section class="grid">
-      <div class="card col-7">
-        <h2>✨ 品牌故事｜一鍋家傳味，想把「好吃」變成你的日常</h2>
-        <p>
-          「吉祥滷意」來自一個很單純的念頭：忙碌的日子裡，也要吃到像家裡一樣的滷汁。
-          我們把傳統古法滷製的香氣，用真空冷凍保存起來——你只需要加熱，
-          就能讓飯桌多一點溫度、多一點幸福。
-        </p>
-        <p class="muted" style="margin-top:10px;">
-          貼心提醒：因為沒有囤貨，所以下單匯款後約 1～2 週準備並寄出。
-          若有任何疑問，歡迎私訊粉專小編或 LINE：0985210319
-        </p>
-      </div>
-
-      <div class="card col-5">
-        <h2>📦 產品資訊</h2>
-        <table class="table">
-          <tr><th>品名</th><td>吉祥滷意（滷汁-肉燥）</td></tr>
-          <tr><th>淨重</th><td>200g / 包</td></tr>
-          <tr><th>成份</th><td>台灣豬、水、醬油、糖、鹽、蔥酥、蒜頭</td></tr>
-          <tr><th>保存</th><td>冷凍保存；開封後請盡速食用</td></tr>
-          <tr><th>有效期限</th><td>90 天（冷凍）</td></tr>
-          <tr><th>最佳賞味</th><td>建議兩週內食用風味最佳</td></tr>
-        </table>
-      </div>
-
-      <div class="card col-6">
-        <h2>🚚 物流與優惠</h2>
-        <p>
-          🎁 <b>買十送一</b><br/>
-          🌟 7-11 冷凍交貨便：運費 <b>NT$150</b>（含包裝耗材）<br/>
-          🧾 訂購 <b>NT$1800</b> 以上免運
-        </p>
-        <div class="cta-row" style="margin-top:12px;">
-          <a class="btn primary" href="./order.html">去下單與試算</a>
-          <a class="btn" href="./heating.html">看加熱方式</a>
-        </div>
-      </div>
-
-      <div class="card col-6">
-        <h2>🍚 黃金比例</h2>
-        <p>
-          <b>20g 滷汁</b> ： <b>150g 白飯</b><br/>
-          想更濃郁：滷汁加到 30g；想更清爽：滷汁 15g 就很剛好。
-        </p>
-        <figure class="photo" style="margin-top:12px;">
-          <img src="./images/label.jpg" alt="貼心小叮嚀標示" />
-          <figcaption>加熱方式與小提醒（可放在包裝/頁面一起看）。</figcaption>
-        </figure>
-      </div>
-
-      <div class="card col-12">
-        <h2>🧺 適合情境</h2>
-        <p>
-          露營：不用帶一堆調味料，一包就能拌飯拌麵、加菜升級。<br/>
-          野餐：便當飯淋上去立刻香起來。<br/>
-          家庭：忙碌下班也能 10 分鐘內端出「像家裡的味道」。
-        </p>
-      </div>
-    </section>
-
-    <div class="footer">© 吉祥滷意｜冷凍真空滷汁（肉燥）</div>
-  </main>
-
-  <div class="dock">
-    <div class="dock-inner">
-      <div>🎁 <b>買十送一</b>｜滿 <b>NT$1800</b> 免運</div>
-      <a class="btn primary small" href="./order.html">🧾 立即下單</a>
     </div>
+
+  </section>
+
+  <div class="footer">© 吉祥滷意｜冷凍真空滷汁（肉燥）</div>
+</main>
+
+<!-- Bottom sticky CTA -->
+<div class="dock">
+  <div class="dock-inner">
+    <div>🎁 <b>買十送一</b>｜滿 <b>NT$1800</b> 免運</div>
+    <a class="btn primary small" href="./order.html">🧾 立即下單</a>
   </div>
+</div>
+
+<script src="./assets/app.js"></script>
 </body>
 </html>
