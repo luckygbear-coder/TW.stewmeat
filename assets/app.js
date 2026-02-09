@@ -298,10 +298,10 @@ ${storeLine}
   });
 
   $("#copyPay")?.addEventListener("click", async ()=>{
-    const pay =
+const pay =
 `【匯款資訊】
-中國信託 (822)
-帳號：668540149274
+郵局 (700)
+帳號：00018330440573
 
 匯款後請回傳：金額＋末五碼＋姓名
 LINE：chris770912`;
