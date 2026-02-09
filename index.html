@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <title>吉祥滷意｜冷凍真空滷汁</title>
 
-  <!-- PWA -->
+  <!-- ✅ PWA -->
   <link rel="manifest" href="./manifest.webmanifest">
   <meta name="theme-color" content="#b5122b">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -20,23 +20,33 @@
   <header class="topbar">
     <div class="topbar-inner">
       <div class="top-actions">
-        <a class="btn small" href="https://www.instagram.com/9.12lin" target="_blank" rel="noopener">📷 IG:@9.12lin</a>
-
-        <!-- ✅ 加好友 -->
-        <a class="btn small navy" href="https://line.me/ti/p/~chris770912" target="_blank" rel="noopener" id="lineAddTop">
-          ➕ 加 LINE：chris770912
+        <a class="btn small ig" href="https://www.instagram.com/9.12lin" target="_blank" rel="noopener" aria-label="前往 IG：9.12lin">
+          <span class="icon" aria-hidden="true">
+            <!-- IG icon -->
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+              <path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9A5.5 5.5 0 0 1 16.5 22h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2Zm9 2h-9A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm5.6-.9a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2Z"/>
+            </svg>
+          </span>
+          IG:@9.12lin
         </a>
 
-        <!-- ✅ 直接用 LINE 預填訊息（下單/詢問） -->
-        <a class="btn primary small" href="#" rel="noopener" id="lineAskTop">💬 LINE 下單/詢問</a>
+        <a class="btn small navy" href="https://line.me/ti/p/~chris770912" target="_blank" rel="noopener" id="lineTop" aria-label="加入 LINE：chris770912">
+          <span class="icon" aria-hidden="true">
+            <!-- LINE bubble icon -->
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+              <path d="M19.5 3h-15A2.5 2.5 0 0 0 2 5.5v9A2.5 2.5 0 0 0 4.5 17H8l4 4 4-4h3.5A2.5 2.5 0 0 0 22 14.5v-9A2.5 2.5 0 0 0 19.5 3Z"/>
+            </svg>
+          </span>
+          LINE：chris770912
+        </a>
 
-        <a class="btn small" href="#order">🧾 下單</a>
+        <a class="btn primary small" href="#order">🧾 下單</a>
       </div>
     </div>
   </header>
 
   <main class="wrap">
-
+    <!-- 先讓人有食慾 -->
     <section class="card">
       <div class="pill">🇹🇼 台灣豬嚴選・慢火熬煮・冷凍真空包</div>
       <h1>一包搞定的台味幸福：<span style="color:var(--red)">吉祥滷意</span></h1>
@@ -61,6 +71,43 @@
       </div>
     </section>
 
+    <!-- ✅ 新增：LINE 三種入口 -->
+    <section class="card">
+      <h2 style="margin:0 0 10px">💬 LINE 快速服務</h2>
+      <div class="cta-row">
+        <button class="btn primary" type="button" id="lineOrderAsk">
+          <span class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+              <path d="M19.5 3h-15A2.5 2.5 0 0 0 2 5.5v9A2.5 2.5 0 0 0 4.5 17H8l4 4 4-4h3.5A2.5 2.5 0 0 0 22 14.5v-9A2.5 2.5 0 0 0 19.5 3Z"/>
+            </svg>
+          </span>
+          LINE 下單 / 詢問
+        </button>
+
+        <a class="btn" href="https://line.me/ti/p/~chris770912" target="_blank" rel="noopener" id="lineAddFast">
+          <span class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+              <path d="M19.5 3h-15A2.5 2.5 0 0 0 2 5.5v9A2.5 2.5 0 0 0 4.5 17H8l4 4 4-4h3.5A2.5 2.5 0 0 0 22 14.5v-9A2.5 2.5 0 0 0 19.5 3Z"/>
+            </svg>
+          </span>
+          加 LINE 快速下單
+        </a>
+
+        <a class="btn navy" href="https://line.me/ti/p/~chris770912" target="_blank" rel="noopener" id="lineService">
+          <span class="icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+              <path d="M19.5 3h-15A2.5 2.5 0 0 0 2 5.5v9A2.5 2.5 0 0 0 4.5 17H8l4 4 4-4h3.5A2.5 2.5 0 0 0 22 14.5v-9A2.5 2.5 0 0 0 19.5 3Z"/>
+            </svg>
+          </span>
+          客服 LINE
+        </a>
+      </div>
+      <p class="muted" style="margin:10px 0 0">
+        若你已填好訂單資料，點「LINE 下單 / 詢問」會自動把訊息帶進 LINE。
+      </p>
+    </section>
+
+    <!-- 快捷入口 -->
     <section class="quick-grid">
       <button class="quick-item red" type="button" onclick="document.getElementById('order').scrollIntoView({behavior:'smooth'})">
         <div class="qi-title">ORDER</div><div class="qi-sub">立即下單</div>
@@ -76,6 +123,7 @@
       </button>
     </section>
 
+    <!-- Tabs -->
     <section class="card" id="tabs">
       <div class="tabs">
         <button class="tab" data-tab="product" aria-selected="true">商品資訊</button>
@@ -146,6 +194,7 @@
       </div>
     </section>
 
+    <!-- 下單表單 + 試算 + 一鍵複製 -->
     <section class="card" id="order">
       <h2>🧾 立即下單（填完一鍵複製訊息給我確認）</h2>
       <p class="muted" style="margin-top:0">
@@ -242,11 +291,14 @@
         <div class="cta-row">
           <button class="btn primary" type="button" id="copyOrder">📋 一鍵複製下單訊息</button>
           <button class="btn" type="button" id="copyPay">🏦 複製匯款資訊</button>
-
-          <!-- ✅ 你要的三個 LINE 功能 -->
-          <button class="btn navy" type="button" id="lineAskBtn">💬 LINE 下單 / 詢問</button>
-          <a class="btn" href="https://line.me/ti/p/~chris770912" target="_blank" rel="noopener" id="lineFastAdd">💬 加 LINE 快速下單</a>
-          <a class="btn" href="https://line.me/ti/p/~chris770912" target="_blank" rel="noopener" id="lineService">💬 客服 LINE</a>
+          <a class="btn navy" href="https://line.me/ti/p/~chris770912" target="_blank" rel="noopener" id="lineSend">
+            <span class="icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+                <path d="M19.5 3h-15A2.5 2.5 0 0 0 2 5.5v9A2.5 2.5 0 0 0 4.5 17H8l4 4 4-4h3.5A2.5 2.5 0 0 0 22 14.5v-9A2.5 2.5 0 0 0 19.5 3Z"/>
+              </svg>
+            </span>
+            用 LINE 送出訂單
+          </a>
         </div>
 
         <div class="panel" style="margin-top:10px">
@@ -276,10 +328,18 @@
   <div class="toast" id="toast">已複製 ✅</div>
 
   <!-- ✅ 右下角浮動 LINE 客服泡泡 -->
-  <button class="line-fab" type="button" id="lineFab" aria-label="LINE 客服">
-    <span class="line-fab-dot" aria-hidden="true"></span>
-    💬
-  </button>
+  <a
+    href="https://line.me/ti/p/~chris770912"
+    target="_blank"
+    rel="noopener"
+    class="line-float"
+    aria-label="LINE 客服"
+    id="lineFloat"
+  >
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M19.5 3h-15A2.5 2.5 0 0 0 2 5.5v9A2.5 2.5 0 0 0 4.5 17H8l4 4 4-4h3.5A2.5 2.5 0 0 0 22 14.5v-9A2.5 2.5 0 0 0 19.5 3Z"/>
+    </svg>
+  </a>
 
   <script src="./assets/app.js"></script>
 </body>
