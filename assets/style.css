@@ -24,13 +24,11 @@ body{
   touch-action: manipulation;
 }
 
-/* ✅ 防止點擊後選字/長按選單造成「像放大」的誤會：只針對非輸入區 */
 body, .btn, .quick-item, .tab, .chip, .pill, .dock, .topbar {
   -webkit-user-select: none;
   user-select: none;
   -webkit-touch-callout: none;
 }
-/* ✅ 但輸入框仍要能選字/貼上 */
 input, textarea, select, pre {
   -webkit-user-select: text;
   user-select: text;
@@ -59,7 +57,6 @@ input, textarea, select, pre {
   gap:10px;
   justify-content:flex-end;
 }
-
 .top-actions{display:flex;gap:8px;align-items:center; flex-wrap:nowrap;}
 
 .btn{
@@ -94,6 +91,7 @@ input, textarea, select, pre {
 h1{ margin: 10px 0 8px; font-size: 24px; line-height:1.25; }
 h2{ margin: 0 0 10px; font-size: 18px; }
 .muted{ color: var(--muted); }
+
 .pill{
   display:inline-flex; gap:8px; align-items:center;
   padding: 8px 12px;
@@ -253,8 +251,6 @@ label{
   color:var(--muted);
   margin: 0 0 6px;
 }
-
-/* ✅ iOS Safari：輸入框字體 <16px 會自動放大，這裡全部固定 16px */
 input, textarea, select{
   width:100%;
   padding:12px 12px;
@@ -286,10 +282,7 @@ input[readonly]{background: rgba(255,255,255,.65); color: var(--muted);}
   padding:12px;
 }
 .box b{display:block;margin-bottom:6px}
-.kpi{
-  font-weight:1000;
-  font-size:18px;
-}
+.kpi{ font-weight:1000; font-size:18px; }
 .kpi small{font-size:12px;color:var(--muted);font-weight:900}
 
 /* Toast */
@@ -342,10 +335,7 @@ input[readonly]{background: rgba(255,255,255,.65); color: var(--muted);}
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.dock-cta{
-  flex: 0 0 auto;
-  white-space: nowrap;
-}
+.dock-cta{ flex: 0 0 auto; white-space: nowrap; }
 
 .footer{
   margin-top: 16px;
@@ -355,18 +345,29 @@ input[readonly]{background: rgba(255,255,255,.65); color: var(--muted);}
   font-size: 12px;
 }
 
-/* ===== Icon helper ===== */
-.btn .icon{
+/* ===== 官方 LINE Logo（綠底白字）===== */
+.btn .icon{ display:inline-grid; place-items:center; line-height:0; }
+
+.line-logo{
   display:inline-grid;
   place-items:center;
-  line-height:0;
+  width:28px;
+  height:18px;
+  border-radius:5px;
+  background:#06c755;
+  color:#fff;
+  font-weight:1000;
+  font-size:11px;
+  letter-spacing:.5px;
+  line-height:1;
+  box-shadow: 0 2px 6px rgba(0,0,0,.12);
 }
 
-/* ===== 右下角 LINE 客服泡泡 ===== */
+/* ===== 右下角 LINE 客服泡泡（官方 LINE 樣式）===== */
 .line-float{
   position:fixed;
   right:16px;
-  bottom:92px; /* 不擋下單 dock */
+  bottom:92px;
   width:56px;
   height:56px;
   border-radius:50%;
@@ -378,11 +379,16 @@ input[readonly]{background: rgba(255,255,255,.65); color: var(--muted);}
   text-decoration:none;
   -webkit-tap-highlight-color: transparent;
 }
-.line-float svg{
-  width:28px;
-  height:28px;
-  fill:#fff;
+.line-float-logo{
+  display:grid;
+  place-items:center;
+  width:40px;
+  height:26px;
+  border-radius:8px;
+  background:#fff;
+  color:#06c755;
+  font-weight:1000;
+  font-size:14px;
+  letter-spacing:.6px;
 }
-.line-float:active{
-  transform:translateY(1px);
-}
+.line-float:active{ transform:translateY(1px); }
