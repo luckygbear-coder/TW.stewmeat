@@ -10,6 +10,9 @@ const UNIT_PRICE = 180;
 const SHIP_FEE = 129;
 const FREE_SHIP_AT = 1800;
 
+// ✅ 郵局帳號（只複製這串）
+const POST_ACCOUNT = "00018330440573";
+
 // ✅ 圖片路徑（不裁切輪播）
 const IMAGES = [
   "images/photo1.jpg",
@@ -20,6 +23,9 @@ const IMAGES = [
   "images/spread.jpg",
   "images/bowl.jpg"
 ];
+
+// ✅ LINE ID
+const LINE_ID = "chris770912";
 
 function $(sel){ return document.querySelector(sel); }
 function $all(sel){ return Array.from(document.querySelectorAll(sel)); }
@@ -47,7 +53,7 @@ function genOrderNo(){
   return `JLY-${t.key}-${r3}`;
 }
 
-// ✅ LINE：預填訊息（送入 LINE 對話框）
+// ✅ LINE：預填訊息（訂單/詢問）
 function openLineWithMessage(text){
   const encoded = encodeURIComponent(text);
   const urlHttps = `https://line.me/R/msg/text/?${encoded}`;
@@ -62,11 +68,10 @@ function openLineWithMessage(text){
   }
 }
 
-// ✅ LINE：加好友（ID: chris770912）
+// ✅ LINE：加好友（導向加好友畫面）
 function openLineAddFriend(){
-  const id = "chris770912";
-  const urlHttps = `https://line.me/ti/p/~${id}`;
-  const urlScheme = `line://ti/p/~${id}`;
+  const urlHttps = `https://line.me/ti/p/~${LINE_ID}`;
+  const urlScheme = `line://ti/p/~${LINE_ID}`;
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
   if(isMobile){
@@ -103,6 +108,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const dotsWrap = root.querySelector("[data-dots]");
     const btnPrev = root.querySelector("[data-prev]");
     const btnNext = root.querySelector("[data-next]");
+
+    if(!track || !dotsWrap) return;
 
     track.innerHTML = IMAGES.map((src, i) => `
       <div class="carousel-slide">
@@ -188,7 +195,7 @@ document.addEventListener("DOMContentLoaded", () => {
     toastTimer = setTimeout(()=> toast.classList.remove("on"), 1600);
   }
 
-  // ===== Order calc + copy =====
+  // ===== Order calc + preview =====
   const qtyEl = $("#qty");
   const priceEl = $("#price");
   const freeEl = $("#freePacks");
@@ -228,7 +235,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return { qty, price, free, product, ship, grand };
   }
 
-  function buildMessage(){
+  function buildOrderMessage(){
     const c = calc();
     const storeLine = `7-11門市：${(storeEl?.value || "（請填門市名稱）")}`;
 
@@ -240,9 +247,9 @@ document.addEventListener("DOMContentLoaded", () => {
 訂單編號：${orderNoEl?.value || ""}
 建立時間：${createdAtEl?.value || ""}
 
-姓名：${nameEl?.value || "（未填）"}
-電話：${phoneEl?.value || "（未填）"}
-取貨方式：7-11 冷凍店到店
+取件人姓名：${nameEl?.value || "（未填）"}
+聯絡電話：${phoneEl?.value || "（未填）"}
+寄送方式：7-11 冷凍店到店
 ${storeLine}
 
 訂購：${c.qty} 包（買十送一：${c.free} 包）
@@ -251,36 +258,19 @@ ${storeLine}
 運費：${c.ship===0 ? "免運（滿1800）" : fmt(c.ship)}
 合計：${fmt(c.grand)}
 
-聯絡方式：${contactText}｜${contactId}
+方便聯絡：${contactText}｜${contactId}
 備註：${noteMsgEl?.value || "—"}
 
-請協助確認訂單，謝謝！`;
+我已付款，請協助確認訂單，謝謝！`;
 
     if(previewEl) previewEl.textContent = msg;
     return msg;
   }
 
-  // ✅ 客服詢問訊息（#lineService + #lineFloat 會用）
-  function buildInquiryMessage(){
-    const name = (nameEl?.value || "").trim();
-    const phone = (phoneEl?.value || "").trim();
-    const hint = (name || phone) ? `（${name || "未填姓名"} / ${phone || "未填電話"}）` : "";
-
-    return (
-`【吉祥滷意｜客服詢問】
-你好～我想詢問商品/下單相關問題 ${hint}
-
-想問的內容：
-（請在這裡輸入你的問題，例如：到貨時間、門市填寫、付款方式…）
-
-謝謝！`
-    );
-  }
-
-  async function copyText(text){
+  async function copyText(text, toastMsg="已複製 ✅"){
     try{
       await navigator.clipboard.writeText(text);
-      showToast("已複製 ✅");
+      showToast(toastMsg);
     }catch(e){
       const ta = document.createElement("textarea");
       ta.value = text;
@@ -288,85 +278,50 @@ ${storeLine}
       ta.select();
       document.execCommand("copy");
       document.body.removeChild(ta);
-      showToast("已複製 ✅");
+      showToast(toastMsg);
     }
   }
 
+  // ✅ 一鍵複製下單訊息（保留）
   $("#copyOrder")?.addEventListener("click", async ()=>{
-    const msg = buildMessage();
-    await copyText(msg);
+    const msg = buildOrderMessage();
+    await copyText(msg, "已複製下單訊息 ✅");
   });
 
-$("#copyPay")?.addEventListener("click", async ()=>{
-  const account = "00018330440573";
-  await copyText(account);
-  showToast("已複製郵局帳號 ✅");
-});
+  // ✅ 一鍵複製郵局帳號（只複製數字）
+  $("#copyPay")?.addEventListener("click", async ()=>{
+    await copyText(POST_ACCOUNT, "已複製郵局帳號 ✅");
+  });
 
-  // ✅ badge：設定數字（不改 HTML，靠 data-badge）
-  const floatEl = $("#lineFloat");
-  function setLineBadge(count){
-    if(!floatEl) return;
-    const c = Math.max(0, Math.floor(n(count)));
-    if(c <= 0){
-      floatEl.removeAttribute("data-badge");
-      floatEl.classList.remove("is-pulse");
-    }else{
-      floatEl.setAttribute("data-badge", String(c > 99 ? "99+" : c));
-      floatEl.classList.add("is-pulse");
-    }
-  }
-
-  // ✅ 一開始先給「引誘人點擊」的未讀數字（你可改 1/3/7）
-  setLineBadge(3);
-
-  function bindLinePrefill(id){
+  // ✅ 用 LINE 送出訂單：帶入「訂單訊息」
+  function bindLineSendOrder(id){
     const el = document.getElementById(id);
     if(!el) return;
     el.addEventListener("click", (e)=>{
       e.preventDefault();
-      const msg = buildMessage();
+      const msg = buildOrderMessage();
       openLineWithMessage(msg);
-      // 點了就把 badge 減少（可刪掉這行，若你想一直顯示）
-      setLineBadge(0);
     });
   }
+  bindLineSendOrder("lineSend");
+  bindLineSendOrder("lineService"); // 你現在的「用LINE送出訂單」在 LINE 快速服務區
 
-  // ✅ 原本兩顆 LINE（上方/送出）保留「預填訂單訊息」
-  bindLinePrefill("lineTop");
-  bindLinePrefill("lineSend");
-
-  // ✅ LINE 下單 / 詢問（#lineOrderAsk）＝自動帶訂單訊息進 LINE
-  $("#lineOrderAsk")?.addEventListener("click", (e)=>{
-    e?.preventDefault?.();
-    const msg = buildMessage();
-    openLineWithMessage(msg);
-    setLineBadge(0);
-  });
-
-  // ✅ 加 LINE 快速下單（#lineAddFast）＝加好友
-  $("#lineAddFast")?.addEventListener("click", (e)=>{
-    e.preventDefault();
-    openLineAddFriend();
-  });
-
-  // ✅ 客服 LINE（#lineService）與右下角泡泡（#lineFloat）＝自動帶「詢問訊息」進 LINE
-  function bindInquiryPrefill(id){
+  // ✅ 加好友入口：導向加好友（客服對話）
+  function bindLineAddFriend(id){
     const el = document.getElementById(id);
     if(!el) return;
     el.addEventListener("click", (e)=>{
       e.preventDefault();
-      const msg = buildInquiryMessage();
-      openLineWithMessage(msg);
-      setLineBadge(0);
+      openLineAddFriend();
     });
   }
-  bindInquiryPrefill("lineService");
-  bindInquiryPrefill("lineFloat");
+  bindLineAddFriend("lineTop");     // topbar LINE
+  bindLineAddFriend("lineAddFast"); // 客服LINE
+  bindLineAddFriend("lineFloat");   // 右下角泡泡（你指定：按了就到加好友）
 
   // inputs live preview
   const inputs = [qtyEl, nameEl, phoneEl, storeEl, contactEl, contactIdEl, noteMsgEl].filter(Boolean);
-  inputs.forEach(el => el.addEventListener("input", buildMessage));
+  inputs.forEach(el => el.addEventListener("input", buildOrderMessage));
 
   // init：訂單號與時間
   (function initOrderMeta(){
@@ -376,5 +331,5 @@ $("#copyPay")?.addEventListener("click", async ()=>{
   })();
 
   calc();
-  buildMessage();
+  buildOrderMessage();
 });
