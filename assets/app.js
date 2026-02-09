@@ -16,11 +16,10 @@ const POST_ACCOUNT = "00018330440573";
 // ✅ 圖片路徑（不裁切輪播）
 const IMAGES = [
   "images/photo1.jpg",
-  "images/photo2.jpg",
+
   "images/photo3.jpg",
   "images/packs.jpg",
-  "images/set.jpg",
-  "images/spread.jpg",
+
   "images/bowl.jpg"
 ];
 
