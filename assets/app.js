@@ -47,7 +47,7 @@ function genOrderNo(){
   return `JLY-${t.key}-${r3}`;
 }
 
-// ✅ LINE：預填訊息
+// ✅ LINE：預填訊息（送入 LINE 對話框）
 function openLineWithMessage(text){
   const encoded = encodeURIComponent(text);
   const urlHttps = `https://line.me/R/msg/text/?${encoded}`;
@@ -62,7 +62,7 @@ function openLineWithMessage(text){
   }
 }
 
-// ✅ LINE：加好友 / 客服（ID: chris770912）
+// ✅ LINE：加好友（ID: chris770912）
 function openLineAddFriend(){
   const id = "chris770912";
   const urlHttps = `https://line.me/ti/p/~${id}`;
@@ -260,6 +260,23 @@ ${storeLine}
     return msg;
   }
 
+  // ✅ 客服詢問訊息（#lineService + #lineFloat 會用）
+  function buildInquiryMessage(){
+    const name = (nameEl?.value || "").trim();
+    const phone = (phoneEl?.value || "").trim();
+    const hint = (name || phone) ? `（${name || "未填姓名"} / ${phone || "未填電話"}）` : "";
+
+    return (
+`【吉祥滷意｜客服詢問】
+你好～我想詢問商品/下單相關問題 ${hint}
+
+想問的內容：
+（請在這裡輸入你的問題，例如：到貨時間、門市填寫、付款方式…）
+
+謝謝！`
+    );
+  }
+
   async function copyText(text){
     try{
       await navigator.clipboard.writeText(text);
@@ -291,6 +308,23 @@ LINE：chris770912`;
     await copyText(pay);
   });
 
+  // ✅ badge：設定數字（不改 HTML，靠 data-badge）
+  const floatEl = $("#lineFloat");
+  function setLineBadge(count){
+    if(!floatEl) return;
+    const c = Math.max(0, Math.floor(n(count)));
+    if(c <= 0){
+      floatEl.removeAttribute("data-badge");
+      floatEl.classList.remove("is-pulse");
+    }else{
+      floatEl.setAttribute("data-badge", String(c > 99 ? "99+" : c));
+      floatEl.classList.add("is-pulse");
+    }
+  }
+
+  // ✅ 一開始先給「引誘人點擊」的未讀數字（你可改 1/3/7）
+  setLineBadge(3);
+
   function bindLinePrefill(id){
     const el = document.getElementById(id);
     if(!el) return;
@@ -298,23 +332,42 @@ LINE：chris770912`;
       e.preventDefault();
       const msg = buildMessage();
       openLineWithMessage(msg);
+      // 點了就把 badge 減少（可刪掉這行，若你想一直顯示）
+      setLineBadge(0);
     });
   }
 
-  // ✅ 原本兩顆 LINE（上方/送出）保留預填
+  // ✅ 原本兩顆 LINE（上方/送出）保留「預填訂單訊息」
   bindLinePrefill("lineTop");
   bindLinePrefill("lineSend");
 
-  // ✅ 新增：LINE 下單/詢問（預填）
-  $("#lineOrderAsk")?.addEventListener("click", ()=>{
+  // ✅ LINE 下單 / 詢問（#lineOrderAsk）＝自動帶訂單訊息進 LINE
+  $("#lineOrderAsk")?.addEventListener("click", (e)=>{
+    e?.preventDefault?.();
     const msg = buildMessage();
     openLineWithMessage(msg);
+    setLineBadge(0);
   });
 
-  // ✅ 新增：加 LINE 快速下單 / 客服 LINE / 浮動泡泡（加好友/客服）
-  $("#lineAddFast")?.addEventListener("click", (e)=>{ e.preventDefault(); openLineAddFriend(); });
-  $("#lineService")?.addEventListener("click", (e)=>{ e.preventDefault(); openLineAddFriend(); });
-  $("#lineFloat")?.addEventListener("click", (e)=>{ e.preventDefault(); openLineAddFriend(); });
+  // ✅ 加 LINE 快速下單（#lineAddFast）＝加好友
+  $("#lineAddFast")?.addEventListener("click", (e)=>{
+    e.preventDefault();
+    openLineAddFriend();
+  });
+
+  // ✅ 客服 LINE（#lineService）與右下角泡泡（#lineFloat）＝自動帶「詢問訊息」進 LINE
+  function bindInquiryPrefill(id){
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.addEventListener("click", (e)=>{
+      e.preventDefault();
+      const msg = buildInquiryMessage();
+      openLineWithMessage(msg);
+      setLineBadge(0);
+    });
+  }
+  bindInquiryPrefill("lineService");
+  bindInquiryPrefill("lineFloat");
 
   // inputs live preview
   const inputs = [qtyEl, nameEl, phoneEl, storeEl, contactEl, contactIdEl, noteMsgEl].filter(Boolean);
