@@ -297,16 +297,11 @@ ${storeLine}
     await copyText(msg);
   });
 
-  $("#copyPay")?.addEventListener("click", async ()=>{
-const pay =
-`【匯款資訊】
-郵局 (700)
-帳號：00018330440573
-
-匯款後請回傳：金額＋末五碼＋姓名
-LINE：chris770912`;
-    await copyText(pay);
-  });
+$("#copyPay")?.addEventListener("click", async ()=>{
+  const account = "00018330440573";
+  await copyText(account);
+  showToast("已複製郵局帳號 ✅");
+});
 
   // ✅ badge：設定數字（不改 HTML，靠 data-badge）
   const floatEl = $("#lineFloat");
