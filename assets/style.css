@@ -378,6 +378,7 @@ input[readonly]{background: rgba(255,255,255,.65); color: var(--muted);}
   z-index:90;
   text-decoration:none;
   -webkit-tap-highlight-color: transparent;
+  will-change: transform;
 }
 .line-float-logo{
   display:grid;
@@ -392,3 +393,42 @@ input[readonly]{background: rgba(255,255,255,.65); color: var(--muted);}
   letter-spacing:.6px;
 }
 .line-float:active{ transform:translateY(1px); }
+
+/* ✅ 未讀數字 badge（不用改 HTML，靠 data-badge 顯示） */
+.line-float::after{
+  content:"";
+  display:none;
+}
+.line-float[data-badge]:after{
+  content: attr(data-badge);
+  display:grid;
+  place-items:center;
+  position:absolute;
+  top:-6px;
+  right:-6px;
+  min-width:22px;
+  height:22px;
+  padding: 0 6px;
+  border-radius:999px;
+  background:#ff2d55; /* iOS 紅 */
+  color:#fff;
+  font-weight:1000;
+  font-size:12px;
+  line-height:1;
+  border:2px solid rgba(255,255,255,.92);
+  box-shadow:0 8px 18px rgba(0,0,0,.22);
+  transform-origin: 70% 30%;
+  animation: badge-pop .9s ease both;
+}
+.line-float.is-pulse{
+  animation: float-pulse 1.45s ease-in-out infinite;
+}
+@keyframes badge-pop{
+  0%{ transform: scale(.6); opacity:0; }
+  45%{ transform: scale(1.18); opacity:1; }
+  100%{ transform: scale(1); opacity:1; }
+}
+@keyframes float-pulse{
+  0%,100%{ transform: translateY(0); }
+  50%{ transform: translateY(-2px); }
+}
