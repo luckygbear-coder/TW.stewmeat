@@ -24,12 +24,13 @@ body{
   touch-action: manipulation;
 }
 
-/* ✅ 防止非輸入區選字/長按 */
-body, .btn, .quick-item, .tab, .chip, .pill, .dock, .topbar, .line-fab {
+/* ✅ 防止點擊後選字/長按選單造成「像放大」的誤會：只針對非輸入區 */
+body, .btn, .quick-item, .tab, .chip, .pill, .dock, .topbar {
   -webkit-user-select: none;
   user-select: none;
   -webkit-touch-callout: none;
 }
+/* ✅ 但輸入框仍要能選字/貼上 */
 input, textarea, select, pre {
   -webkit-user-select: text;
   user-select: text;
@@ -58,7 +59,8 @@ input, textarea, select, pre {
   gap:10px;
   justify-content:flex-end;
 }
-.top-actions{display:flex;gap:8px;align-items:center; flex-wrap:wrap;}
+
+.top-actions{display:flex;gap:8px;align-items:center; flex-wrap:nowrap;}
 
 .btn{
   display:inline-flex; align-items:center; justify-content:center;
@@ -81,7 +83,6 @@ input, textarea, select, pre {
 .btn:active{transform: translateY(1px)}
 .btn:disabled{opacity:.55; cursor:not-allowed; transform:none;}
 
-/* Card */
 .card{
   background: var(--card);
   border: 2px solid rgba(245,211,166,.9);
@@ -252,13 +253,15 @@ label{
   color:var(--muted);
   margin: 0 0 6px;
 }
+
+/* ✅ iOS Safari：輸入框字體 <16px 會自動放大，這裡全部固定 16px */
 input, textarea, select{
   width:100%;
   padding:12px 12px;
   border-radius:14px;
   border:2px solid rgba(245,211,166,.95);
   background:#fff;
-  font-size:16px; /* ✅ iOS 不放大 */
+  font-size:16px;
   outline:none;
 }
 textarea{min-height:88px;resize:vertical}
@@ -352,33 +355,34 @@ input[readonly]{background: rgba(255,255,255,.65); color: var(--muted);}
   font-size: 12px;
 }
 
-/* ✅ 右下角 LINE 客服泡泡（避開 dock） */
-.line-fab{
-  position: fixed;
-  right: 14px;
-  bottom: 92px; /* dock 上方 */
-  z-index: 90;
-  width: 56px;
-  height: 56px;
-  border-radius: 999px;
-  border: 2px solid rgba(245,211,166,.9);
-  background: #fff;
-  box-shadow: 0 10px 22px rgba(0,0,0,.18);
-  font-size: 22px;
-  font-weight: 900;
-  display: grid;
-  place-items: center;
-  cursor: pointer;
+/* ===== Icon helper ===== */
+.btn .icon{
+  display:inline-grid;
+  place-items:center;
+  line-height:0;
+}
+
+/* ===== 右下角 LINE 客服泡泡 ===== */
+.line-float{
+  position:fixed;
+  right:16px;
+  bottom:92px; /* 不擋下單 dock */
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  background:#06c755;
+  box-shadow:0 8px 20px rgba(0,0,0,.25);
+  display:grid;
+  place-items:center;
+  z-index:90;
+  text-decoration:none;
   -webkit-tap-highlight-color: transparent;
 }
-.line-fab:active{ transform: translateY(1px); }
-.line-fab-dot{
-  position:absolute;
-  top: 9px;
-  right: 10px;
-  width: 10px;
-  height: 10px;
-  border-radius: 999px;
-  background: var(--red);
-  border: 2px solid #fff;
+.line-float svg{
+  width:28px;
+  height:28px;
+  fill:#fff;
+}
+.line-float:active{
+  transform:translateY(1px);
 }
