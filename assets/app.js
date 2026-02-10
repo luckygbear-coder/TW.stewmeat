@@ -301,7 +301,7 @@ ${storeLine}
     });
   }
   bindLineSendOrder("lineSend");
-  bindLineSendOrder("lineService"); // 你現在的「用LINE送出訂單」在 LINE 快速服務區
+  bindLineSendOrder("lineService"); // LINE 快速服務區：用LINE送出訂單
 
   // ✅ 加好友入口：導向加好友（客服對話）
   function bindLineAddFriend(id){
@@ -314,7 +314,7 @@ ${storeLine}
   }
   bindLineAddFriend("lineTop");     // topbar LINE
   bindLineAddFriend("lineAddFast"); // 客服LINE
-  bindLineAddFriend("lineFloat");   // 右下角泡泡（你指定：按了就到加好友）
+  bindLineAddFriend("lineFloat");   // 右下角泡泡：加好友
 
   // inputs live preview
   const inputs = [qtyEl, nameEl, phoneEl, storeEl, contactEl, contactIdEl, noteMsgEl].filter(Boolean);
@@ -330,15 +330,22 @@ ${storeLine}
   calc();
   buildOrderMessage();
 
-  // ===== 熱絡留言板（五星＋留言） =====
+  // ===== 熱絡留言板（五星＋留言｜分頁 reviews）=====
   (function initReviews(){
     const listEl = document.getElementById("reviewList");
     const summaryEl = document.getElementById("reviewSummary");
     const refreshBtn = document.getElementById("refreshReviews");
+    const rNameEl = document.getElementById("reviewName");
+    const rStarsEl = document.getElementById("reviewStars");
+    const rTextEl = document.getElementById("reviewText");
+    const submitBtn = document.getElementById("submitReview");
+    const clearBtn = document.getElementById("clearMyReviews");
     if(!listEl || !summaryEl) return;
 
-    // 30 組暱稱＋留言（台味×溫暖×一點幽默）
-    const REVIEWS = [
+    const LS_KEY = "jly_reviews_v1";
+
+    // 30 組預設暱稱＋留言（台味×溫暖×一點幽默）
+    const SEED = [
       {name:"阿嬤說可以", stars:5, text:"這滷汁一打開，家裡瞬間像過年。\n我阿嬤說：嗯～有中！"},
       {name:"便當界小白", stars:5, text:"我只會煮水…結果拌飯也能上桌。\n謝謝吉祥滷意救了我。"},
       {name:"台味收藏家", stars:5, text:"香到我家白飯自己站起來排隊。"},
@@ -349,134 +356,138 @@ ${storeLine}
       {name:"白飯大師", stars:5, text:"白飯遇到它，直接升級成主角。"},
       {name:"露營派", stars:5, text:"露營帶一包，朋友以為我請了主廚。\n我只負責打開…"},
       {name:"滷蛋教", stars:5, text:"配滷蛋超搭，香氣很乾淨。\n吃完嘴巴會想唱歌。"},
-      {name:"吃貨小隊長", stars:5, text:"一包搞定真的不是口號。\n我連碗都省了（直接拌）。"},
+      {name:"吃貨小隊長", stars:5, text:"一包搞定不是口號。\n我連碗都省了（直接拌）。"},
       {name:"台北媽媽", stars:5, text:"小孩說：今天的飯怎麼比較乖？\n我：因為有吉祥滷意。"},
-      {name:"夜貓子", stars:5, text:"半夜肚子餓不用叫外送。\n這包比較懂我。"},
-      {name:"阿公認證", stars:5, text:"阿公吃一口點頭：有古早味。\n我立刻續碗。"},
-      {name:"會心一笑", stars:5, text:"香氣不是那種很兇的，是溫柔抱著你的那種。"},
-      {name:"滷肉飯研究所", stars:5, text:"鹹甜平衡很剛好，吃完不膩。\n有水準。"},
-      {name:"怕油星人", stars:5, text:"我很怕油，但這個不會怕。\n吃起來很順。"},
-      {name:"小資族", stars:5, text:"一包 180 我覺得划算。\n比我亂買宵夜還值得。"},
-      {name:"祖傳胃", stars:5, text:"這味道像小時候巷口那家。\n一秒回到童年。"},
-      {name:"好想再來", stars:5, text:"我本來只想試試…現在在算要湊免運。"},
+      {name:"夜貓子", stars:5, text:"半夜肚子餓不用叫外送。\n熱一下就能睡回去。"},
       {name:"香氣控", stars:5, text:"打開那瞬間我就知道：完了我會上癮。"},
-      {name:"懶人代表", stars:5, text:"我只負責加熱，剩下都交給它。\n人生突然很簡單。"},
       {name:"飯桶本人", stars:5, text:"淋下去，白飯直接變得很有禮貌。\n一直讓我再來一口。"},
-      {name:"配菜派", stars:5, text:"燙青菜淋一下就變高級。\n我媽以為我進修了。"},
-      {name:"台味粉", stars:5, text:"不是那種死甜，是真的台味。\n懂吃的會懂。"},
-      {name:"回購王", stars:5, text:"第二次買了，味道一樣穩。\n這點很重要。"},
       {name:"微波派", stars:5, text:"微波也香，救急神物。\n我願稱它為便當守護神。"},
-      {name:"親友推薦", stars:5, text:"朋友推薦的，果然沒騙我。\n我也要去騙…不是，推薦別人。"},
-      {name:"幸福感", stars:5, text:"吃完心情真的會變好。\n台味就是溫暖。"},
-      {name:"過年嘴饞", stars:5, text:"年味感很足，配一碗白飯就滿足。\n吉祥到我想貼春聯。"}
+      {name:"拌麵研究員", stars:5, text:"麵一拌開，童年麵攤味道回來了。\n好想再加一顆蛋。"},
+      {name:"青菜被安撫", stars:5, text:"青菜終於不用硬吃。\n加一匙就『喔～可以耶』。"},
+      {name:"外食減脂人", stars:5, text:"想吃台味又怕踩雷？\n這包很穩。"},
+      {name:"露營裝備王", stars:5, text:"只帶這包就夠。\n朋友說我很會煮…我笑而不語。"},
+      {name:"隔水派代表", stars:5, text:"隔水加熱最香。\n香到鄰居以為我在辦桌。"},
+      {name:"便當回憶殺", stars:5, text:"像以前便當店的滷肉香。\n我直接多煮兩碗飯。"},
+      {name:"台味哲學家", stars:5, text:"人生很苦，滷肉很甜。\n先吃飯再說。"},
+      {name:"省時王者", stars:5, text:"從肚子餓到開吃，不用十分鐘。\n太懂忙碌的人了。"},
+      {name:"拜飯教信徒", stars:5, text:"白飯配它，我願意每天上供。"},
+      {name:"小資上班族", stars:5, text:"一包撐起一餐的幸福感。\n錢包跟胃都滿意。"},
+      {name:"家庭晚餐救星", stars:5, text:"今天不想煮又想像有煮。\n它就是答案。"},
+      {name:"滷汁守門員", stars:5, text:"冰箱必備。\n沒有它我會慌。"},
+      {name:"台灣魂", stars:5, text:"這味道很台。\n台到我想配一段台語旁白。"},
+      {name:"飯後微笑", stars:5, text:"吃完會不自覺笑一下。\n很奇怪但是真的。"}
     ];
 
-    function nowText(){
-      const d = new Date();
-      return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())} ${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
+    function escapeHtml(s){
+      return String(s)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
     }
 
-    // 每天固定選 5 則：用日期做 seed
-    function daySeed(){
-      const d = new Date();
-      return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
-    }
-
-    function xmur3(str){
-      let h = 1779033703 ^ str.length;
-      for(let i=0;i<str.length;i++){
-        h = Math.imul(h ^ str.charCodeAt(i), 3432918353);
-        h = (h << 13) | (h >>> 19);
+    function loadMine(){
+      try{
+        const raw = localStorage.getItem(LS_KEY);
+        const arr = raw ? JSON.parse(raw) : [];
+        return Array.isArray(arr) ? arr : [];
+      }catch(e){
+        return [];
       }
-      return function(){
-        h = Math.imul(h ^ (h >>> 16), 2246822507);
-        h = Math.imul(h ^ (h >>> 13), 3266489909);
-        return (h ^= h >>> 16) >>> 0;
-      };
     }
-    function mulberry32(a){
-      return function(){
-        let t = a += 0x6D2B79F5;
-        t = Math.imul(t ^ (t >>> 15), t | 1);
-        t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-      };
-    }
-    function shuffleWithSeed(arr, seedStr){
-      const seedFn = xmur3(seedStr);
-      const rand = mulberry32(seedFn());
-      const a = arr.slice();
-      for(let i=a.length-1;i>0;i--){
-        const j = Math.floor(rand() * (i+1));
-        [a[i], a[j]] = [a[j], a[i]];
-      }
-      return a;
+    function saveMine(arr){
+      localStorage.setItem(LS_KEY, JSON.stringify(arr));
     }
 
-    function starsHtml(nStars){
-      let s = `<span class="stars" aria-label="${nStars} 星">`;
-      for(let i=1;i<=5;i++){
-        s += `<span class="${i<=nStars ? "star-on":"star-off"}">★</span>`;
-      }
-      s += `</span>`;
-      return s;
+    function pad2r(x){ return String(x).padStart(2,"0"); }
+    function fmtTime(d){
+      return `${d.getFullYear()}-${pad2r(d.getMonth()+1)}-${pad2r(d.getDate())} ${pad2r(d.getHours())}:${pad2r(d.getMinutes())}`;
     }
 
-    let pool = [];
-    let shown = [];
-    let rotateTimer = null;
+    // 每一篇時間都不同：以「現在」回推 5 分鐘～48 小時，並確保分鐘級不重複
+    function makeUniqueTimes(count){
+      const now = Date.now();
+      const used = new Set();
+      const out = [];
+      while(out.length < count){
+        const backMin = 5 + Math.floor(Math.random() * ((48*60) - 5));
+        const t = now - backMin * 60 * 1000;
+        const key = Math.floor(t / (60*1000)); // minute key
+        if(used.has(key)) continue;
+        used.add(key);
+        out.push(new Date(t));
+      }
+      out.sort((a,b)=> b.getTime() - a.getTime()); // 新到舊
+      return out;
+    }
+
+    function starsText(n){
+      const s = Math.max(1, Math.min(5, n|0));
+      return "★★★★★".slice(0,s) + "☆☆☆☆☆".slice(0,5-s);
+    }
+
+    function pickN(all, n){
+      const pool = all.slice();
+      for(let i = pool.length - 1; i > 0; i--){
+        const j = Math.floor(Math.random() * (i + 1));
+        [pool[i], pool[j]] = [pool[j], pool[i]];
+      }
+      return pool.slice(0, n);
+    }
 
     function render(){
-      const avg = (shown.reduce((a,b)=>a+b.stars,0) / shown.length) || 5;
-      summaryEl.innerHTML = `${starsHtml(Math.round(avg))} <b>${avg.toFixed(1)}</b>｜今日精選 <b>${shown.length}</b> 則`;
+      const mine = loadMine();
+      const all = [...mine, ...SEED];
 
-      listEl.innerHTML = shown.map(r => `
-        <div class="review-item review-pop">
-          <div class="review-top">
-            <div>
-              <div class="review-name">${r.name}</div>
-              ${starsHtml(r.stars)}
-            </div>
-            <div class="review-time">${r.time}</div>
+      const featured = pickN(all, 5);
+      const times = makeUniqueTimes(featured.length);
+
+      const avg = featured.reduce((sum, r)=> sum + (r.stars || 5), 0) / featured.length;
+      summaryEl.textContent = `${avg.toFixed(1)} ｜ 今日精選 5 則`;
+
+      listEl.innerHTML = featured.map((r, idx)=>`
+        <div class="review-item">
+          <div class="review-meta">
+            <div class="review-name">${escapeHtml(r.name || "匿名")}</div>
+            <div class="review-time">${fmtTime(times[idx])}</div>
           </div>
-          <div class="review-text">${r.text}</div>
+          <div class="review-stars">${starsText(r.stars || 5)}</div>
+          <div class="review-text">${escapeHtml(r.text || "")}</div>
         </div>
       `).join("");
-
-      requestAnimationFrame(()=>{
-        listEl.querySelectorAll(".review-item").forEach(el=>el.classList.remove("review-pop"));
-      });
     }
 
-    function pickToday(){
-      pool = shuffleWithSeed(REVIEWS, daySeed());
-      shown = pool.slice(0,5).map(x => ({...x, time: nowText()}));
+    refreshBtn?.addEventListener("click", render);
+
+    submitBtn?.addEventListener("click", ()=>{
+      const name = (rNameEl?.value || "").trim().slice(0,12) || "匿名";
+      const stars = Math.max(1, Math.min(5, parseInt(rStarsEl?.value || "5", 10)));
+      const text = (rTextEl?.value || "").trim().slice(0,90);
+
+      if(!text){
+        showToast("請先寫一句留言再送出 🙏");
+        return;
+      }
+
+      const mine = loadMine();
+      mine.unshift({ name, stars, text });
+      saveMine(mine.slice(0,60)); // 最多保留 60 則
+
+      if(rTextEl) rTextEl.value = "";
+      showToast("留言已送出 ✅");
       render();
-      startRotate();
-    }
-
-    function rotateOne(){
-      if(!pool.length || shown.length<5) return;
-      const next = pool.shift();
-      pool.push(next);
-
-      const idx = Math.floor(Math.random()*shown.length);
-      shown[idx] = {...next, time: nowText()};
-      render();
-    }
-
-    function startRotate(){
-      if(rotateTimer) clearInterval(rotateTimer);
-      rotateTimer = setInterval(rotateOne, 6500); // 6.5 秒換一則
-    }
-
-    refreshBtn?.addEventListener("click", ()=>{
-      pool = shuffleWithSeed(REVIEWS, daySeed() + "-tap-" + nowText());
-      shown = pool.slice(0,5).map(x => ({...x, time: nowText()}));
-      render();
-      startRotate();
     });
 
-    pickToday();
+    clearBtn?.addEventListener("click", ()=>{
+      localStorage.removeItem(LS_KEY);
+      showToast("已清除本機留言 ✅");
+      render();
+    });
+
+    // 看起來更熱絡：每 45 秒自動換一批
+    setInterval(render, 45000);
+
+    render();
   })();
 });
