@@ -63,7 +63,7 @@
       </div>
     </section>
 
-    <!-- ✅ LINE 快速服務 -->
+    <!-- ✅ LINE 入口 -->
     <section class="card">
       <h2 style="margin:0 0 10px">💬 LINE 快速服務</h2>
       <div class="cta-row">
@@ -82,26 +82,6 @@
       </p>
     </section>
 
-    <!-- ✅ 熱絡留言板（五星＋留言） -->
-    <section class="card" id="reviews">
-      <div class="review-head">
-        <div>
-          <h2 style="margin:0">⭐ 熱絡留言板</h2>
-          <div class="muted" style="margin-top:6px">
-            <span id="reviewSummary">載入中…</span>
-          </div>
-        </div>
-
-        <button class="btn small" type="button" id="refreshReviews" aria-label="換一批留言">
-          🔄 換一批
-        </button>
-      </div>
-
-      <div id="reviewList" class="review-list" aria-live="polite"></div>
-
-     
-    </section>
-
     <!-- 快捷入口 -->
     <section class="quick-grid">
       <button class="quick-item red" type="button" onclick="document.getElementById('order').scrollIntoView({behavior:'smooth'})">
@@ -113,8 +93,8 @@
       <button class="quick-item sand" type="button" onclick="selectTab('cook')">
         <div class="qi-title">COOK</div><div class="qi-sub">料理教學</div>
       </button>
-      <button class="quick-item teal" type="button" onclick="selectTab('story')">
-        <div class="qi-title">ABOUT</div><div class="qi-sub">品牌故事</div>
+      <button class="quick-item teal" type="button" onclick="selectTab('reviews')">
+        <div class="qi-title">STAR</div><div class="qi-sub">熱絡留言</div>
       </button>
     </section>
 
@@ -126,6 +106,8 @@
         <button class="tab" data-tab="cook">料理教學</button>
         <button class="tab" data-tab="story">品牌故事</button>
         <button class="tab" data-tab="ship">下單資訊</button>
+        <!-- ✅ 新增分頁 -->
+        <button class="tab" data-tab="reviews">熱絡留言</button>
       </div>
 
       <div class="tab-panel" data-panel="product">
@@ -148,7 +130,7 @@
           </div>
           <div class="li">
             <b>🍚 電鍋加熱</b>
-            <div class="muted"> 滷汁倒入碗中→ 外鍋半碗水 → 約 10 分鐘</div>
+            <div class="muted">滷汁倒入碗中 → 外鍋半碗水 → 約 10 分鐘</div>
           </div>
           <div class="li">
             <b>⚡ 微波加熱</b>
@@ -163,9 +145,18 @@
 
       <div class="tab-panel hide" data-panel="cook">
         <div class="list">
-          <div class="li"><b>1）台灣魂滷肉飯</b><div class="muted">白飯一碗，淋上熱騰騰正港台灣魂滷汁——今天就值得好好吃飯。</div></div>
-          <div class="li"><b>2）銷魂拌麵</b><div class="muted">熱麵拌開滷汁，銷魂香氣冒出來——簡單最好吃！這是小時候麵攤的味道！</div></div>
-          <div class="li"><b>3）靈魂燙青菜</b><div class="muted">青菜燙一燙，加一匙靈魂滷汁——青菜瞬間美味升級，挑食的孩子都搶著吃。</div></div>
+          <div class="li">
+            <b>1）台灣魂滷肉飯</b>
+            <div class="muted">白飯一碗，淋上熱騰騰正港台灣魂滷汁——今天就值得好好吃飯。</div>
+          </div>
+          <div class="li">
+            <b>2）銷魂拌麵</b>
+            <div class="muted">熱麵拌開滷汁，香氣一出來——簡單最好吃！就是小時候麵攤的味道。</div>
+          </div>
+          <div class="li">
+            <b>3）靈魂燙青菜</b>
+            <div class="muted">青菜燙一燙，加一匙靈魂滷汁——青菜瞬間升級，連挑食都會「欸～可以耶」。</div>
+          </div>
         </div>
       </div>
 
@@ -173,7 +164,7 @@
         <div class="panel">
           <b>🏮 品牌故事</b>
           <p class="muted" style="margin:8px 0 0">
-            在地經營便當店39年，推出「吉祥滷意」滷汁包，希望讓您在家輕輕鬆鬆幾分鐘就能把台灣魂的美味幸福端上桌。<br><br>
+            在地經營便當店 39 年，推出「吉祥滷意」滷汁包，希望讓您在家輕輕鬆鬆幾分鐘就能把台灣魂的美味幸福端上桌。<br><br>
             嚴選台灣豬搭配黃金比例的醬油、糖、鹽、蔥酥、蒜頭慢火熬煮，讓香氣抱住白飯，好吃到停不下來！
           </p>
         </div>
@@ -186,6 +177,61 @@
           <div class="li"><b>🏦 收款帳號</b><div class="muted">郵局 (700)｜00018330440573</div></div>
           <div class="li"><b>⏳ 出貨時間</b><div class="muted">下單付款後約1～2週寄出</div></div>
         </div>
+      </div>
+
+      <!-- ✅ 新分頁：熱絡留言（系統輪播 + 真實留言） -->
+      <div class="tab-panel hide" data-panel="reviews">
+        <div class="panel">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;">
+            <div>
+              <b>⭐ 熱絡留言板</b>
+              <div class="muted" style="margin-top:4px;">
+                ★★★★★ <span id="reviewSummary">5.0 ｜ 今日精選 5 則</span>
+              </div>
+            </div>
+            <button class="btn small" type="button" id="refreshReviews">🔁 換一批</button>
+          </div>
+        </div>
+
+        <div class="review-list" id="reviewList" style="margin-top:10px;"></div>
+
+        <div class="panel" style="margin-top:12px;">
+          <b>✍️ 我也要留言</b>
+          <p class="muted" style="margin:6px 0 10px;">（留言會先顯示在你自己的手機上，讓版面看起來更熱絡❤️）</p>
+
+          <div class="form">
+            <div class="row">
+              <div>
+                <label for="reviewName">暱稱</label>
+                <input id="reviewName" placeholder="例如：飯桶本人" maxlength="12" />
+              </div>
+              <div>
+                <label for="reviewStars">五星評分</label>
+                <select id="reviewStars">
+                  <option value="5" selected>★★★★★（5）</option>
+                  <option value="4">★★★★☆（4）</option>
+                  <option value="3">★★★☆☆（3）</option>
+                  <option value="2">★★☆☆☆（2）</option>
+                  <option value="1">★☆☆☆☆（1）</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label for="reviewText">留言內容</label>
+              <textarea id="reviewText" placeholder="1～3 行最剛好：例如『香到我家白飯自己排隊！』" maxlength="90"></textarea>
+            </div>
+
+            <div class="cta-row">
+              <button class="btn primary" type="button" id="submitReview">✅ 送出留言</button>
+              <button class="btn" type="button" id="clearMyReviews">🧹 清除本機留言</button>
+            </div>
+          </div>
+        </div>
+
+        <p class="muted" style="margin:10px 0 0;">
+          小提醒：若你希望「真正上線公開給所有人看到」，需要後端資料庫（例如 Firebase / Supabase）。現在這版是先用本機留言，畫面一樣很熱鬧、也很好用。
+        </p>
       </div>
     </section>
 
@@ -259,16 +305,11 @@
           <div>
             <label for="store">
               取件7-11門市
-              <a
-                href="https://emap.pcsc.com.tw/"
-                target="_blank"
-                rel="noopener"
-                style="margin-left:6px;font-size:12px;color:#0e8a8a;text-decoration:none;font-weight:900;"
-              >
+              <a href="https://emap.pcsc.com.tw/" target="_blank" rel="noopener"
+                 style="margin-left:6px;font-size:12px;color:#0e8a8a;text-decoration:none;font-weight:900;">
                 🔍 查詢門市
               </a>
             </label>
-
             <input id="store" placeholder="例如：德東門市" />
           </div>
         </div>
@@ -330,7 +371,7 @@
 
   <div class="toast" id="toast">已複製 ✅</div>
 
-  <!-- ✅ 右下角浮動 LINE 客服泡泡 -->
+  <!-- ✅ 右下角浮動 LINE 客服泡泡：官方 LINE 樣式 -->
   <a
     href="https://line.me/ti/p/~chris770912"
     target="_blank"
