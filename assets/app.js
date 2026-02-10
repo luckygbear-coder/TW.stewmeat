@@ -41,6 +41,14 @@ function nowLocal(){
   const ss = pad2(d.getSeconds());
   return { d, text: `${y}-${m}-${dd} ${hh}:${mm}:${ss}`, key: `${y}${m}${dd}${hh}${mm}${ss}` };
 }
+function fmtTime(d){
+  const y = d.getFullYear();
+  const m = pad2(d.getMonth()+1);
+  const dd = pad2(d.getDate());
+  const hh = pad2(d.getHours());
+  const mm = pad2(d.getMinutes());
+  return `${y}-${m}-${dd} ${hh}:${mm}`;
+}
 
 // ✅ 訂單編號
 function genOrderNo(){
@@ -77,6 +85,30 @@ function openLineAddFriend(){
   }else{
     window.open(urlHttps, "_blank", "noopener");
   }
+}
+
+// ===== 小工具：安全取亂數 =====
+function randInt(min, max){
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+function sample(arr){
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+function escapeHtml(str){
+  return String(str)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#39;");
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -237,7 +269,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const storeLine = `7-11門市：${(storeEl?.value || "（請填門市名稱）")}`;
 
     const contactText = contactEl?.value || "LINE";
-    const contactId = contactIdEl?.value || "9.12lin";
+    const contactId = (contactIdEl?.value || "9.12lin").trim() || "9.12lin";
 
     const msg =
 `【吉祥滷意 下單資料】
@@ -301,7 +333,7 @@ ${storeLine}
     });
   }
   bindLineSendOrder("lineSend");
-  bindLineSendOrder("lineService"); // LINE 快速服務區：用LINE送出訂單
+  bindLineSendOrder("lineService"); // LINE 快速服務區的「用LINE送出訂單」
 
   // ✅ 加好友入口：導向加好友（客服對話）
   function bindLineAddFriend(id){
@@ -312,9 +344,9 @@ ${storeLine}
       openLineAddFriend();
     });
   }
-  bindLineAddFriend("lineTop");     // topbar LINE
-  bindLineAddFriend("lineAddFast"); // 客服LINE
-  bindLineAddFriend("lineFloat");   // 右下角泡泡：加好友
+  bindLineAddFriend("lineTop");
+  bindLineAddFriend("lineAddFast");
+  bindLineAddFriend("lineFloat"); // 右下角泡泡 → 加好友畫面
 
   // inputs live preview
   const inputs = [qtyEl, nameEl, phoneEl, storeEl, contactEl, contactIdEl, noteMsgEl].filter(Boolean);
@@ -330,21 +362,69 @@ ${storeLine}
   calc();
   buildOrderMessage();
 
-  // ===== 熱絡留言板（五星＋留言｜分頁 reviews）=====
+  // ==========================
+  // ⭐ 熱絡留言板（新分頁：匿名＋骰子暱稱＋真實客人留言(本機)）
+  // index.html 需要有：
+  // #reviewSummary #refreshReviews #reviewList
+  // #anonNick #rollNick
+  // #starBtns(內含 data-star="1..5") #reviewStars(隱藏 input)
+  // #reviewText #submitReview #clearMyReviews
+  // ==========================
   (function initReviews(){
-    const listEl = document.getElementById("reviewList");
-    const summaryEl = document.getElementById("reviewSummary");
-    const refreshBtn = document.getElementById("refreshReviews");
-    const rNameEl = document.getElementById("reviewName");
-    const rStarsEl = document.getElementById("reviewStars");
-    const rTextEl = document.getElementById("reviewText");
-    const submitBtn = document.getElementById("submitReview");
-    const clearBtn = document.getElementById("clearMyReviews");
+    const listEl = $("#reviewList");
+    const summaryEl = $("#reviewSummary");
+    const refreshBtn = $("#refreshReviews");
     if(!listEl || !summaryEl) return;
 
-    const LS_KEY = "jly_reviews_v1";
+    // ---- 匿名暱稱（骰子生成） ----
+    const nickEl = $("#anonNick");
+    const rollBtn = $("#rollNick");
 
-    // 30 組預設暱稱＋留言（台味×溫暖×一點幽默）
+    const NICK_A = ["飯桶","滷蛋","香氣","白飯","便當","夜貓","加班","露營","阿嬤","小資","嘴饞","吃貨","台味","快手","電鍋","微波","隔水","排隊","老派","幸福"];
+    const NICK_B = ["本人","教主","控","隊長","王","少女","阿姨","叔叔","同學","大師","社畜","勇者","研究員","學徒","守護神","派","先生","小姐","天使","高手"];
+    const NICK_C = ["不講武德","只想吃飯","今天有乖","嘴巴想唱歌","白飯站起來","香到暈船","滷汁萬歲","一匙入魂","不用開火","想再來一口","連青菜都愛","拌一拌就好","便當救星","台灣魂開啟","吃到點頭","香氣抱抱","飯都變乖","很有禮貌","心情上線","被香氣收編"];
+
+    function genFunnyNick(){
+      const left = sample(NICK_A) + sample(NICK_B);
+      const right = sample(NICK_C);
+      return `${left}｜${right}`;
+    }
+    function ensureNick(){
+      if(!nickEl) return genFunnyNick();
+      const v = (nickEl.value || "").trim();
+      if(v) return v;
+      const g = genFunnyNick();
+      nickEl.value = g;
+      return g;
+    }
+    rollBtn?.addEventListener("click", ()=>{
+      if(!nickEl) return;
+      nickEl.value = genFunnyNick();
+      showToast("已生成暱稱 🎲");
+    });
+
+    if(nickEl && !(nickEl.value || "").trim()){
+      nickEl.value = genFunnyNick();
+    }
+
+    // ---- 星星選擇（金色⭐️）----
+    const starsInput = $("#reviewStars");
+    const starBtns = $all("#starBtns [data-star]");
+    function setStars(v){
+      const s = Math.max(1, Math.min(5, Math.floor(n(v))));
+      if(starsInput) starsInput.value = String(s);
+      starBtns.forEach(btn=>{
+        const b = Math.floor(n(btn.dataset.star));
+        btn.textContent = b <= s ? "⭐️" : "☆";
+        btn.setAttribute("aria-pressed", b <= s ? "true" : "false");
+      });
+    }
+    starBtns.forEach(btn=>{
+      btn.addEventListener("click", ()=> setStars(btn.dataset.star));
+    });
+    setStars(starsInput?.value || 5);
+
+    // ---- 30 組系統預設留言 ----
     const SEED = [
       {name:"阿嬤說可以", stars:5, text:"這滷汁一打開，家裡瞬間像過年。\n我阿嬤說：嗯～有中！"},
       {name:"便當界小白", stars:5, text:"我只會煮水…結果拌飯也能上桌。\n謝謝吉祥滷意救了我。"},
@@ -356,38 +436,31 @@ ${storeLine}
       {name:"白飯大師", stars:5, text:"白飯遇到它，直接升級成主角。"},
       {name:"露營派", stars:5, text:"露營帶一包，朋友以為我請了主廚。\n我只負責打開…"},
       {name:"滷蛋教", stars:5, text:"配滷蛋超搭，香氣很乾淨。\n吃完嘴巴會想唱歌。"},
-      {name:"吃貨小隊長", stars:5, text:"一包搞定不是口號。\n我連碗都省了（直接拌）。"},
+      {name:"吃貨小隊長", stars:5, text:"一包搞定真的不是口號。\n我連碗都省了（直接拌）。"},
       {name:"台北媽媽", stars:5, text:"小孩說：今天的飯怎麼比較乖？\n我：因為有吉祥滷意。"},
-      {name:"夜貓子", stars:5, text:"半夜肚子餓不用叫外送。\n熱一下就能睡回去。"},
-      {name:"香氣控", stars:5, text:"打開那瞬間我就知道：完了我會上癮。"},
+      {name:"夜貓子", stars:5, text:"半夜肚子餓不用叫外送。\n滷汁熱一下，心也被照顧到。"},
       {name:"飯桶本人", stars:5, text:"淋下去，白飯直接變得很有禮貌。\n一直讓我再來一口。"},
+      {name:"香氣控", stars:5, text:"打開那瞬間我就知道：完了我會上癮。"},
       {name:"微波派", stars:5, text:"微波也香，救急神物。\n我願稱它為便當守護神。"},
-      {name:"拌麵研究員", stars:5, text:"麵一拌開，童年麵攤味道回來了。\n好想再加一顆蛋。"},
-      {name:"青菜被安撫", stars:5, text:"青菜終於不用硬吃。\n加一匙就『喔～可以耶』。"},
-      {name:"外食減脂人", stars:5, text:"想吃台味又怕踩雷？\n這包很穩。"},
-      {name:"露營裝備王", stars:5, text:"只帶這包就夠。\n朋友說我很會煮…我笑而不語。"},
-      {name:"隔水派代表", stars:5, text:"隔水加熱最香。\n香到鄰居以為我在辦桌。"},
-      {name:"便當回憶殺", stars:5, text:"像以前便當店的滷肉香。\n我直接多煮兩碗飯。"},
-      {name:"台味哲學家", stars:5, text:"人生很苦，滷肉很甜。\n先吃飯再說。"},
-      {name:"省時王者", stars:5, text:"從肚子餓到開吃，不用十分鐘。\n太懂忙碌的人了。"},
-      {name:"拜飯教信徒", stars:5, text:"白飯配它，我願意每天上供。"},
-      {name:"小資上班族", stars:5, text:"一包撐起一餐的幸福感。\n錢包跟胃都滿意。"},
-      {name:"家庭晚餐救星", stars:5, text:"今天不想煮又想像有煮。\n它就是答案。"},
-      {name:"滷汁守門員", stars:5, text:"冰箱必備。\n沒有它我會慌。"},
-      {name:"台灣魂", stars:5, text:"這味道很台。\n台到我想配一段台語旁白。"},
-      {name:"飯後微笑", stars:5, text:"吃完會不自覺笑一下。\n很奇怪但是真的。"}
+      {name:"電鍋派", stars:5, text:"電鍋一按，等它跳起來，幸福也跟著跳起來。"},
+      {name:"老派好味", stars:5, text:"是那種『一吃就想起家』的味道。\n很溫柔。"},
+      {name:"拌麵研究員", stars:5, text:"拌一拌就很厲害。\n我宣布今晚不外食。"},
+      {name:"青菜救援隊", stars:5, text:"青菜本來很無聊，加一匙就變主角。\n謝謝讓我有在吃菜。"},
+      {name:"暖胃派", stars:5, text:"天冷的時候來一碗，整個人都被安慰。"},
+      {name:"忙碌上班族", stars:5, text:"回家不想煮又想吃好，這包真的太懂我。"},
+      {name:"台味信徒", stars:5, text:"醬香很順，不死鹹。\n白飯直接升天。"},
+      {name:"媽媽偷懶系", stars:5, text:"我只加熱就被誇：今天煮得很用心。\n我：嗯（點頭）。"},
+      {name:"便當回憶", stars:5, text:"一入口就是小時候便當店的味道。\n很可以。"},
+      {name:"香氣抱抱", stars:5, text:"香氣真的像抱抱。\n吃完心情也比較乖。"},
+      {name:"飯後幸福", stars:5, text:"吃完會有一種『今天過得不錯』的感覺。"},
+      {name:"取貨很順", stars:5, text:"7-11 取貨好方便，冰箱放著很安心。\n想吃就來一包。"},
+      {name:"家常派", stars:5, text:"不用太多花樣，就是很家常、很耐吃。"},
+      {name:"回購預備軍", stars:5, text:"先說好，我不是衝動購物。\n但我會回購。"}
     ];
 
-    function escapeHtml(s){
-      return String(s)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-    }
-
-    function loadMine(){
+    // ---- 本機留言存檔 ----
+    const LS_KEY = "jly_reviews_v1";
+    function loadMy(){
       try{
         const raw = localStorage.getItem(LS_KEY);
         const arr = raw ? JSON.parse(raw) : [];
@@ -396,98 +469,159 @@ ${storeLine}
         return [];
       }
     }
-    function saveMine(arr){
-      localStorage.setItem(LS_KEY, JSON.stringify(arr));
+    function saveMy(arr){
+      try{
+        localStorage.setItem(LS_KEY, JSON.stringify(arr.slice(0, 80)));
+      }catch(e){}
     }
 
-    function pad2r(x){ return String(x).padStart(2,"0"); }
-    function fmtTime(d){
-      return `${d.getFullYear()}-${pad2r(d.getMonth()+1)}-${pad2r(d.getDate())} ${pad2r(d.getHours())}:${pad2r(d.getMinutes())}`;
-    }
-
-    // 每一篇時間都不同：以「現在」回推 5 分鐘～48 小時，並確保分鐘級不重複
-    function makeUniqueTimes(count){
-      const now = Date.now();
+    // ---- 近 72 小時內：產生不重複的分鐘時間 ----
+    function makeUniqueTimes(count, hoursBack=72){
       const used = new Set();
       const out = [];
+      const now = Date.now();
+      const min = now - hoursBack * 3600 * 1000;
       while(out.length < count){
-        const backMin = 5 + Math.floor(Math.random() * ((48*60) - 5));
-        const t = now - backMin * 60 * 1000;
-        const key = Math.floor(t / (60*1000)); // minute key
+        const t = randInt(min, now);
+        const d = new Date(t);
+        d.setSeconds(0,0);
+        const key = d.getTime();
         if(used.has(key)) continue;
         used.add(key);
-        out.push(new Date(t));
+        out.push(d);
       }
-      out.sort((a,b)=> b.getTime() - a.getTime()); // 新到舊
+      out.sort((a,b)=> b.getTime() - a.getTime());
       return out;
     }
 
-    function starsText(n){
-      const s = Math.max(1, Math.min(5, n|0));
-      return "★★★★★".slice(0,s) + "☆☆☆☆☆".slice(0,5-s);
+    function starsLine(stars){
+      const s = Math.max(1, Math.min(5, Math.floor(n(stars))));
+      return "⭐️".repeat(s) + "☆".repeat(5 - s);
     }
 
-    function pickN(all, n){
-      const pool = all.slice();
-      for(let i = pool.length - 1; i > 0; i--){
-        const j = Math.floor(Math.random() * (i + 1));
-        [pool[i], pool[j]] = [pool[j], pool[i]];
-      }
-      return pool.slice(0, n);
-    }
-
-    function render(){
-      const mine = loadMine();
-      const all = [...mine, ...SEED];
-
-      const featured = pickN(all, 5);
-      const times = makeUniqueTimes(featured.length);
-
-      const avg = featured.reduce((sum, r)=> sum + (r.stars || 5), 0) / featured.length;
-      summaryEl.textContent = `${avg.toFixed(1)} ｜ 今日精選 5 則`;
-
-      listEl.innerHTML = featured.map((r, idx)=>`
-        <div class="review-item">
-          <div class="review-meta">
-            <div class="review-name">${escapeHtml(r.name || "匿名")}</div>
-            <div class="review-time">${fmtTime(times[idx])}</div>
+    function render(items){
+      listEl.innerHTML = items.map(r => `
+        <div class="li" style="border-radius:18px">
+          <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+            <div style="font-weight:1000">${escapeHtml(r.name || "匿名客")}</div>
+            <div class="muted" style="font-weight:900;white-space:nowrap">${escapeHtml(r.time || "")}</div>
           </div>
-          <div class="review-stars">${starsText(r.stars || 5)}</div>
-          <div class="review-text">${escapeHtml(r.text || "")}</div>
+          <div style="margin-top:6px;font-weight:1000;font-size:16px;letter-spacing:.5px">${starsLine(r.stars || 5)}</div>
+          <div style="margin-top:8px;white-space:pre-wrap;line-height:1.55;font-weight:900">
+            ${escapeHtml(r.text || "")}
+          </div>
         </div>
       `).join("");
     }
 
-    refreshBtn?.addEventListener("click", render);
+    function computeAvg(items){
+      if(!items.length) return 5.0;
+      const sum = items.reduce((a,b)=> a + Math.max(1, Math.min(5, Math.floor(n(b.stars || 5)))), 0);
+      return Math.round((sum / items.length) * 10) / 10;
+    }
+
+    function buildSeedBatch(){
+      const times = makeUniqueTimes(12, 72);
+      return shuffle(SEED).slice(0, 12).map((x, i) => ({
+        name: x.name,
+        stars: x.stars,
+        text: x.text,
+        time: fmtTime(times[i] || new Date())
+      }));
+    }
+
+    function pickFive(){
+      const myAll = loadMy().slice().reverse();              // 新的在前
+      const myPick = shuffle(myAll).slice(0, Math.min(3, myAll.length));
+      const need = 5 - myPick.length;
+
+      const seedBatch = buildSeedBatch();
+      const seedPick = seedBatch.slice(0, need);
+
+      const merged = (myPick.concat(seedPick)).slice(0,5);
+
+      // 保險：如果 time 重複（同分鐘），微調
+      const seen = new Set();
+      merged.forEach((it, idx)=>{
+        const t = (it.time || "").trim();
+        if(!t) return;
+
+        if(seen.has(t)){
+          // 往前推 (idx+1)*7~(idx+1)*19 分鐘
+          const d = new Date();
+          d.setMinutes(d.getMinutes() - randInt((idx+1)*7, (idx+1)*19));
+          it.time = fmtTime(d);
+        }
+        seen.add(it.time);
+      });
+
+      // 最後依時間新到舊排序（看起來更真）
+      merged.sort((a,b)=> {
+        const ta = Date.parse((a.time||"").replace(" ", "T"));
+        const tb = Date.parse((b.time||"").replace(" ", "T"));
+        return (isFinite(tb)?tb:0) - (isFinite(ta)?ta:0);
+      });
+
+      return merged;
+    }
+
+    function refresh(){
+      const items = pickFive();
+      const avg = computeAvg(items);
+      summaryEl.textContent = `⭐️⭐️⭐️⭐️⭐️ ${avg.toFixed(1)}｜今日精選 5 則`;
+      render(items);
+    }
+
+    refreshBtn?.addEventListener("click", ()=>{
+      refresh();
+      showToast("已換一批留言 ✅");
+    });
+
+    // ---- 真實客人留言（匿名）----
+    const textEl = $("#reviewText");
+    const submitBtn = $("#submitReview");
+    const clearBtn = $("#clearMyReviews");
 
     submitBtn?.addEventListener("click", ()=>{
-      const name = (rNameEl?.value || "").trim().slice(0,12) || "匿名";
-      const stars = Math.max(1, Math.min(5, parseInt(rStarsEl?.value || "5", 10)));
-      const text = (rTextEl?.value || "").trim().slice(0,90);
+      const name = ensureNick();
+      const stars = Math.max(1, Math.min(5, Math.floor(n(starsInput?.value || 5))));
+      const text = (textEl?.value || "").trim();
 
       if(!text){
-        showToast("請先寫一句留言再送出 🙏");
+        showToast("請先輸入留言內容 ✍️");
+        return;
+      }
+      if(text.length > 140){
+        showToast("留言太長了（建議 140 字內）");
         return;
       }
 
-      const mine = loadMine();
-      mine.unshift({ name, stars, text });
-      saveMine(mine.slice(0,60)); // 最多保留 60 則
+      const item = {
+        name,
+        stars,
+        text,
+        time: fmtTime(new Date())
+      };
 
-      if(rTextEl) rTextEl.value = "";
-      showToast("留言已送出 ✅");
-      render();
+      const arr = loadMy();
+      arr.push(item);
+      saveMy(arr);
+
+      if(textEl) textEl.value = "";
+      if(nickEl) nickEl.value = genFunnyNick(); // 留完自動換一個暱稱
+      setStars(5);
+
+      refresh();
+      showToast("留言成功 ✅ 謝謝你！");
     });
 
     clearBtn?.addEventListener("click", ()=>{
-      localStorage.removeItem(LS_KEY);
-      showToast("已清除本機留言 ✅");
-      render();
+      try{ localStorage.removeItem(LS_KEY); }catch(e){}
+      refresh();
+      showToast("已清除本機留言 🧹");
     });
 
-    // 看起來更熱絡：每 45 秒自動換一批
-    setInterval(render, 45000);
-
-    render();
+    // 初始顯示
+    refresh();
   })();
 });
