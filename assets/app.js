@@ -53,7 +53,7 @@ function updatePromo(qty, subtotal) {
   let needForFreeShip = Math.ceil((FREE_SHIP_THRESHOLD - subtotal) / PRICE)
 
   if (subtotal >= FREE_SHIP_THRESHOLD) {
-    message = "🎉 已達免運門檻！太會買了吧～"
+    message = "🎉 已達免運門檻！您真內行！"
   } else if (needForFreeShip > 0 && needForFreeShip <= 3) {
     message = `🚚 再買 ${needForFreeShip} 包就免運！`
   } else if (needForFreePack > 0 && needForFreePack < 10) {
