@@ -333,7 +333,7 @@ ${storeLine}
     });
   }
   bindLineSendOrder("lineSend");
-  bindLineSendOrder("lineService"); // LINE 快速服務區的「用LINE送出訂單」
+  bindLineSendOrder("lineService");
 
   // ✅ 加好友入口：導向加好友（客服對話）
   function bindLineAddFriend(id){
@@ -364,30 +364,29 @@ ${storeLine}
 
   // ==========================
   // ⭐ 熱絡留言板（新分頁：匿名＋骰子暱稱＋真實客人留言(本機)）
-  // index.html 需要有：
+  // index.html 需要：
   // #reviewSummary #refreshReviews #reviewList
   // #anonNick #rollNick
-  // #starBtns(內含 data-star="1..5") #reviewStars(隱藏 input)
+  // 星星二擇一：
+  //   A) #starBtns [data-star="1..5"] + input#reviewStars(可hidden)
+  //   B) select#reviewStars
   // #reviewText #submitReview #clearMyReviews
   // ==========================
-  (function initReviews(){
+  ;(function initReviews(){
     const listEl = $("#reviewList");
     const summaryEl = $("#reviewSummary");
     const refreshBtn = $("#refreshReviews");
     if(!listEl || !summaryEl) return;
 
-    // ---- 匿名暱稱（骰子生成） ----
+    // ---- 匿名暱稱（骰子生成）----
     const nickEl = $("#anonNick");
     const rollBtn = $("#rollNick");
 
     const NICK_A = ["飯桶","滷蛋","香氣","白飯","便當","夜貓","加班","露營","阿嬤","小資","嘴饞","吃貨","台味","快手","電鍋","微波","隔水","排隊","老派","幸福"];
     const NICK_B = ["本人","教主","控","隊長","王","少女","阿姨","叔叔","同學","大師","社畜","勇者","研究員","學徒","守護神","派","先生","小姐","天使","高手"];
     const NICK_C = ["不講武德","只想吃飯","今天有乖","嘴巴想唱歌","白飯站起來","香到暈船","滷汁萬歲","一匙入魂","不用開火","想再來一口","連青菜都愛","拌一拌就好","便當救星","台灣魂開啟","吃到點頭","香氣抱抱","飯都變乖","很有禮貌","心情上線","被香氣收編"];
-
     function genFunnyNick(){
-      const left = sample(NICK_A) + sample(NICK_B);
-      const right = sample(NICK_C);
-      return `${left}｜${right}`;
+      return `${sample(NICK_A)}${sample(NICK_B)}｜${sample(NICK_C)}`;
     }
     function ensureNick(){
       if(!nickEl) return genFunnyNick();
@@ -397,34 +396,66 @@ ${storeLine}
       nickEl.value = g;
       return g;
     }
+    // ✅ 進頁面：暱稱先自動生成
+    if(nickEl && !(nickEl.value || "").trim()){
+      nickEl.value = genFunnyNick();
+    }
+    // ✅ 骰子：重骰
     rollBtn?.addEventListener("click", ()=>{
       if(!nickEl) return;
       nickEl.value = genFunnyNick();
       showToast("已生成暱稱 🎲");
     });
 
-    if(nickEl && !(nickEl.value || "").trim()){
-      nickEl.value = genFunnyNick();
-    }
+    // ---- 星星（金色⭐️）支援：按鈕版 or 下拉版 ----
+    const reviewTextEl = $("#reviewText");
+    const submitBtn = $("#submitReview");
+    const clearBtn = $("#clearMyReviews");
 
-    // ---- 星星選擇（金色⭐️）----
-    const starsInput = $("#reviewStars");
+    // 你的星星值統一讀寫在 reviewStarsEl（可能是 input 或 select）
+    const reviewStarsEl = $("#reviewStars");
     const starBtns = $all("#starBtns [data-star]");
-    function setStars(v){
-      const s = Math.max(1, Math.min(5, Math.floor(n(v))));
-      if(starsInput) starsInput.value = String(s);
-      starBtns.forEach(btn=>{
-        const b = Math.floor(n(btn.dataset.star));
-        btn.textContent = b <= s ? "⭐️" : "☆";
-        btn.setAttribute("aria-pressed", b <= s ? "true" : "false");
-      });
-    }
-    starBtns.forEach(btn=>{
-      btn.addEventListener("click", ()=> setStars(btn.dataset.star));
-    });
-    setStars(starsInput?.value || 5);
 
-    // ---- 30 組系統預設留言 ----
+    function setStars(v){
+      const s = Math.max(1, Math.min(5, Math.floor(n(v) || 5)));
+      if(reviewStarsEl){
+        reviewStarsEl.value = String(s);
+        // 下拉版：把文字換成 ⭐️
+        if(reviewStarsEl.tagName === "SELECT"){
+          const opts = Array.from(reviewStarsEl.options || []);
+          opts.forEach((op, i)=>{
+            const val = Math.max(1, Math.min(5, n(op.value || (i+1))));
+            op.textContent = `${"⭐️".repeat(val)} (${val})`;
+          });
+        }
+      }
+      // 按鈕版：點亮⭐️/空心☆
+      if(starBtns.length){
+        starBtns.forEach(btn=>{
+          const b = Math.floor(n(btn.dataset.star));
+          btn.textContent = b <= s ? "⭐️" : "☆";
+          btn.setAttribute("aria-pressed", b <= s ? "true" : "false");
+        });
+      }
+      return s;
+    }
+
+    // 初始化星星
+    setStars(reviewStarsEl?.value || 5);
+
+    // 綁定按鈕選星
+    if(starBtns.length){
+      starBtns.forEach(btn=>{
+        btn.addEventListener("click", ()=>{
+          setStars(btn.dataset.star);
+        });
+      });
+    }else{
+      // 下拉改變也要同步（如果你用 select）
+      reviewStarsEl?.addEventListener("change", ()=> setStars(reviewStarsEl.value));
+    }
+
+    // ---- 系統預設 30 則（台味×溫暖×一點幽默）----
     const SEED = [
       {name:"阿嬤說可以", stars:5, text:"這滷汁一打開，家裡瞬間像過年。\n我阿嬤說：嗯～有中！"},
       {name:"便當界小白", stars:5, text:"我只會煮水…結果拌飯也能上桌。\n謝謝吉祥滷意救了我。"},
@@ -458,7 +489,7 @@ ${storeLine}
       {name:"回購預備軍", stars:5, text:"先說好，我不是衝動購物。\n但我會回購。"}
     ];
 
-    // ---- 本機留言存檔 ----
+    // ---- 本機留言存檔（真實客人留言：存在他手機/瀏覽器）----
     const LS_KEY = "jly_reviews_v1";
     function loadMy(){
       try{
@@ -475,13 +506,16 @@ ${storeLine}
       }catch(e){}
     }
 
-    // ---- 近 72 小時內：產生不重複的分鐘時間 ----
+    // ---- 讓時間「每篇不同」：近 72 小時內亂數（分鐘級去重）----
     function makeUniqueTimes(count, hoursBack=72){
       const used = new Set();
       const out = [];
       const now = Date.now();
       const min = now - hoursBack * 3600 * 1000;
-      while(out.length < count){
+
+      let guard = 0;
+      while(out.length < count && guard < 5000){
+        guard++;
         const t = randInt(min, now);
         const d = new Date(t);
         d.setSeconds(0,0);
@@ -495,7 +529,7 @@ ${storeLine}
     }
 
     function starsLine(stars){
-      const s = Math.max(1, Math.min(5, Math.floor(n(stars))));
+      const s = Math.max(1, Math.min(5, Math.floor(n(stars) || 5)));
       return "⭐️".repeat(s) + "☆".repeat(5 - s);
     }
 
@@ -507,9 +541,7 @@ ${storeLine}
             <div class="muted" style="font-weight:900;white-space:nowrap">${escapeHtml(r.time || "")}</div>
           </div>
           <div style="margin-top:6px;font-weight:1000;font-size:16px;letter-spacing:.5px">${starsLine(r.stars || 5)}</div>
-          <div style="margin-top:8px;white-space:pre-wrap;line-height:1.55;font-weight:900">
-            ${escapeHtml(r.text || "")}
-          </div>
+          <div style="margin-top:8px;white-space:pre-wrap;line-height:1.55;font-weight:900">${escapeHtml(r.text || "")}</div>
         </div>
       `).join("");
     }
@@ -530,98 +562,97 @@ ${storeLine}
       }));
     }
 
+    function minuteKey(timeStr){
+      // "YYYY-MM-DD HH:mm" -> same string is already minute key
+      return (timeStr || "").trim();
+    }
+
+    function ensureUniqueTimes(items){
+      const seen = new Set();
+      items.forEach(it=>{
+        if(!it.time) it.time = fmtTime(new Date());
+        let key = minuteKey(it.time);
+        // 如果撞到，就往後 +1~9 分鐘
+        let bump = 0;
+        while(seen.has(key) && bump < 12){
+          bump++;
+          const base = new Date(it.time.replace(" ", "T") + ":00");
+          base.setMinutes(base.getMinutes() + bump);
+          it.time = fmtTime(base);
+          key = minuteKey(it.time);
+        }
+        seen.add(key);
+      });
+      return items;
+    }
+
     function pickFive(){
-      const myAll = loadMy().slice().reverse();              // 新的在前
-      const myPick = shuffle(myAll).slice(0, Math.min(3, myAll.length));
+      const myAll = loadMy().slice().reverse(); // 最新在前
+      const myPick = shuffle(myAll).slice(0, Math.min(3, myAll.length)); // 最多 3 則真實留言
       const need = 5 - myPick.length;
 
       const seedBatch = buildSeedBatch();
       const seedPick = seedBatch.slice(0, need);
 
-      const merged = (myPick.concat(seedPick)).slice(0,5);
-
-      // 保險：如果 time 重複（同分鐘），微調
-      const seen = new Set();
-      merged.forEach((it, idx)=>{
-        const t = (it.time || "").trim();
-        if(!t) return;
-
-        if(seen.has(t)){
-          // 往前推 (idx+1)*7~(idx+1)*19 分鐘
-          const d = new Date();
-          d.setMinutes(d.getMinutes() - randInt((idx+1)*7, (idx+1)*19));
-          it.time = fmtTime(d);
-        }
-        seen.add(it.time);
-      });
-
-      // 最後依時間新到舊排序（看起來更真）
-      merged.sort((a,b)=> {
-        const ta = Date.parse((a.time||"").replace(" ", "T"));
-        const tb = Date.parse((b.time||"").replace(" ", "T"));
-        return (isFinite(tb)?tb:0) - (isFinite(ta)?ta:0);
-      });
-
-      return merged;
+      const merged = myPick.concat(seedPick).slice(0, 5);
+      return ensureUniqueTimes(merged);
     }
 
+    function renderSummary(items){
+      const avg = computeAvg(items);
+      // 顯示：★★★★★ 5.0｜今日精選 5 則
+      summaryEl.textContent = `${avg.toFixed(1)}｜今日精選 ${items.length} 則`;
+    }
+
+    // ---- 當次顯示的 5 則（可刷新）----
     function refresh(){
       const items = pickFive();
-      const avg = computeAvg(items);
-      summaryEl.textContent = `⭐️⭐️⭐️⭐️⭐️ ${avg.toFixed(1)}｜今日精選 5 則`;
       render(items);
+      renderSummary(items);
     }
 
     refreshBtn?.addEventListener("click", ()=>{
       refresh();
-      showToast("已換一批留言 ✅");
+      showToast("已換一批 ✅");
     });
 
-    // ---- 真實客人留言（匿名）----
-    const textEl = $("#reviewText");
-    const submitBtn = $("#submitReview");
-    const clearBtn = $("#clearMyReviews");
-
+    // ---- 送出留言（本機）----
     submitBtn?.addEventListener("click", ()=>{
       const name = ensureNick();
-      const stars = Math.max(1, Math.min(5, Math.floor(n(starsInput?.value || 5))));
-      const text = (textEl?.value || "").trim();
+      const stars = setStars(reviewStarsEl?.value || 5);
+      const text = (reviewTextEl?.value || "").trim();
 
       if(!text){
-        showToast("請先輸入留言內容 ✍️");
-        return;
-      }
-      if(text.length > 140){
-        showToast("留言太長了（建議 140 字內）");
+        showToast("請先寫 1～3 行留言 ✍️");
         return;
       }
 
       const item = {
         name,
         stars,
-        text,
+        text: text.slice(0, 200), // 防止太長
         time: fmtTime(new Date())
       };
 
-      const arr = loadMy();
-      arr.push(item);
-      saveMy(arr);
+      const all = loadMy();
+      all.push(item);
+      saveMy(all);
 
-      if(textEl) textEl.value = "";
-      if(nickEl) nickEl.value = genFunnyNick(); // 留完自動換一個暱稱
-      setStars(5);
+      if(reviewTextEl) reviewTextEl.value = "";
+      showToast("已送出留言 ⭐️");
 
+      // 送出後：立即刷新，讓畫面更熱絡
       refresh();
-      showToast("留言成功 ✅ 謝謝你！");
     });
 
+    // ---- 清除本機留言（本機）----
     clearBtn?.addEventListener("click", ()=>{
       try{ localStorage.removeItem(LS_KEY); }catch(e){}
-      refresh();
       showToast("已清除本機留言 🧹");
+      refresh();
     });
 
-    // 初始顯示
+    // 初次載入
     refresh();
   })();
 });
