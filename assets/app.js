@@ -16,10 +16,8 @@ const POST_ACCOUNT = "00018330440573";
 // ✅ 圖片路徑（不裁切輪播）
 const IMAGES = [
   "images/photo1.jpg",
-
   "images/photo3.jpg",
   "images/packs.jpg",
-
   "images/bowl.jpg"
 ];
 
@@ -331,4 +329,154 @@ ${storeLine}
 
   calc();
   buildOrderMessage();
+
+  // ===== 熱絡留言板（五星＋留言） =====
+  (function initReviews(){
+    const listEl = document.getElementById("reviewList");
+    const summaryEl = document.getElementById("reviewSummary");
+    const refreshBtn = document.getElementById("refreshReviews");
+    if(!listEl || !summaryEl) return;
+
+    // 30 組暱稱＋留言（台味×溫暖×一點幽默）
+    const REVIEWS = [
+      {name:"阿嬤說可以", stars:5, text:"這滷汁一打開，家裡瞬間像過年。\n我阿嬤說：嗯～有中！"},
+      {name:"便當界小白", stars:5, text:"我只會煮水…結果拌飯也能上桌。\n謝謝吉祥滷意救了我。"},
+      {name:"台味收藏家", stars:5, text:"香到我家白飯自己站起來排隊。"},
+      {name:"加班社畜", stars:5, text:"加班到懷疑人生，淋下去立刻相信台灣。"},
+      {name:"德東門市王", stars:5, text:"7-11 取貨很方便，回家 5 分鐘就有滷肉飯。\n太犯規。"},
+      {name:"小鳥胃也投降", stars:5, text:"本來說吃兩口…結果整碗見底。\n我對不起我的意志力。"},
+      {name:"廚房逃兵", stars:5, text:"不用進廚房熱到中暑，還能假裝很會煮。\n完美。"},
+      {name:"白飯大師", stars:5, text:"白飯遇到它，直接升級成主角。"},
+      {name:"露營派", stars:5, text:"露營帶一包，朋友以為我請了主廚。\n我只負責打開…"},
+      {name:"滷蛋教", stars:5, text:"配滷蛋超搭，香氣很乾淨。\n吃完嘴巴會想唱歌。"},
+      {name:"吃貨小隊長", stars:5, text:"一包搞定真的不是口號。\n我連碗都省了（直接拌）。"},
+      {name:"台北媽媽", stars:5, text:"小孩說：今天的飯怎麼比較乖？\n我：因為有吉祥滷意。"},
+      {name:"夜貓子", stars:5, text:"半夜肚子餓不用叫外送。\n這包比較懂我。"},
+      {name:"阿公認證", stars:5, text:"阿公吃一口點頭：有古早味。\n我立刻續碗。"},
+      {name:"會心一笑", stars:5, text:"香氣不是那種很兇的，是溫柔抱著你的那種。"},
+      {name:"滷肉飯研究所", stars:5, text:"鹹甜平衡很剛好，吃完不膩。\n有水準。"},
+      {name:"怕油星人", stars:5, text:"我很怕油，但這個不會怕。\n吃起來很順。"},
+      {name:"小資族", stars:5, text:"一包 180 我覺得划算。\n比我亂買宵夜還值得。"},
+      {name:"祖傳胃", stars:5, text:"這味道像小時候巷口那家。\n一秒回到童年。"},
+      {name:"好想再來", stars:5, text:"我本來只想試試…現在在算要湊免運。"},
+      {name:"香氣控", stars:5, text:"打開那瞬間我就知道：完了我會上癮。"},
+      {name:"懶人代表", stars:5, text:"我只負責加熱，剩下都交給它。\n人生突然很簡單。"},
+      {name:"飯桶本人", stars:5, text:"淋下去，白飯直接變得很有禮貌。\n一直讓我再來一口。"},
+      {name:"配菜派", stars:5, text:"燙青菜淋一下就變高級。\n我媽以為我進修了。"},
+      {name:"台味粉", stars:5, text:"不是那種死甜，是真的台味。\n懂吃的會懂。"},
+      {name:"回購王", stars:5, text:"第二次買了，味道一樣穩。\n這點很重要。"},
+      {name:"微波派", stars:5, text:"微波也香，救急神物。\n我願稱它為便當守護神。"},
+      {name:"親友推薦", stars:5, text:"朋友推薦的，果然沒騙我。\n我也要去騙…不是，推薦別人。"},
+      {name:"幸福感", stars:5, text:"吃完心情真的會變好。\n台味就是溫暖。"},
+      {name:"過年嘴饞", stars:5, text:"年味感很足，配一碗白飯就滿足。\n吉祥到我想貼春聯。"}
+    ];
+
+    function nowText(){
+      const d = new Date();
+      return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())} ${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
+    }
+
+    // 每天固定選 5 則：用日期做 seed
+    function daySeed(){
+      const d = new Date();
+      return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`;
+    }
+
+    function xmur3(str){
+      let h = 1779033703 ^ str.length;
+      for(let i=0;i<str.length;i++){
+        h = Math.imul(h ^ str.charCodeAt(i), 3432918353);
+        h = (h << 13) | (h >>> 19);
+      }
+      return function(){
+        h = Math.imul(h ^ (h >>> 16), 2246822507);
+        h = Math.imul(h ^ (h >>> 13), 3266489909);
+        return (h ^= h >>> 16) >>> 0;
+      };
+    }
+    function mulberry32(a){
+      return function(){
+        let t = a += 0x6D2B79F5;
+        t = Math.imul(t ^ (t >>> 15), t | 1);
+        t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+      };
+    }
+    function shuffleWithSeed(arr, seedStr){
+      const seedFn = xmur3(seedStr);
+      const rand = mulberry32(seedFn());
+      const a = arr.slice();
+      for(let i=a.length-1;i>0;i--){
+        const j = Math.floor(rand() * (i+1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    function starsHtml(nStars){
+      let s = `<span class="stars" aria-label="${nStars} 星">`;
+      for(let i=1;i<=5;i++){
+        s += `<span class="${i<=nStars ? "star-on":"star-off"}">★</span>`;
+      }
+      s += `</span>`;
+      return s;
+    }
+
+    let pool = [];
+    let shown = [];
+    let rotateTimer = null;
+
+    function render(){
+      const avg = (shown.reduce((a,b)=>a+b.stars,0) / shown.length) || 5;
+      summaryEl.innerHTML = `${starsHtml(Math.round(avg))} <b>${avg.toFixed(1)}</b>｜今日精選 <b>${shown.length}</b> 則`;
+
+      listEl.innerHTML = shown.map(r => `
+        <div class="review-item review-pop">
+          <div class="review-top">
+            <div>
+              <div class="review-name">${r.name}</div>
+              ${starsHtml(r.stars)}
+            </div>
+            <div class="review-time">${r.time}</div>
+          </div>
+          <div class="review-text">${r.text}</div>
+        </div>
+      `).join("");
+
+      requestAnimationFrame(()=>{
+        listEl.querySelectorAll(".review-item").forEach(el=>el.classList.remove("review-pop"));
+      });
+    }
+
+    function pickToday(){
+      pool = shuffleWithSeed(REVIEWS, daySeed());
+      shown = pool.slice(0,5).map(x => ({...x, time: nowText()}));
+      render();
+      startRotate();
+    }
+
+    function rotateOne(){
+      if(!pool.length || shown.length<5) return;
+      const next = pool.shift();
+      pool.push(next);
+
+      const idx = Math.floor(Math.random()*shown.length);
+      shown[idx] = {...next, time: nowText()};
+      render();
+    }
+
+    function startRotate(){
+      if(rotateTimer) clearInterval(rotateTimer);
+      rotateTimer = setInterval(rotateOne, 6500); // 6.5 秒換一則
+    }
+
+    refreshBtn?.addEventListener("click", ()=>{
+      pool = shuffleWithSeed(REVIEWS, daySeed() + "-tap-" + nowText());
+      shown = pool.slice(0,5).map(x => ({...x, time: nowText()}));
+      render();
+      startRotate();
+    });
+
+    pickToday();
+  })();
 });
