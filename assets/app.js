@@ -33,7 +33,7 @@ function calculate() {
   freePacksEl.innerHTML = `${freePacks} 包 <small>（每滿10送1）</small>`
   shipFeeEl.innerHTML = shipping === 0
     ? `免運 🎉`
-    : `NT$${SHIP_FEE} <small>（滿1800免運）</small>`
+    : `NT$${SHIP_FEE} <small> </small>`
 
   grandEl.innerHTML = `NT$${total}`
   grandNoteEl.innerText = `（商品 ${subtotal} + 運費 ${shipping}）`
