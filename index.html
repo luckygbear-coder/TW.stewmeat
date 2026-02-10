@@ -106,7 +106,6 @@
         <button class="tab" data-tab="cook">料理教學</button>
         <button class="tab" data-tab="story">品牌故事</button>
         <button class="tab" data-tab="ship">下單資訊</button>
-        <!-- ✅ 新增分頁 -->
         <button class="tab" data-tab="reviews">熱絡留言</button>
       </div>
 
@@ -197,14 +196,23 @@
 
         <div class="panel" style="margin-top:12px;">
           <b>✍️ 我也要留言</b>
-        
 
           <div class="form">
             <div class="row">
               <div>
-                <label for="reviewName">暱稱</label>
-                <input id="reviewName" placeholder="例如：飯桶本人" maxlength="12" />
+                <label for="anonNick">暱稱（匿名）</label>
+
+                <!-- ✅ 暱稱：先自動生成；旁邊骰子可重骰 -->
+                <div style="display:flex;gap:10px;align-items:center;">
+                  <input id="anonNick" placeholder="（系統會幫你自動取名）" maxlength="24" />
+                  <button class="btn small" type="button" id="rollNick" aria-label="骰子生成暱稱">🎲</button>
+                </div>
+
+                <div class="muted" style="margin-top:6px;">
+                  不用本名也能留言～按 🎲 重新生成有趣暱稱
+                </div>
               </div>
+
               <div>
                 <label for="reviewStars">五星評分</label>
                 <select id="reviewStars">
@@ -226,10 +234,13 @@
               <button class="btn primary" type="button" id="submitReview">✅ 送出留言</button>
               <button class="btn" type="button" id="clearMyReviews">🧹 清除本機留言</button>
             </div>
+
+            <p class="muted" style="margin:10px 0 0">
+              小提醒：目前留言會先保存在「你這台手機/瀏覽器」，讓版面看起來更熱絡❤️
+              若要「真正公開讓所有人都看到」，需要接後端資料庫（例如 Firebase / Supabase）。
+            </p>
           </div>
         </div>
-
-        
       </div>
     </section>
 
@@ -369,7 +380,6 @@
 
   <div class="toast" id="toast">已複製 ✅</div>
 
-  <!-- ✅ 右下角浮動 LINE 客服泡泡：官方 LINE 樣式 -->
   <a
     href="https://line.me/ti/p/~chris770912"
     target="_blank"
