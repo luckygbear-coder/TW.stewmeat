@@ -21,7 +21,6 @@
       <div class="top-actions">
         <a class="btn small ig" href="https://www.instagram.com/9.12lin" target="_blank" rel="noopener" aria-label="前往 IG：9.12lin">
           <span class="icon" aria-hidden="true">
-            <!-- IG icon -->
             <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
               <path d="M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9A5.5 5.5 0 0 1 16.5 22h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2Zm9 2h-9A3.5 3.5 0 0 0 4 7.5v9A3.5 3.5 0 0 0 7.5 20h9a3.5 3.5 0 0 0 3.5-3.5v-9A3.5 3.5 0 0 0 16.5 4ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm5.6-.9a1.1 1.1 0 1 1 0 2.2 1.1 1.1 0 0 1 0-2.2Z"/>
             </svg>
@@ -64,12 +63,10 @@
       </div>
     </section>
 
-    <!-- ✅ LINE 三種入口 -->
+    <!-- ✅ LINE 快速服務 -->
     <section class="card">
       <h2 style="margin:0 0 10px">💬 LINE 快速服務</h2>
       <div class="cta-row">
-
-
         <a class="btn" href="https://line.me/ti/p/~chris770912" target="_blank" rel="noopener" id="lineAddFast">
           <span class="icon line-logo" aria-hidden="true">LINE</span>
           客服LINE
@@ -82,7 +79,29 @@
       </div>
       <p class="muted" style="margin:10px 0 0">
         輸入訂單資料後點選「用LINE送出訂單」，系統會自動將訊息帶進LINE喔❤️
-              </p>
+      </p>
+    </section>
+
+    <!-- ✅ 熱絡留言板（五星＋留言） -->
+    <section class="card" id="reviews">
+      <div class="review-head">
+        <div>
+          <h2 style="margin:0">⭐ 熱絡留言板</h2>
+          <div class="muted" style="margin-top:6px">
+            <span id="reviewSummary">載入中…</span>
+          </div>
+        </div>
+
+        <button class="btn small" type="button" id="refreshReviews" aria-label="換一批留言">
+          🔄 換一批
+        </button>
+      </div>
+
+      <div id="reviewList" class="review-list" aria-live="polite"></div>
+
+      <p class="muted" style="margin:10px 0 0">
+        （系統會自動輪播更新留言時間，讓畫面看起來很熱絡🔥）
+      </p>
     </section>
 
     <!-- 快捷入口 -->
@@ -156,10 +175,9 @@
         <div class="panel">
           <b>🏮 品牌故事</b>
           <p class="muted" style="margin:8px 0 0">
-            
-在地經營便當店39年，推出「吉祥滷意」滷汁包，希望讓您在家輕輕鬆鬆幾分鐘就能把台灣魂的美味幸福端上桌。
-
-嚴選台灣豬搭配黃金比例的醬油、糖、鹽、蔥酥、蒜頭慢火熬煮，讓香氣抱住白飯，好吃到停不下來！ </p>
+            在地經營便當店39年，推出「吉祥滷意」滷汁包，希望讓您在家輕輕鬆鬆幾分鐘就能把台灣魂的美味幸福端上桌。<br><br>
+            嚴選台灣豬搭配黃金比例的醬油、糖、鹽、蔥酥、蒜頭慢火熬煮，讓香氣抱住白飯，好吃到停不下來！
+          </p>
         </div>
       </div>
 
@@ -167,8 +185,8 @@
         <div class="list">
           <div class="li"><b>🌟 7-11 冷凍店到店</b><div class="muted">運費 NT$129｜滿 NT$1800 免運</div></div>
           <div class="li"><b>🎁 買十送一</b><div class="muted">每買 10 包 → 送 1 包（系統自動計算）</div></div>
-      <div class="li"><b>🏦 收款帳號</b><div class="muted">郵局 (700)｜00018330440573</div></div>
-      <div class="li"><b>⏳ 出貨時間</b><div class="muted">下單付款後約1～2週寄出</div></div>
+          <div class="li"><b>🏦 收款帳號</b><div class="muted">郵局 (700)｜00018330440573</div></div>
+          <div class="li"><b>⏳ 出貨時間</b><div class="muted">下單付款後約1～2週寄出</div></div>
         </div>
       </div>
     </section>
@@ -232,33 +250,30 @@
           </div>
         </div>
 
-   <div class="row">
-  <div>
-    <label for="method">寄送方式</label>
-    <select id="method" disabled>
-      <option value="711" selected>7-11 冷凍店到店</option>
-    </select>
-  </div>
+        <div class="row">
+          <div>
+            <label for="method">寄送方式</label>
+            <select id="method" disabled>
+              <option value="711" selected>7-11 冷凍店到店</option>
+            </select>
+          </div>
 
-  <div>
-    <label for="store">
-      取件7-11門市
-      <a
-        href="https://emap.pcsc.com.tw/"
-        target="_blank"
-        rel="noopener"
-        style="margin-left:6px;font-size:12px;color:#0e8a8a;text-decoration:none;font-weight:900;"
-      >
-        🔍 查詢門市
-      </a>
-    </label>
+          <div>
+            <label for="store">
+              取件7-11門市
+              <a
+                href="https://emap.pcsc.com.tw/"
+                target="_blank"
+                rel="noopener"
+                style="margin-left:6px;font-size:12px;color:#0e8a8a;text-decoration:none;font-weight:900;"
+              >
+                🔍 查詢門市
+              </a>
+            </label>
 
-    <input
-      id="store"
-      placeholder="例如：德東門市"
-    />
-  </div>
-</div>
+            <input id="store" placeholder="例如：德東門市" />
+          </div>
+        </div>
 
         <div class="row">
           <div>
@@ -317,7 +332,7 @@
 
   <div class="toast" id="toast">已複製 ✅</div>
 
-  <!-- ✅ 右下角浮動 LINE 客服泡泡：官方 LINE 樣式 -->
+  <!-- ✅ 右下角浮動 LINE 客服泡泡 -->
   <a
     href="https://line.me/ti/p/~chris770912"
     target="_blank"
